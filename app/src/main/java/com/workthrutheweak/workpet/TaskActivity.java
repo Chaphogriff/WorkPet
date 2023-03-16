@@ -1,6 +1,8 @@
 package com.workthrutheweak.workpet;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,10 +20,9 @@ public class TaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
-
+         getSupportActionBar().hide();
         // Récupérer les éléments du xml
         button_back = (Button) findViewById(R.id.back);
-        textView = (TextView) findViewById(R.id.textView);
 
         // Mettre en place les listeners
 
@@ -29,5 +30,6 @@ public class TaskActivity extends AppCompatActivity {
         button_back.setOnClickListener(view ->
                 startActivity(new Intent(this, MainActivity.class))
         );
+
     }
 }
