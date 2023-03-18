@@ -5,13 +5,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+
+import com.workthrutheweak.workpet.databinding.ActivityFirstBinding;
+import com.workthrutheweak.workpet.databinding.ActivityMainBinding;
+import com.workthrutheweak.workpet.databinding.ActivityTaskBinding;
 
 public class FirstActivity extends AppCompatActivity {
+    private ActivityFirstBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
+        binding = ActivityFirstBinding.inflate(getLayoutInflater());
+        View v = binding.getRoot();
+        setContentView(v);
+
         getSupportActionBar().hide();
 
         final Intent i=new Intent(FirstActivity.this, MainActivity.class);

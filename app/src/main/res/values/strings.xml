@@ -3,4 +3,14 @@
     <string name="tasks">Tasks</string>
     <string name="save">Save</string>
     <string name="new_task">New Task</string>
+    <string name="taskTitle1">Jogging</string>
+    <string name="taskTitle2">Faire le ménage</string>
+    <string name="taskTitle3">Faire les courses</string>
+    <string name="taskDate1">Deadline : 18/03/2023</string>
+    <string name="taskDate2">Deadline : 19/03/2023</string>
+    <string name="taskDesc1">1h dans les bois</string>
+    <string name="taskDesc2">Ne pas oublier les croquettes pour chat</string>
+    <string name="taskReward1">Reward : 10 xp, 10 gold</string>
+    <string name="taskReward2">Reward : 5 xp, 10 gold</string>
+    <string name="empty" />
 </resources>

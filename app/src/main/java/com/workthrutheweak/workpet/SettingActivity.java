@@ -4,12 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.workthrutheweak.workpet.databinding.ActivityMainBinding;
+import com.workthrutheweak.workpet.databinding.ActivitySettingBinding;
 
 public class SettingActivity extends AppCompatActivity {
 
     // Variables
+    private ActivitySettingBinding binding;
     Button button_back;
     TextView textView;
 
@@ -17,10 +22,13 @@ public class SettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+        binding = ActivitySettingBinding.inflate(getLayoutInflater());
+        View v = binding.getRoot();
+        setContentView(v);
 
         // Récupérer les éléments du xml
-        button_back = (Button) findViewById(R.id.back);
-        textView = (TextView) findViewById(R.id.textView);
+        button_back = binding.back;
+        textView = binding.textView;
 
         // Mettre en place les listeners
 
