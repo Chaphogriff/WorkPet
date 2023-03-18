@@ -16,7 +16,7 @@ import com.workthrutheweak.workpet.databinding.ActivityTaskBinding;
 public class CalendarActivity extends AppCompatActivity {
 
     // Variables
-    private ActivityCalendarBinding binding;
+    private ActivityCalendarBinding binding; //For ViewBinding feature
     Button button_back;
     CalendarView calendar;
 
@@ -24,6 +24,8 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+
+        //Setup View Binding variable
         binding = ActivityCalendarBinding.inflate(getLayoutInflater());
         View v = binding.getRoot();
         setContentView(v);

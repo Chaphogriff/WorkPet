@@ -22,7 +22,7 @@ import java.util.List;
 public class TaskActivity extends AppCompatActivity {
 
     // Variables
-    private ActivityTaskBinding binding;
+    private ActivityTaskBinding binding;//For ViewBinding feature
     Button button_back;
     TextView textView;
 
@@ -30,6 +30,8 @@ public class TaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
+
+        //Setup View Binding variable
         binding = ActivityTaskBinding.inflate(getLayoutInflater());
         View v = binding.getRoot();
         setContentView(v);

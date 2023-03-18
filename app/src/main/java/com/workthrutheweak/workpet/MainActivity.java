@@ -11,7 +11,7 @@ import android.widget.ImageButton;
 import com.workthrutheweak.workpet.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-    private ActivityMainBinding binding;
+    private ActivityMainBinding binding; //For ViewBinding feature
 
     // Variables
     ImageButton logo_main;
@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Setup View Binding variable
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View v = binding.getRoot();
         setContentView(v);

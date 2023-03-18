@@ -12,12 +12,14 @@ import com.workthrutheweak.workpet.databinding.ActivityMainBinding;
 import com.workthrutheweak.workpet.databinding.ActivityTaskBinding;
 
 public class FirstActivity extends AppCompatActivity {
-    private ActivityFirstBinding binding;
+    private ActivityFirstBinding binding; //For ViewBinding feature
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
+
+        //Setup View Binding variable
         binding = ActivityFirstBinding.inflate(getLayoutInflater());
         View v = binding.getRoot();
         setContentView(v);

@@ -14,7 +14,7 @@ import com.workthrutheweak.workpet.databinding.ActivitySettingBinding;
 public class SettingActivity extends AppCompatActivity {
 
     // Variables
-    private ActivitySettingBinding binding;
+    private ActivitySettingBinding binding; //For ViewBinding feature
     Button button_back;
     TextView textView;
 
@@ -22,6 +22,8 @@ public class SettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
+        //Setup View Binding variable
         binding = ActivitySettingBinding.inflate(getLayoutInflater());
         View v = binding.getRoot();
         setContentView(v);

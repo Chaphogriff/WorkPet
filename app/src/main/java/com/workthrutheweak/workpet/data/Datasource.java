@@ -5,6 +5,7 @@ import com.workthrutheweak.workpet.model.Task;
 
 import java.util.List;
 
+//Class to get data for recycler view
 public class Datasource {
     public Datasource(){}
      public List<Task> loadTasks() {

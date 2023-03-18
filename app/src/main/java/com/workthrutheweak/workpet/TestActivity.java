@@ -4,10 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import com.workthrutheweak.workpet.databinding.ActivityTaskBinding;
+import com.workthrutheweak.workpet.databinding.ActivityTestBinding;
+
 public class TestActivity extends AppCompatActivity {
+
+    private ActivityTestBinding binding;//For ViewBinding feature
 
     // Variables
     Button button_back;
@@ -18,10 +24,14 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
+        //Setup View Binding variable
+        binding = ActivityTestBinding.inflate(getLayoutInflater());
+        View v = binding.getRoot();
+        setContentView(v);
 
         // Récupérer les éléments du xml
-        button_back = (Button) findViewById(R.id.back);
-        logo_wttw = (ImageButton) findViewById(R.id.logo_wttw);
+        button_back = binding.back;
+        logo_wttw = binding.logoWttw;
 
         // Mettre en place les listeners
 

@@ -16,7 +16,7 @@ import com.workthrutheweak.workpet.databinding.ActivityTaskBinding;
 public class AvatarActivity extends AppCompatActivity {
 
     // Variables
-    private ActivityAvatarBinding binding;
+    private ActivityAvatarBinding binding; //For ViewBinding feature
     Button button_back;
     TextView textView;
 
@@ -24,9 +24,12 @@ public class AvatarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_avatar);
+
+        //Setup View Binding variable
         binding = ActivityAvatarBinding.inflate(getLayoutInflater());
         View v = binding.getRoot();
         setContentView(v);
+
         // Récupérer les éléments du xml
         button_back = binding.back;
         textView = binding.textView;

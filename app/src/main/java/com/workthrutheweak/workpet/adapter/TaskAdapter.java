@@ -17,6 +17,8 @@ import com.workthrutheweak.workpet.model.Task;
 import java.util.List;
 import java.util.StringJoiner;
 
+
+//Adapter for Task List Recycler View
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     private Context context;
     private List<Task> dataset;
@@ -81,7 +83,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         holder.getTaskDescTextView().setText(context.getResources().getString(item.descriptionId));
         holder.getTaskDateTextView().setText(context.getResources().getString(item.dateId));
         holder.getTaskRewardTextView().setText(context.getResources().getString(item.rewardId));
-        holder.taskCompletionCheckBox.setChecked(item.isTaskDone);
+        holder.getTaskCompletionCheckBox().setChecked(item.isTaskDone);
     }
 
     @Override
