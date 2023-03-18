@@ -5,13 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.TextView;
 
 public class CalendarActivity extends AppCompatActivity {
 
     // Variables
     Button button_back;
-    TextView textView;
+    CalendarView calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +21,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         // Récupérer les éléments du xml
         button_back = (Button) findViewById(R.id.back);
-        textView = (TextView) findViewById(R.id.textView);
+        calendar = (CalendarView) findViewById(R.id.calendar);
 
         // Mettre en place les listeners
 
