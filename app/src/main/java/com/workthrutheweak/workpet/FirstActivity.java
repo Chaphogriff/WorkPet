@@ -8,8 +8,6 @@ import android.os.Handler;
 import android.view.View;
 
 import com.workthrutheweak.workpet.databinding.ActivityFirstBinding;
-import com.workthrutheweak.workpet.databinding.ActivityMainBinding;
-import com.workthrutheweak.workpet.databinding.ActivityTaskBinding;
 
 public class FirstActivity extends AppCompatActivity {
     private ActivityFirstBinding binding; //For ViewBinding feature

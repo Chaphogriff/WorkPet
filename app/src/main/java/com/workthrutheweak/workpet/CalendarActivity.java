@@ -7,11 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.TextView;
 
 import com.workthrutheweak.workpet.databinding.ActivityCalendarBinding;
-import com.workthrutheweak.workpet.databinding.ActivityMainBinding;
-import com.workthrutheweak.workpet.databinding.ActivityTaskBinding;
+
 
 public class CalendarActivity extends AppCompatActivity {
 
