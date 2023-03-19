@@ -10,7 +10,6 @@ public class Task {
     public int dateId;
     //Task Date string ID
     public int rewardId;
-
     //Task boolean to check if Task is done for checkbox
     public boolean isTaskDone = false;
 

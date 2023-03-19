@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/AddButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
+        android:backgroundTint="@color/tint"
+        android:src="@drawable/baseline_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/XPText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/XPTextInput"
+        app:layout_constraintTop_toBottomOf="@+id/GoldTextInput" />
+
+    <Button
+        android:id="@+id/back2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="16dp"
+        android:text="Back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/TaskTitle"
+        android:layout_width="39dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:text="Title :"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/back2" />
+
+    <TextView
+        android:id="@+id/TaskDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="44dp"
+        android:text="Description :"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TaskTitle" />
+
+    <TextView
+        android:id="@+id/TaskDeadline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="56dp"
+        android:text="Deadline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/DescInputField" />
+
+    <TextView
+        android:id="@+id/TaskReward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:text="Reward :"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTime" />
+
+    <EditText
+        android:id="@+id/editTextTime"
+        android:layout_width="219dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:inputType="time"
+        android:hint="Enter time"
+        app:layout_constraintStart_toEndOf="@+id/TaskDeadline"
+        app:layout_constraintTop_toBottomOf="@+id/editTextDate" />
+
+    <EditText
+        android:id="@+id/GoldTextInput"
+        android:layout_width="103dp"
+        android:layout_height="68dp"
+        android:layout_marginStart="72dp"
+        android:ems="10"
+        android:inputType="number"
+        android:hint="Enter Gold"
+        app:layout_constraintStart_toEndOf="@+id/TaskReward"
+        app:layout_constraintTop_toTopOf="@+id/TaskReward" />
+
+    <EditText
+        android:id="@+id/XPTextInput"
+        android:layout_width="107dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:inputType="number"
+        android:hint="Enter XP"
+        app:layout_constraintStart_toEndOf="@+id/TaskReward"
+        app:layout_constraintTop_toBottomOf="@+id/GoldTextInput" />
+
+    <TextView
+        android:id="@+id/GoldText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/GoldTextInput"
+        app:layout_constraintTop_toTopOf="@+id/TaskReward" />
+
+    <EditText
+        android:id="@+id/TitleInputField"
+        android:layout_width="220dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="92dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Task title"
+        app:layout_constraintStart_toEndOf="@+id/TaskTitle"
+        app:layout_constraintTop_toTopOf="@+id/TaskTitle" />
+
+    <EditText
+        android:id="@+id/DescInputField"
+        android:layout_width="224dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="52dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Task description"
+        app:layout_constraintStart_toEndOf="@+id/TaskDesc"
+        app:layout_constraintTop_toTopOf="@+id/TaskDesc" />
+
+    <EditText
+        android:id="@+id/editTextDate"
+        android:layout_width="216dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="76dp"
+        android:ems="10"
+        android:inputType="date"
+        android:hint="Enter date"
+        app:layout_constraintStart_toEndOf="@+id/TaskDeadline"
+        app:layout_constraintTop_toTopOf="@+id/TaskDeadline" />
+</androidx.constraintlayout.widget.ConstraintLayout>
