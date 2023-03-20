@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav);
-
+        bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.avatar:
                         startActivity(new Intent(getApplicationContext(), AvatarActivity.class));
                         overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.home:
                         return true;
                     case R.id.setting:
                         startActivity(new Intent(getApplicationContext(), SettingActivity.class));

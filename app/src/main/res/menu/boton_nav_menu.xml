@@ -6,20 +6,21 @@
         android:id="@+id/calendar"
         />
 
+    <item android:title="Task" android:icon="@drawable/baseline_task_24"
+        android:id="@+id/task"/>
 
-    <item android:title="Avatar"
+    <item android:title="Home" android:icon="@drawable/baseline_home_24"
+        android:id="@+id/home"/>
+
+    <item android:title="Pet"
         android:icon="@drawable/baseline_self_improvement_24"
         android:id="@+id/avatar"
         />
-
 
     <item android:title="Setting"
         android:icon="@drawable/baseline_settings_24"
         android:id="@+id/setting"
         />
 
-
-    <item android:title="Task" android:icon="@drawable/baseline_task_24"
-        android:id="@+id/task"/>
 
 </menu>
