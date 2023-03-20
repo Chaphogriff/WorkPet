@@ -13,7 +13,7 @@
         android:id="@+id/home"/>
 
     <item android:title="Pet"
-        android:icon="@drawable/baseline_self_improvement_24"
+        android:icon="@drawable/pets_icon"
         android:id="@+id/avatar"
         />
 

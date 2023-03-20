@@ -60,6 +60,10 @@ public class SettingActivity extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), AvatarActivity.class));
                         overridePendingTransition(0, 0);
                         return true;
+                    case R.id.home:
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
                     case R.id.setting:
                         return true;
                     case R.id.task:

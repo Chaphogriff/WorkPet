@@ -58,6 +58,10 @@ public class AvatarActivity extends AppCompatActivity {
                         return true;
                     case R.id.avatar:
                         return true;
+                    case R.id.home:
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
                     case R.id.setting:
                         startActivity(new Intent(getApplicationContext(), SettingActivity.class));
                         overridePendingTransition(0, 0);

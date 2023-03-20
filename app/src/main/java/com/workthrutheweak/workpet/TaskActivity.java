@@ -80,6 +80,10 @@ public class TaskActivity extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), AvatarActivity.class));
                         overridePendingTransition(0, 0);
                         return true;
+                    case R.id.home:
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
                     case R.id.setting:
                         startActivity(new Intent(getApplicationContext(), SettingActivity.class));
                         overridePendingTransition(0, 0);
