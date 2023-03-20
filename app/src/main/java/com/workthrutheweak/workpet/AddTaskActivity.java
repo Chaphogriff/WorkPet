@@ -49,6 +49,7 @@ public class AddTaskActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         // Récupérer les éléments du xml
         button_back = binding.back2;
+
         button_add = binding.AddButton;
 
         dateTask = binding.editTextDate;
@@ -86,4 +87,5 @@ public class AddTaskActivity extends AppCompatActivity {
         );
     }
 
+    }
 }

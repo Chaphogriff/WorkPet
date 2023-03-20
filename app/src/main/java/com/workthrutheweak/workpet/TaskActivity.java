@@ -1,14 +1,18 @@
 package com.workthrutheweak.workpet;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -32,6 +36,7 @@ public class TaskActivity extends AppCompatActivity {
     // Variables
     private ActivityTaskBinding binding;//For ViewBinding feature
     Button button_back;
+
     FloatingActionButton button_addT;
     TextView textView;
     static List<Task> TaskList;
@@ -48,8 +53,7 @@ public class TaskActivity extends AppCompatActivity {
         View v = binding.getRoot();
         setContentView(v);
 
-        getSupportActionBar().hide();
-
+         getSupportActionBar().hide();
         // Récupérer les éléments du xml
         button_back = binding.back;
         button_addT = binding.fab;
@@ -91,6 +95,34 @@ public class TaskActivity extends AppCompatActivity {
         button_addT.setOnClickListener(view ->
                 startActivity(new Intent(this, AddTaskActivity.class))
         );
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) BottomNavigationView bottomNavigationView = findViewById(R.id.nav);
+        bottomNavigationView.setSelectedItemId(R.id.task);
+        //ajout du navbar
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()) {
+                    case R.id.calendar:
+                        startActivity(new Intent(getApplicationContext(), CalendarActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.avatar:
+                        startActivity(new Intent(getApplicationContext(), AvatarActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.home:
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.setting:
+                        startActivity(new Intent(getApplicationContext(), SettingActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.task:
+                        return true;
+                }
+                return false;
     }
 
     @Override

@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".AvatarActivity">
 
-    <TextView
-        android:id="@+id/textView"
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/pet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Avatar"
+        android:src="@drawable/cat"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent=".5"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -29,5 +29,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/boton_nav_menu"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
