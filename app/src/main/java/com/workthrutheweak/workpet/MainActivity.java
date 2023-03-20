@@ -1,13 +1,16 @@
 package com.workthrutheweak.workpet;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.workthrutheweak.workpet.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -15,10 +18,6 @@ public class MainActivity extends AppCompatActivity {
 
     // Variables
     ImageButton logo_main;
-    Button button_avatar;
-    Button button_calendar;
-    Button button_setting;
-    Button button_task;
 
 
     @Override
@@ -33,10 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Récupérer les éléments du xml
         logo_main = binding.logoWorkpet;
-        button_avatar = binding.avatar;
-        button_calendar = binding.calendar;
-        button_task = binding.task;
-        button_setting = binding.setting;
+
 
         // Mettre en place les listeners
 
@@ -44,18 +40,34 @@ public class MainActivity extends AppCompatActivity {
         logo_main.setOnClickListener(view ->
                 startActivity(new Intent(MainActivity.this, TestActivity.class))
         );
-        button_avatar.setOnClickListener(view ->
-                startActivity(new Intent(MainActivity.this,AvatarActivity.class))
-        );
-        button_calendar.setOnClickListener(view ->
-                startActivity(new Intent(MainActivity.this, CalendarActivity.class))
-        );
-        button_task.setOnClickListener(view ->
-                startActivity(new Intent(MainActivity.this, TaskActivity.class))
-        );
-        button_setting.setOnClickListener(view ->
-                startActivity(new Intent(MainActivity.this, SettingActivity.class))
-        );
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.nav);
+
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()) {
+                    case R.id.calendar:
+                        startActivity(new Intent(getApplicationContext(), CalendarActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.avatar:
+                        startActivity(new Intent(getApplicationContext(), AvatarActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.setting:
+                        startActivity(new Intent(getApplicationContext(), SettingActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.task:
+                        startActivity(new Intent(getApplicationContext(), TaskActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 }

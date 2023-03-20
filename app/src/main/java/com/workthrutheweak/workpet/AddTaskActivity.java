@@ -50,5 +50,6 @@ public class AddTaskActivity extends AppCompatActivity {
                 view -> startActivity(new Intent(this, TaskActivity.class))
         );
 
+
     }
 }
