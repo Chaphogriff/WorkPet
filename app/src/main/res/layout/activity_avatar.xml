@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".AvatarActivity">
 
-    <TextView
-        android:id="@+id/textView"
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/pet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Avatar"
+        android:src="@drawable/cat"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent=".5"
         app:layout_constraintLeft_toLeftOf="parent"

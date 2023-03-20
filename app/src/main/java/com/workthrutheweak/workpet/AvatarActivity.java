@@ -20,7 +20,6 @@ public class AvatarActivity extends AppCompatActivity {
     // Variables
     private ActivityAvatarBinding binding; //For ViewBinding feature
     Button button_back;
-    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +33,6 @@ public class AvatarActivity extends AppCompatActivity {
 
         // Récupérer les éléments du xml
         button_back = binding.back;
-        textView = binding.textView;
 
         // Mettre en place les listeners
 
