@@ -7,20 +7,27 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.workthrutheweak.workpet.databinding.ActivityAvatarBinding;
+
+import pl.droidsonroids.gif.GifImageView;
 
 public class AvatarActivity extends AppCompatActivity {
 
     // Variables
     private ActivityAvatarBinding binding; //For ViewBinding feature
     Button button_back;
+    GifImageView heart;
+    GifImageView pet;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +40,8 @@ public class AvatarActivity extends AppCompatActivity {
 
         // Récupérer les éléments du xml
         button_back = binding.back;
+        heart = binding.heart;
+        pet = binding.pet;
 
         // Mettre en place les listeners
 
@@ -40,6 +49,30 @@ public class AvatarActivity extends AppCompatActivity {
         button_back.setOnClickListener(view ->
                 startActivity(new Intent(this, MainActivity.class))
         );
+
+        // Appuyer le bouton nous envoie vers un autre activité
+        heart.setVisibility(View.INVISIBLE);
+        // onHold
+        pet.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    heart.setVisibility(View.VISIBLE);
+                    Toast.makeText(getApplicationContext(), "Pat Pat Pat", Toast.LENGTH_SHORT).show();
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    // ne fonctionne pas -> voir onClick
+                }
+                return false;
+            }
+        });
+        // onRelease ( MotionEvent.ACTION_UP ne fonctionne pas )
+        pet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                heart.setVisibility(View.INVISIBLE);
+                Toast.makeText(getApplicationContext(), "Released", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
     @SuppressLint({"MissingInflatedId", "LocalSuppress"}) BottomNavigationView bottomNavigationView = findViewById(R.id.nav);

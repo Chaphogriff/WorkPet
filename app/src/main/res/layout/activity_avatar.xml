@@ -8,16 +8,30 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/pet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:src="@drawable/cat"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHeight_percent=".5"
+        app:layout_constraintHeight_percent=".35"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent=".5"
-        />
+        app:layout_constraintVertical_bias="0.2"
+        app:layout_constraintWidth_percent=".75" />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/heart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/heart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent=".3"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.095"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintWidth_percent=".2" />
 
     <Button
         android:id="@+id/back"
@@ -39,6 +53,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/boton_nav_menu"/>
+
+    <Button
+        android:id="@+id/inventory"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/cat"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent=".075"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.6"
+        app:layout_constraintWidth_percent=".75"
+        android:text="Inventory" />
+
+    <Button
+        android:id="@+id/customize"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/cat"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent=".075"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.7"
+        app:layout_constraintWidth_percent=".75"
+        android:text="Customize" />
+
+    <Button
+        android:id="@+id/shop"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/cat"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent=".075"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintWidth_percent=".75"
+        android:text="Shop" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
