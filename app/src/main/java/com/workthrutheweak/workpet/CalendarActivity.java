@@ -43,7 +43,7 @@ public class CalendarActivity extends AppCompatActivity {
         );
 
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.nav);
+        BottomNavigationView bottomNavigationView = binding.nav;
         bottomNavigationView.setSelectedItemId(R.id.calendar);
         //ajout du navbar
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

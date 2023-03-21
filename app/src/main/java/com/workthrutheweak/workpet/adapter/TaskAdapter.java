@@ -23,7 +23,7 @@ import java.util.StringJoiner;
 //Adapter for Task List Recycler View
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     private Context context;
-    private List<Task> dataset = new ArrayList<>();
+    private List<Task> dataset;
 
     public TaskAdapter(Context context, List<Task> dataset){
         this.context = context;
