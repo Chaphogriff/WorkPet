@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/homePet"
         android:layout_width="0dp"
@@ -44,7 +43,7 @@
         app:layout_constraintVertical_bias="0.461" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/playerName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="87dp"
@@ -56,15 +55,22 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/goldTextHome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="97dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="51dp"
         android:text="Gold : 10"
-        tools:layout_editor_absoluteX="262dp"
-        tools:layout_editor_absoluteY="77dp" />
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/homePet"
+        app:layout_constraintTop_toBottomOf="@+id/expBar"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ProgressBar
-        android:id="@+id/progressBar2"
+        android:id="@+id/expBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="170dp"
         android:layout_height="20dp"
@@ -73,11 +79,11 @@
         android:layout_marginEnd="16dp"
         android:progress="25"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintStart_toEndOf="@+id/lvlText"
+        app:layout_constraintTop_toBottomOf="@+id/playerName" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/lvlText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="13dp"
@@ -86,6 +92,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/homePet"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/playerName" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
