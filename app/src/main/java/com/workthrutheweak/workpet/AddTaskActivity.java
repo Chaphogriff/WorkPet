@@ -94,6 +94,7 @@ public class AddTaskActivity extends AppCompatActivity {
                     String Gold = goldTask.getText().toString();
                     String XP = xpTask.getText().toString();
                     Task newTask = new Task(Title,Desc,Date,Time,Gold,XP,false );
+
                     /*Intent calendarIntent = new Intent(Intent.ACTION_INSERT);
                     if (!Title.isEmpty() && !Desc.isEmpty()) {
                         calendarIntent.setData(CalendarContract.Events.CONTENT_URI);

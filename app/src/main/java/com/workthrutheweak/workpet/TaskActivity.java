@@ -20,6 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.adapter.TaskAdapter;
 import com.workthrutheweak.workpet.data.Datasource;
 import com.workthrutheweak.workpet.databinding.ActivityTaskBinding;
@@ -44,8 +45,8 @@ public class TaskActivity extends AppCompatActivity {
 
     // Variables
     private ActivityTaskBinding binding;//For ViewBinding feature
+    JsonManager JsonM = new JsonManager();
     Button button_back;
-
     FloatingActionButton button_addT;
     TextView textView;
     List<Task> TaskList;
@@ -68,40 +69,11 @@ public class TaskActivity extends AppCompatActivity {
         File path = getApplicationContext().getFilesDir();
         try {
             FileInputStream fis = new FileInputStream(new File(path, "tasklist.json"));
-            TaskList = readJsonStream(fis);
+            TaskList = JsonManager.readJsonStream(fis);
         } catch (Exception e) {
             TaskList = new ArrayList<>();
             TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", "Aujourd'hui", "10 gold et 10XP", false));
         }
-
-        /*File jsontask = new File("tasklist.json");
-
-        if (jsontask.exists()) {
-            try {
-                FileReader fileReader = new FileReader(jsontask);
-                Type type = new TypeToken<ArrayList<Task>>() {
-                }.getType();
-                Gson gson = new Gson();
-                TaskList = gson.fromJson(fileReader, type);
-                fileReader.close();
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            TaskList = new ArrayList<>();
-            TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", "Aujourd'hui", "10 gold et 10XP"));
-        }
-
-        try {
-            FileWriter filewriter = new FileWriter("tasklist.json");
-            Gson gson = new Gson();
-            gson.toJson(TaskList, filewriter);
-            filewriter.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }*/
 
         Task task = getIntent().getParcelableExtra("Task");
         if (task != null) {
@@ -125,7 +97,7 @@ public class TaskActivity extends AppCompatActivity {
 
         try {
             FileOutputStream fos = new FileOutputStream(new File(path, "tasklist.json"));
-            writeJsonStream(fos, TaskList);
+            JsonManager.writeJsonStream(fos, TaskList);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -178,82 +150,9 @@ public class TaskActivity extends AppCompatActivity {
         File path = getApplicationContext().getFilesDir();
         try {
             FileOutputStream fos = new FileOutputStream(new File(path, "tasklist.json"));
-            writeJsonStream(fos, TaskList);
+            JsonManager.writeJsonStream(fos, TaskList);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public void writeJsonStream(OutputStream out, List<Task> taskList) throws IOException {
-        JsonWriter writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
-        writer.setIndent("  ");
-        writeTaskList(writer, taskList);
-        writer.close();
-    }
-
-    public void writeTaskList(JsonWriter writer, List<Task> taskList) throws IOException {
-        writer.beginArray();
-        for (Task task : taskList) {
-            writeTask(writer, task);
-        }
-        writer.endArray();
-    }
-
-    public void writeTask(JsonWriter writer, Task task) throws IOException {
-        writer.beginObject();
-        writer.name("Title").value(task.get_title());
-        writer.name("Description").value(task.get_description());
-        writer.name("Date").value(task.get_date());
-        writer.name("Reward").value(task.get_reward());
-        writer.name("isTaskDone").value(task.isTaskDone());
-        writer.endObject();
-    }
-
-    public List<Task> readJsonStream(InputStream in) throws IOException {
-        JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
-        try {
-            return readTaskList(reader);
-        } finally {
-            reader.close();
-        }
-    }
-
-    public List<Task> readTaskList(JsonReader reader) throws IOException {
-        List<Task> taskList = new ArrayList<Task>();
-
-        reader.beginArray();
-        while (reader.hasNext()) {
-            taskList.add(readTask(reader));
-        }
-        reader.endArray();
-        return taskList;
-    }
-
-    public Task readTask(JsonReader reader) throws IOException {
-        String title = null;
-        String description = null;
-        String date = null;
-        String reward = null;
-        Boolean isTaskDone = null;
-
-        reader.beginObject();
-        while (reader.hasNext()) {
-            String name = reader.nextName();
-            if (name.equals("Title")) {
-                title = reader.nextString();
-            } else if (name.equals("Description")) {
-                description = reader.nextString();
-            } else if (name.equals("Date")) {
-                date = reader.nextString();
-            } else if (name.equals("Reward")) {
-                reward = reader.nextString();
-            } else if (name.equals("isTaskDone")) {
-                isTaskDone = reader.nextBoolean();
-            }else {
-                reader.skipValue();
-            }
-        }
-        reader.endObject();
-        return new Task(title, description, date, reward, isTaskDone);
     }
 }

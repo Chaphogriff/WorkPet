@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TaskActivity">
@@ -11,59 +12,60 @@
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_marginStart="25dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="39dp"
         android:text="Back"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-         />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tasksText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/tasks"
         android:textColor="@android:color/black"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
         android:textSize="32sp"
-        android:text="@string/tasks" />
-
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tasksRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tasksText"
-        android:layout_marginTop="-18dp"
+        android:layout_marginTop="72dp"
         android:nestedScrollingEnabled="true"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tasksText" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="383dp"
-        android:layout_marginTop="52dp"
-        android:layout_marginBottom="93dp"
+
+        android:layout_marginBottom="52dp"
         android:backgroundTint="@color/tint"
-        android:src="@drawable/baseline_add" />
+        android:src="@drawable/baseline_add"
+        app:layout_constraintBottom_toTopOf="@+id/nav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav"
+        style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/boton_nav_menu" />
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
