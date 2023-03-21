@@ -69,7 +69,7 @@ public class TaskActivity extends AppCompatActivity {
         try {
             FileInputStream fis = new FileInputStream(new File(path, "tasklist.json"));
             TaskList = readJsonStream(fis);
-        } catch (IOException e) {
+        } catch (Exception e) {
             TaskList = new ArrayList<>();
             TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", "Aujourd'hui", "10 gold et 10XP", false));
         }

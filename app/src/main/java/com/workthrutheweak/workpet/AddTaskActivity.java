@@ -1,9 +1,13 @@
 package com.workthrutheweak.workpet;
 
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.provider.CalendarContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +39,8 @@ public class AddTaskActivity extends AppCompatActivity {
     EditText descTask;
     EditText goldTask;
     EditText xpTask;
+    CalendarView calendarView;
+    long datelong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +64,7 @@ public class AddTaskActivity extends AppCompatActivity {
         descTask = binding.DescInputField;
         goldTask = binding.GoldTextInput;
         xpTask = binding.XPTextInput;
+        calendarView = binding.DatePicker;
 
         // Mettre en place les listeners
 
@@ -66,6 +73,16 @@ public class AddTaskActivity extends AppCompatActivity {
                 startActivity(new Intent(this, TaskActivity.class))
         );
 
+
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            //show the selected date as a toast
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int day) {
+                Calendar c = Calendar.getInstance();
+                c.set(year, month, day);
+                datelong = c.getTimeInMillis();
+            }
+        });
         button_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -77,11 +94,26 @@ public class AddTaskActivity extends AppCompatActivity {
                     String Gold = goldTask.getText().toString();
                     String XP = xpTask.getText().toString();
                     Task newTask = new Task(Title,Desc,Date,Time,Gold,XP,false );
+                    /*Intent calendarIntent = new Intent(Intent.ACTION_INSERT);
+                    if (!Title.isEmpty() && !Desc.isEmpty()) {
+                        calendarIntent.setData(CalendarContract.Events.CONTENT_URI);
+                        calendarIntent.putExtra(CalendarContract.Events.TITLE, Title);
+                        calendarIntent.putExtra(CalendarContract.Events.DESCRIPTION, Desc);
+                        calendarIntent.putExtra(CalendarContract.Events.DTSTART, datelong);
+                        calendarIntent.putExtra(CalendarContract.Events.ALL_DAY, true);
+                        Log.i("AddTaskActivity", "not empty");
+                    }
+
+                    if (calendarIntent.resolveActivity(getPackageManager()) != null){
+                        Log.i("AddTaskActivity", "in if statement");
+                        startActivity(calendarIntent);
+                    } else {
+                        Log.i("AddTaskActivity", "not in if statement");
+                    }*/
 
                     Intent intent = new Intent(AddTaskActivity.this, TaskActivity.class);
                     intent.putExtra("Task", newTask);
                     startActivity(intent);
-
                 }
             }
         );
