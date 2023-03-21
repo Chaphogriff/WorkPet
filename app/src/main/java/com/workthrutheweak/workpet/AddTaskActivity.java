@@ -76,7 +76,7 @@ public class AddTaskActivity extends AppCompatActivity {
                     String Time = timeTask.getText().toString();
                     String Gold = goldTask.getText().toString();
                     String XP = xpTask.getText().toString();
-                    Task newTask = new Task(Title,Desc,Date,Time,Gold,XP);
+                    Task newTask = new Task(Title,Desc,Date,Time,Gold,XP,false );
 
                     Intent intent = new Intent(AddTaskActivity.this, TaskActivity.class);
                     intent.putExtra("Task", newTask);

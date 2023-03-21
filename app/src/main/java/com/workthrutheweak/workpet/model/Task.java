@@ -75,18 +75,20 @@ public class Task implements Parcelable {
         this.rewardId = rewardId;
     }*/
 
-    public Task(String title, String Desc, String Date, String Time, String Gold, String xp) {
+    public Task(String title, String Desc, String Date, String Time, String Gold, String xp, boolean isTaskDone) {
         this._title = title;
         this._description = Desc;
         this._date = Date + " " + Time;
         this._reward = Gold + " gold and " + xp + " xp";
+        this.isTaskDone = isTaskDone;
     }
 
-    public Task(String title, String Desc, String Date, String Reward){
+    public Task(String title, String Desc, String Date, String Reward, boolean isTaskDone){
         this._title = title;
         this._date = Date;
         this._description = Desc;
         this._reward = Reward;
+        this.isTaskDone = isTaskDone;
     }
 
     protected Task(Parcel in) {

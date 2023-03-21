@@ -71,7 +71,7 @@ public class TaskActivity extends AppCompatActivity {
             TaskList = readJsonStream(fis);
         } catch (IOException e) {
             TaskList = new ArrayList<>();
-            TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", "Aujourd'hui", "10 gold et 10XP"));
+            TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", "Aujourd'hui", "10 gold et 10XP", false));
         }
 
         /*File jsontask = new File("tasklist.json");
@@ -111,6 +111,8 @@ public class TaskActivity extends AppCompatActivity {
         RecyclerView recyclerView = binding.tasksRecyclerView;
         recyclerView.setAdapter(new TaskAdapter(this, TaskList));
         // Mettre en place les listeners
+
+
 
         // Appuyer le bouton nous envoie vers un autre activité
         button_back.setOnClickListener(view ->
@@ -160,6 +162,28 @@ public class TaskActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (TaskList!=null){
+            if (!TaskList.isEmpty()){
+                for (Task task : TaskList) {
+                    if (task.isTaskDone) {
+                        TaskList.remove(task);
+                    }
+                }
+            }
+        }
+        File path = getApplicationContext().getFilesDir();
+        try {
+            FileOutputStream fos = new FileOutputStream(new File(path, "tasklist.json"));
+            writeJsonStream(fos, TaskList);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void writeJsonStream(OutputStream out, List<Task> taskList) throws IOException {
         JsonWriter writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
         writer.setIndent("  ");
@@ -181,6 +205,7 @@ public class TaskActivity extends AppCompatActivity {
         writer.name("Description").value(task.get_description());
         writer.name("Date").value(task.get_date());
         writer.name("Reward").value(task.get_reward());
+        writer.name("isTaskDone").value(task.isTaskDone());
         writer.endObject();
     }
 
@@ -209,6 +234,7 @@ public class TaskActivity extends AppCompatActivity {
         String description = null;
         String date = null;
         String reward = null;
+        Boolean isTaskDone = null;
 
         reader.beginObject();
         while (reader.hasNext()) {
@@ -221,11 +247,13 @@ public class TaskActivity extends AppCompatActivity {
                 date = reader.nextString();
             } else if (name.equals("Reward")) {
                 reward = reader.nextString();
-            } else {
+            } else if (name.equals("isTaskDone")) {
+                isTaskDone = reader.nextBoolean();
+            }else {
                 reader.skipValue();
             }
         }
         reader.endObject();
-        return new Task(title, description, date, reward);
+        return new Task(title, description, date, reward, isTaskDone);
     }
 }
