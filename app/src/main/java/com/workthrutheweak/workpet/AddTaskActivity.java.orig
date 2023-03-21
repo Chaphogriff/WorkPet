@@ -49,7 +49,6 @@ public class AddTaskActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         // Récupérer les éléments du xml
         button_back = binding.back2;
-
         button_add = binding.AddButton;
 
         dateTask = binding.editTextDate;
@@ -70,20 +69,25 @@ public class AddTaskActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     //SaveData();
-                    String Title = titleTask.getText().toString();
-                    String Desc = descTask.getText().toString();
-                    String Date = dateTask.getText().toString();
-                    String Time = timeTask.getText().toString();
-                    String Gold = goldTask.getText().toString();
-                    String XP = xpTask.getText().toString();
+                    String Title = titleTask.toString();
+                    String Desc = descTask.toString();
+                    String Date = dateTask.toString();
+                    String Time = timeTask.toString();
+                    String Gold = goldTask.toString();
+                    String XP = xpTask.toString();
                     Task newTask = new Task(Title,Desc,Date,Time,Gold,XP);
 
+<<<<<<< HEAD
                     Intent intent = new Intent(AddTaskActivity.this, TaskActivity.class);
                     intent.putExtra("Task", newTask);
-                    startActivity(intent);
+                    startActivity(new Intent(view.getContext(), TaskActivity.class));
 
                 }
             }
         );
+=======
+
+>>>>>>> f095c4c059f68480f8f91d7f1d1eb021f356bf2a
     }
+
 }

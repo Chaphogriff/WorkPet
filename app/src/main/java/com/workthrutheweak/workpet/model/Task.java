@@ -22,6 +22,43 @@ public class Task implements Parcelable {
     public int rewardId;
     @SerializedName("Title")
     public String _title;
+
+    public int getTitleId() {
+        return titleId;
+    }
+
+    public int getDescriptionId() {
+        return descriptionId;
+    }
+
+    public int getDateId() {
+        return dateId;
+    }
+
+    public int getRewardId() {
+        return rewardId;
+    }
+
+    public String get_title() {
+        return _title;
+    }
+
+    public String get_description() {
+        return _description;
+    }
+
+    public String get_date() {
+        return _date;
+    }
+
+    public String get_reward() {
+        return _reward;
+    }
+
+    public boolean isTaskDone() {
+        return isTaskDone;
+    }
+
     @SerializedName("Description")
     public String _description;
     @SerializedName("Date")

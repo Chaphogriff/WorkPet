@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.workthrutheweak.workpet.R;
 import com.workthrutheweak.workpet.model.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -21,7 +22,7 @@ import java.util.StringJoiner;
 //Adapter for Task List Recycler View
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     private Context context;
-    private List<Task> dataset;
+    private List<Task> dataset = new ArrayList<>();
 
     public TaskAdapter(Context context, List<Task> dataset){
         this.context = context;
@@ -79,15 +80,19 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull TaskAdapter.ViewHolder holder, int position) {
         Task item = dataset.get(position);
-        holder.getTaskTitleTextView().setText(context.getResources().getString(item.titleId));
-        holder.getTaskDescTextView().setText(context.getResources().getString(item.descriptionId));
-        holder.getTaskDateTextView().setText(context.getResources().getString(item.dateId));
-        holder.getTaskRewardTextView().setText(context.getResources().getString(item.rewardId));
+        holder.getTaskTitleTextView().setText(item._title);
+        holder.getTaskDescTextView().setText(item._description);
+        holder.getTaskDateTextView().setText(item._date);
+        holder.getTaskRewardTextView().setText(item._reward);
         holder.getTaskCompletionCheckBox().setChecked(item.isTaskDone);
     }
 
     @Override
     public int getItemCount() {
-        return dataset.size();
+        if (dataset!=null) {
+            return dataset.size();
+        } else {
+            return 0;
+        }
     }
 }
