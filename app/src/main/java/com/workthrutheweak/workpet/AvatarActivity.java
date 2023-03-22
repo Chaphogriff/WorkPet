@@ -58,7 +58,6 @@ public class AvatarActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN) {
                     heart.setVisibility(View.VISIBLE);
-                    Toast.makeText(getApplicationContext(), "Pat Pat Pat", Toast.LENGTH_SHORT).show();
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     // ne fonctionne pas -> voir onClick
                 }
@@ -70,7 +69,6 @@ public class AvatarActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 heart.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(), "Released", Toast.LENGTH_SHORT).show();
             }
         });
 
