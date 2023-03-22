@@ -1,12 +1,14 @@
 package com.workthrutheweak.workpet;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.util.JsonWriter;
@@ -38,6 +40,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +55,7 @@ public class TaskActivity extends AppCompatActivity {
     TextView textView;
     List<Task> TaskList;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,17 +74,40 @@ public class TaskActivity extends AppCompatActivity {
         File path = getApplicationContext().getFilesDir();
         try {
             FileInputStream fis = new FileInputStream(new File(path, "tasklist.json"));
-            TaskList = JsonManager.readJsonStream(fis);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                TaskList = JsonManager.readJsonStream(fis);
+            }
         } catch (Exception e) {
             TaskList = new ArrayList<>();
-            TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", "Aujourd'hui", "10 gold et 10XP", false));
+            LocalDate localDate = LocalDate.ofYearDay(2023,1);
+            LocalTime localTime = LocalTime.of(0,0);
+            TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", localDate, localTime, 10, 10, false));
         }
 
-        Task task = getIntent().getParcelableExtra("Task");
-        if (task != null) {
+        String titleIntent = getIntent().getStringExtra("Title");
+        String descIntent = getIntent().getStringExtra("Desc");
+        int yearIntent = getIntent().getIntExtra("Year", 0);
+        int monthIntent = getIntent().getIntExtra("Month",0);
+        int dayIntent = getIntent().getIntExtra("Day",0);
+        int hourIntent = getIntent().getIntExtra("Hour",0);
+        int minuteIntent = getIntent().getIntExtra("Minute",0);
+        int goldIntent = getIntent().getIntExtra("Gold",0);
+        int xpIntent = getIntent().getIntExtra("XP",0);
+        if (yearIntent != 0) {
+            LocalTime localTimeI = LocalTime.of(hourIntent,minuteIntent);
+            LocalDate localDateI = LocalDate.of(yearIntent,monthIntent,dayIntent);
+            Task task = new Task(titleIntent,descIntent,localDateI,localTimeI,goldIntent,xpIntent,false);
             TaskList.add(task);
         }
-
+        Log.i("addTaskActivity",  "Hi");
+        int i = 1;
+        for (Task thetask : TaskList){
+            if (thetask.getLocalDate() == null){
+                Log.i("addTaskActivity",  "localdate is null 4" + i);
+            }
+            i+=1;
+        }
+        Log.i("addTaskActivity",  "WTH");
         RecyclerView recyclerView = binding.tasksRecyclerView;
         recyclerView.setAdapter(new TaskAdapter(this, TaskList));
         // Mettre en place les listeners
@@ -134,6 +162,7 @@ public class TaskActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onPause() {
         super.onPause();

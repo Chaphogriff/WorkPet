@@ -20,6 +20,7 @@ public class CalendarActivity extends AppCompatActivity {
     private ActivityCalendarBinding binding; //For ViewBinding feature
     Button button_back;
     CalendarView calendar;
+    long date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class CalendarActivity extends AppCompatActivity {
         calendar = binding.calendar;
 
         // Mettre en place les listeners
+        calendar.setDate(date);
 
         // Appuyer le bouton nous envoie vers un autre activité
         button_back.setOnClickListener(view ->

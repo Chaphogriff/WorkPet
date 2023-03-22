@@ -67,6 +67,22 @@
                 android:layout_marginTop="32dp"
                 android:text="Deadline" />
 
+            <Button
+                android:id="@+id/Datebutton"
+                android:layout_width="154dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="32dp"
+                android:text="Select Date" />
+
+            <Button
+                android:id="@+id/Timebutton"
+                android:layout_width="133dp"
+                android:layout_marginTop="32dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Select Time" />
+
             <CalendarView
                 android:id="@+id/DatePicker"
                 android:layout_width="269dp"

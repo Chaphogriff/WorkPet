@@ -81,10 +81,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull TaskAdapter.ViewHolder holder, int position) {
         Task item = dataset.get(position);
-        holder.getTaskTitleTextView().setText(item._title);
-        holder.getTaskDescTextView().setText(item._description);
-        holder.getTaskDateTextView().setText(item._date);
-        holder.getTaskRewardTextView().setText(item._reward);
+        List<String> TaskString = item.inString();
+        holder.getTaskTitleTextView().setText(TaskString.get(0));
+        holder.getTaskDescTextView().setText(TaskString.get(1));
+        holder.getTaskDateTextView().setText(TaskString.get(2));
+        holder.getTaskRewardTextView().setText(TaskString.get(3));
         holder.getTaskCompletionCheckBox().setChecked(item.isTaskDone);
         holder.getTaskCompletionCheckBox().setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

@@ -9,35 +9,73 @@ import androidx.annotation.NonNull;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 //Class for a Task item for recycler view
 public class Task implements Parcelable {
-    //Task Title string ID
-    public int titleId;
-    //Task Description string ID
-    public int descriptionId;
-    //Task Date string ID
-    public int dateId;
-    //Task Date string ID
-    public int rewardId;
+    /* //Task Title string ID
+     public int titleId;
+     //Task Description string ID
+     public int descriptionId;
+     //Task Date string ID
+     public int dateId;
+     //Task Date string ID
+     public int rewardId;*/
     @SerializedName("Title")
     public String _title;
+    @SerializedName("Description")
+    public String _description;
+    @SerializedName("Date")
+    public String _date;
+    @SerializedName("Reward")
+    public String _reward;
+    public LocalDate localDate;
+    public LocalTime localTime;
+    public int goldreward;
+    public int xpreward;
+    //Task boolean to check if Task is done for checkbox
+    public boolean isTaskDone = false;
 
-    public int getTitleId() {
-        return titleId;
+    List<String> TaskString;
+
+    public Task(String _title, String _description, LocalDate localDate, LocalTime localTime, int goldreward, int xpreward, boolean isTaskDone) {
+        this._title = _title;
+        this._description = _description;
+        this.localDate = localDate;
+        this.localTime = localTime;
+        this.goldreward = goldreward;
+        this.xpreward = xpreward;
+        this.isTaskDone = isTaskDone;
     }
 
-    public int getDescriptionId() {
-        return descriptionId;
+    public List<String> inString() {
+        List<String> list = new ArrayList<>();
+        list.add(this._title);
+        list.add(this._description);
+        list.add(this.localDate.toString() + " " + this.localTime.toString());
+        list.add(this.goldreward + " gold, " + this.xpreward + " xp");
+        return list;
     }
 
-    public int getDateId() {
-        return dateId;
+    public LocalDate getLocalDate() {
+        return localDate;
     }
 
-    public int getRewardId() {
-        return rewardId;
+    public LocalTime getLocalTime() {
+        return localTime;
     }
+
+    public int getGoldreward() {
+        return goldreward;
+    }
+
+    public int getXpreward() {
+        return xpreward;
+    }
+
 
     public String get_title() {
         return _title;
@@ -59,14 +97,7 @@ public class Task implements Parcelable {
         return isTaskDone;
     }
 
-    @SerializedName("Description")
-    public String _description;
-    @SerializedName("Date")
-    public String _date;
-    @SerializedName("Reward")
-    public String _reward;
-    //Task boolean to check if Task is done for checkbox
-    public boolean isTaskDone = false;
+
 
     /*public Task(int titleId, int descriptionId, int dateId, int rewardId){
         this.titleId = titleId;
@@ -83,7 +114,7 @@ public class Task implements Parcelable {
         this.isTaskDone = isTaskDone;
     }
 
-    public Task(String title, String Desc, String Date, String Reward, boolean isTaskDone){
+    public Task(String title, String Desc, String Date, String Reward, boolean isTaskDone) {
         this._title = title;
         this._date = Date;
         this._description = Desc;
@@ -92,10 +123,10 @@ public class Task implements Parcelable {
     }
 
     protected Task(Parcel in) {
-        titleId = in.readInt();
+        /*titleId = in.readInt();
         descriptionId = in.readInt();
         dateId = in.readInt();
-        rewardId = in.readInt();
+        rewardId = in.readInt();*/
         _title = in.readString();
         _description = in.readString();
         _date = in.readString();
@@ -122,10 +153,10 @@ public class Task implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
-        parcel.writeInt(titleId);
+        /*parcel.writeInt(titleId);
         parcel.writeInt(descriptionId);
         parcel.writeInt(dateId);
-        parcel.writeInt(rewardId);
+        parcel.writeInt(rewardId);*/
         parcel.writeString(_title);
         parcel.writeString(_description);
         parcel.writeString(_date);
