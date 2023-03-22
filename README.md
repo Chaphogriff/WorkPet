@@ -18,14 +18,19 @@ Notre équipe WorkThruTheWeak (WTTW) est composée de 4 membres suivants :
 ## Structure du projet
 
 ```               
-├── .idea                    
-├── app                     
-├── gradle                    
-├── .gitignore                   
-├── README.md
-├── build.gradle
-├── gradle.properties
-├── gradlew
-├── gradlew.bat
-└── settings.gradle
+├── .idea                                 # dossier composé des fichiers propriétés de .idea                 
+├── app                                   # dossier contenant le code principal
+|    └── src                              # dossier de code source
+|         └── main                        # dossier contenant notre application ( ne pas utiliser le dossier test )
+|              ├── java                   # dossier contenant les classes java, principalement les Activity
+|              ├── res                    # dossier ressources composées des fichiers .xml, les images, le son etc.
+|              └── AndroidManifest.xml    # fichier qui gère les permissions nécessaires pour lancer l'application
+├── gradle                                # dossier composé des fichiers gradle  
+├── .gitignore                            # fichier .gitignore pour git
+├── README.md                             # instructions (ce fichier)
+├── build.gradle                          # fichier qui gère la compilation et le build de l'application
+├── gradle.properties                     # fichier qui gère les propriétés de gradle
+├── gradlew                               # fichier script wrapper de gradle // ne pas toucher
+├── gradlew.bat                           # fichier script wrapper de gradle // ne pas toucher
+└── settings.gradle                       # fichier qui définit les modules à inclure sur gradle
 ```
