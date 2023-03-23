@@ -72,29 +72,17 @@ public class TaskActivity extends AppCompatActivity {
         edit=binding.edit;
 
         File path = getApplicationContext().getFilesDir();
-        //try {
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(new File(path, "tasklist.json"));
-        } catch (FileNotFoundException e) {
-            System.out.println(e);
-            throw new RuntimeException(e);
-        }
-        try {
             TaskList = JsonManager.readJsonStream(fis);
         } catch (IOException e) {
             System.out.println(e);
-            throw new RuntimeException(e);
-        }
-        Log.i("app", "reading json");
-        /*} catch (Exception e) {
-            System.out.println(e);
-            Log.i("app", "not reading json");
             TaskList = new ArrayList<>();
             LocalDate localDate = LocalDate.ofYearDay(2023,1);
             LocalTime localTime = LocalTime.of(0,0);
             TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", localDate, localTime, 10, 10, false));
-        }*/
+        }
 
         String titleIntent = getIntent().getStringExtra("Title");
         String descIntent = getIntent().getStringExtra("Desc");

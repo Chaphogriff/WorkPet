@@ -1,5 +1,6 @@
 package com.workthrutheweak.workpet.model;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -16,14 +17,6 @@ import java.util.List;
 
 //Class for a Task item for recycler view
 public class Task implements Parcelable {
-    /* //Task Title string ID
-     public int titleId;
-     //Task Description string ID
-     public int descriptionId;
-     //Task Date string ID
-     public int dateId;
-     //Task Date string ID
-     public int rewardId;*/
     @SerializedName("Title")
     public String _title;
     @SerializedName("Description")
@@ -34,13 +27,17 @@ public class Task implements Parcelable {
     public String _reward;
     public LocalDate localDate;
     public LocalTime localTime;
+    @SerializedName("Gold")
     public int goldreward;
+    @SerializedName("XP")
     public int xpreward;
     //Task boolean to check if Task is done for checkbox
+    @SerializedName("isTaskDone")
     public boolean isTaskDone = false;
 
     List<String> TaskString;
 
+    @SuppressLint("NewApi")
     public Task(String _title, String _description, LocalDate localDate, LocalTime localTime, int goldreward, int xpreward, boolean isTaskDone) {
         this._title = _title;
         this._description = _description;

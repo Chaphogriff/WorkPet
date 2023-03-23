@@ -47,13 +47,10 @@ public class AddTaskActivity extends AppCompatActivity {
     Button button_time;
     Button button_date;
     FloatingActionButton button_add;
-    EditText dateTask;
-    EditText timeTask;
     EditText titleTask;
     EditText descTask;
     EditText goldTask;
     EditText xpTask;
-    CalendarView calendarView;
     LocalDate localdate;
     LocalTime localtime;
     int hour, minute;
@@ -81,7 +78,6 @@ public class AddTaskActivity extends AppCompatActivity {
         descTask = binding.DescInputField;
         goldTask = binding.GoldTextInput;
         xpTask = binding.XPTextInput;
-        calendarView = binding.DatePicker;
 
         // Mettre en place les listeners
 

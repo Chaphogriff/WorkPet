@@ -83,14 +83,6 @@
                 android:layout_gravity="center_horizontal"
                 android:text="Select Time" />
 
-            <CalendarView
-                android:id="@+id/DatePicker"
-                android:layout_width="269dp"
-                android:layout_height="261dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="48dp" />
-
-       
 
             <TextView
                 android:id="@+id/TaskReward"

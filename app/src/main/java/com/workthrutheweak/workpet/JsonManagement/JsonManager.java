@@ -3,6 +3,7 @@ package com.workthrutheweak.workpet.JsonManagement;
 import android.os.Build;
 import android.util.JsonReader;
 import android.util.JsonWriter;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -104,13 +105,13 @@ public class JsonManager {
             } else if (name.equals("Year")) {
                 year = reader.nextInt();
             } else if (name.equals("Month")) {
-                year = reader.nextInt();
+                month = reader.nextInt();
             } else if (name.equals("Day")) {
-                year = reader.nextInt();
+                day = reader.nextInt();
             } else if (name.equals("Hour")) {
-                year = reader.nextInt();
+                hour = reader.nextInt();
             } else if (name.equals("Minute")) {
-                year = reader.nextInt();
+                minute = reader.nextInt();
             } else if (name.equals("Gold")) {
                 gold = reader.nextInt();
             } else if (name.equals("XP")) {
