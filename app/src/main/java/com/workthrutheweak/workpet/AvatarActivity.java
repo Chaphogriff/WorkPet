@@ -1,12 +1,16 @@
 package com.workthrutheweak.workpet;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -28,6 +32,7 @@ public class AvatarActivity extends AppCompatActivity {
     GifImageView heart;
     GifImageView pet;
     MediaPlayer mp;
+    Vibrator vibe;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -44,7 +49,10 @@ public class AvatarActivity extends AppCompatActivity {
         heart = binding.heart;
         pet = binding.pet;
 
+        // Initialisation valeurs
         mp = MediaPlayer.create(this,R.raw.pet_sample);
+        vibe = (Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
+        long[] vibrate_pattern = { 0, 200, 0 }; //0 to start now, 200 to vibrate 200 ms, 0 to sleep for 0 ms.
 
         // Mettre en place les listeners
 
@@ -52,11 +60,13 @@ public class AvatarActivity extends AppCompatActivity {
         heart.setVisibility(View.INVISIBLE);
         // onHold
         pet.setOnTouchListener(new View.OnTouchListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN) {
                     heart.setVisibility(View.VISIBLE);
                     mp.start();
+                    vibe.vibrate(vibrate_pattern, 0);
 
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     // ne fonctionne pas -> voir onClick
@@ -69,6 +79,7 @@ public class AvatarActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 heart.setVisibility(View.INVISIBLE);
+                vibe.cancel();
             }
         });
 
