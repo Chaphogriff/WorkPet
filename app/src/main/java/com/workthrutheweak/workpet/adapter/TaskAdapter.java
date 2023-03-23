@@ -3,6 +3,8 @@ package com.workthrutheweak.workpet.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +17,17 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.R;
 import com.workthrutheweak.workpet.model.Task;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
@@ -103,17 +113,24 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
              @Override
              public boolean onLongClick(View view) {
                  int p=position;
+                 p=holder.getAdapterPosition();// obtenir la position actuelle de l'élément dans la liste
                  CharSequence[] delete={
                         "Delete",
                  };
                  AlertDialog.Builder alert= new AlertDialog.Builder(context);
+                 int finalP = p;
                  alert.setItems(delete, new DialogInterface.OnClickListener() {
                      @Override
                      public void onClick(DialogInterface dialogInterface, int i) {
                       if(i==0){
 
-                          dataset.remove(p);
-                          notifyItemRemoved(p);
+                          //if (p >= 0 && p < dataset.size()) {
+                              dataset.remove(finalP);// supprimer l'élément à la position actuelle
+                              notifyItemRemoved(finalP);
+
+
+                          // }
+
                       }
                      }
                  });
