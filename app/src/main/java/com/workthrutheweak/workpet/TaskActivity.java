@@ -49,7 +49,7 @@ public class TaskActivity extends AppCompatActivity {
     private ActivityTaskBinding binding;//For ViewBinding feature
     JsonManager JsonM = new JsonManager();
     Button button_back;
-    FloatingActionButton button_addT;
+    FloatingActionButton button_addT,edit,delete;
     TextView textView;
     List<Task> TaskList;
 
@@ -69,6 +69,9 @@ public class TaskActivity extends AppCompatActivity {
         button_back = binding.back;
         button_addT = binding.fab;
         textView = binding.tasksText;
+        delete=binding.delete;
+        edit=binding.edit;
+
         File path = getApplicationContext().getFilesDir();
         try {
             FileInputStream fis = new FileInputStream(new File(path, "tasklist.json"));
