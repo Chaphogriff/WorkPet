@@ -8,6 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="tint">#D4C1C1</color>
+    <color name="light_tint">#D8D5D5</color>
 
 
 

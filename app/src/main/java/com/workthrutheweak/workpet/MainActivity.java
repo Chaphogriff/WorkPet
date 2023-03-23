@@ -1,10 +1,12 @@
 package com.workthrutheweak.workpet;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.util.JsonWriter;
@@ -27,6 +29,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Variables
     ImageButton logo_main;
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,15 +53,15 @@ public class MainActivity extends AppCompatActivity {
         // Récupérer les éléments du xml
         //logo_main = binding.logoWorkpet;
 
-        List<Task> myDataset = new Datasource().loadTasks();
         RecyclerView recyclerView = binding.recyclerView;
-        recyclerView.setAdapter(new TaskAdapter(this, myDataset));
-        // Mettre en place les listeners
 
-        // Appuyer le bouton nous envoie vers un autre activité
-        /*logo_main.setOnClickListener(view ->
-                startActivity(new Intent(MainActivity.this, TestActivity.class))
-        );*/
+        // Ajout des tâches
+        List<Task> TaskList;
+        TaskList = new ArrayList<>();
+        LocalDate localDate = LocalDate.ofYearDay(2023,1);
+        LocalTime localTime = LocalTime.of(0,0);
+        TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", localDate, localTime, 10, 10, false));
+        recyclerView.setAdapter(new TaskAdapter(this, TaskList));
 
         BottomNavigationView bottomNavigationView = binding.nav;
         bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
