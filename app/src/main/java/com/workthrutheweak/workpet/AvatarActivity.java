@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,9 +25,9 @@ public class AvatarActivity extends AppCompatActivity {
 
     // Variables
     private ActivityAvatarBinding binding; //For ViewBinding feature
-    Button button_back;
     GifImageView heart;
     GifImageView pet;
+    MediaPlayer mp;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -39,16 +41,12 @@ public class AvatarActivity extends AppCompatActivity {
         setContentView(v);
 
         // Récupérer les éléments du xml
-        button_back = binding.back;
         heart = binding.heart;
         pet = binding.pet;
 
-        // Mettre en place les listeners
+        mp = MediaPlayer.create(this,R.raw.pet_sample);
 
-        // Appuyer le bouton nous envoie vers un autre activité
-        button_back.setOnClickListener(view ->
-                startActivity(new Intent(this, MainActivity.class))
-        );
+        // Mettre en place les listeners
 
         // Appuyer le bouton nous envoie vers un autre activité
         heart.setVisibility(View.INVISIBLE);
@@ -58,6 +56,8 @@ public class AvatarActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN) {
                     heart.setVisibility(View.VISIBLE);
+                    mp.start();
+
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     // ne fonctionne pas -> voir onClick
                 }
@@ -82,20 +82,25 @@ public class AvatarActivity extends AppCompatActivity {
 
                 switch (item.getItemId()) {
                     case R.id.calendar:
+                        mp.release();
                         startActivity(new Intent(getApplicationContext(), CalendarActivity.class));
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.avatar:
+                        mp.release();
                         return true;
                     case R.id.home:
+                        mp.release();
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.setting:
+                        mp.release();
                         startActivity(new Intent(getApplicationContext(), SettingActivity.class));
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.task:
+                        mp.release();
                         startActivity(new Intent(getApplicationContext(), TaskActivity.class));
                         overridePendingTransition(0, 0);
                         return true;
