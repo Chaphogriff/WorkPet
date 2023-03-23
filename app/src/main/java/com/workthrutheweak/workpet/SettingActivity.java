@@ -34,7 +34,6 @@ public class SettingActivity extends AppCompatActivity {
 
         // Récupérer les éléments du xml
         button_back = binding.back;
-        textView = binding.textView;
 
         // Mettre en place les listeners
 
