@@ -1,6 +1,8 @@
 package com.workthrutheweak.workpet.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -70,6 +73,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     }
 
 
+
+
     @NonNull
     @Override
     public TaskAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -93,6 +98,31 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
                 item.isTaskDone = isChecked;
             }
         });
+              //delete Task
+         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+             @Override
+             public boolean onLongClick(View view) {
+                 int p=position;
+                 CharSequence[] delete={
+                        "Delete",
+                 };
+                 AlertDialog.Builder alert= new AlertDialog.Builder(context);
+                 alert.setItems(delete, new DialogInterface.OnClickListener() {
+                     @Override
+                     public void onClick(DialogInterface dialogInterface, int i) {
+                      if(i==0){
+
+                          dataset.remove(p);
+                          notifyItemRemoved(p);
+                      }
+                     }
+                 });
+                 alert.create().show();
+
+                 return false;
+             }
+         });
+
     }
 
     @Override
