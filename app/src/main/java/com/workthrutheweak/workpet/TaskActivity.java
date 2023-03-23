@@ -72,17 +72,29 @@ public class TaskActivity extends AppCompatActivity {
         button_addT = binding.fab;
         textView = binding.tasksText;
         File path = getApplicationContext().getFilesDir();
+        //try {
+        FileInputStream fis = null;
         try {
-            FileInputStream fis = new FileInputStream(new File(path, "tasklist.json"));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                TaskList = JsonManager.readJsonStream(fis);
-            }
-        } catch (Exception e) {
+            fis = new FileInputStream(new File(path, "tasklist.json"));
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+            throw new RuntimeException(e);
+        }
+        try {
+            TaskList = JsonManager.readJsonStream(fis);
+        } catch (IOException e) {
+            System.out.println(e);
+            throw new RuntimeException(e);
+        }
+        Log.i("app", "reading json");
+        /*} catch (Exception e) {
+            System.out.println(e);
+            Log.i("app", "not reading json");
             TaskList = new ArrayList<>();
             LocalDate localDate = LocalDate.ofYearDay(2023,1);
             LocalTime localTime = LocalTime.of(0,0);
             TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", localDate, localTime, 10, 10, false));
-        }
+        }*/
 
         String titleIntent = getIntent().getStringExtra("Title");
         String descIntent = getIntent().getStringExtra("Desc");
@@ -98,16 +110,9 @@ public class TaskActivity extends AppCompatActivity {
             LocalDate localDateI = LocalDate.of(yearIntent,monthIntent,dayIntent);
             Task task = new Task(titleIntent,descIntent,localDateI,localTimeI,goldIntent,xpIntent,false);
             TaskList.add(task);
+
         }
-        Log.i("addTaskActivity",  "Hi");
-        int i = 1;
-        for (Task thetask : TaskList){
-            if (thetask.getLocalDate() == null){
-                Log.i("addTaskActivity",  "localdate is null 4" + i);
-            }
-            i+=1;
-        }
-        Log.i("addTaskActivity",  "WTH");
+
         RecyclerView recyclerView = binding.tasksRecyclerView;
         recyclerView.setAdapter(new TaskAdapter(this, TaskList));
         // Mettre en place les listeners
@@ -126,6 +131,7 @@ public class TaskActivity extends AppCompatActivity {
         try {
             FileOutputStream fos = new FileOutputStream(new File(path, "tasklist.json"));
             JsonManager.writeJsonStream(fos, TaskList);
+            Log.i("app","saving");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -164,9 +170,7 @@ public class TaskActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    protected void onPause() {
-        super.onPause();
-
+    protected void onDestroy() {
         if (TaskList!=null){
             if (!TaskList.isEmpty()){
                 for (Task task : TaskList) {
@@ -183,5 +187,6 @@ public class TaskActivity extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        super.onDestroy();
     }
 }

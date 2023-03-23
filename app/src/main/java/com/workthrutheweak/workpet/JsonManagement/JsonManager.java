@@ -115,7 +115,7 @@ public class JsonManager {
                 gold = reader.nextInt();
             } else if (name.equals("XP")) {
                 XP = reader.nextInt();
-            } else if (name.equals("IsTaskDone")) {
+            } else if (name.equals("isTaskDone")) {
                 isTaskDone = reader.nextBoolean();
             }
             else {
