@@ -76,8 +76,7 @@ public class AddTaskActivity extends AppCompatActivity {
         button_date = binding.Datebutton;
         button_time = binding.Timebutton;
 
-        dateTask = binding.editTextDate;
-        timeTask = binding.editTextTime;
+
         titleTask = binding.TitleInputField;
         descTask = binding.DescInputField;
         goldTask = binding.GoldTextInput;
@@ -122,8 +121,8 @@ public class AddTaskActivity extends AppCompatActivity {
                     //SaveData();
                     String Title = titleTask.getText().toString();
                     String Desc = descTask.getText().toString();
-                    String Date = dateTask.getText().toString();
-                    String Time = timeTask.getText().toString();
+                    String Date = button_date.getText().toString();
+                    String Time = button_time.getText().toString();
                     String Gold = goldTask.getText().toString();
                     String XP = xpTask.getText().toString();
                     LocalDate ld = localdate;
