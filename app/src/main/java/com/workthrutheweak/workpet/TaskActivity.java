@@ -158,7 +158,7 @@ public class TaskActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    protected void onDestroy() {
+    protected void onPause() {
         if (TaskList!=null){
             if (!TaskList.isEmpty()){
                 for (Task task : TaskList) {
@@ -175,6 +175,6 @@ public class TaskActivity extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        super.onDestroy();
+        super.onPause();
     }
 }

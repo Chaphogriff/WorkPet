@@ -51,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(v);
 
         // Récupérer les éléments du xml
-        //logo_main = binding.logoWorkpet;
-
         RecyclerView recyclerView = binding.recyclerView;
 
         // Ajout des tâches

@@ -38,10 +38,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     private Context context;
     private List<Task> dataset;
 
-    public TaskAdapter(Context context, List<Task> dataset){
+    public TaskAdapter(Context context, List<Task> dataset) {
         this.context = context;
         this.dataset = dataset;
     }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView taskTitleTextView;
         private TextView taskDescTextView;
@@ -83,8 +84,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     }
 
 
-
-
     @NonNull
     @Override
     public TaskAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -108,43 +107,38 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
                 item.isTaskDone = isChecked;
             }
         });
-              //delete Task
-         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-             @Override
-             public boolean onLongClick(View view) {
-                 int p=position;
-                 p=holder.getAdapterPosition();// obtenir la position actuelle de l'élément dans la liste
-                 CharSequence[] delete={
+        //delete Task
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                int p = position;
+                p = holder.getAdapterPosition();// obtenir la position actuelle de l'élément dans la liste
+                CharSequence[] delete = {
                         "Delete",
-                 };
-                 AlertDialog.Builder alert= new AlertDialog.Builder(context);
-                 int finalP = p;
-                 alert.setItems(delete, new DialogInterface.OnClickListener() {
-                     @Override
-                     public void onClick(DialogInterface dialogInterface, int i) {
-                      if(i==0){
+                };
+                AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                int finalP = p;
+                alert.setItems(delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (i == 0) {
+                            dataset.remove(finalP);// supprimer l'élément à la position actuelle
+                            notifyItemRemoved(finalP);
 
-                          //if (p >= 0 && p < dataset.size()) {
-                              dataset.remove(finalP);// supprimer l'élément à la position actuelle
-                              notifyItemRemoved(finalP);
+                        }
+                    }
+                });
+                alert.create().show();
 
-
-                          // }
-
-                      }
-                     }
-                 });
-                 alert.create().show();
-
-                 return false;
-             }
-         });
+                return false;
+            }
+        });
 
     }
 
     @Override
     public int getItemCount() {
-        if (dataset!=null) {
+        if (dataset != null) {
             return dataset.size();
         } else {
             return 0;

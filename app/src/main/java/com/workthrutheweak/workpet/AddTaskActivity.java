@@ -61,6 +61,7 @@ public class AddTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_addtask);
 
         initDatePicker();
+
         //Setup View Binding variable
         binding = ActivityAddtaskBinding.inflate(getLayoutInflater());
         View v = binding.getRoot();
@@ -86,17 +87,6 @@ public class AddTaskActivity extends AppCompatActivity {
                 startActivity(new Intent(this, TaskActivity.class))
         );
 
-        /*
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            //show the selected date as a toast
-            @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int day) {
-                Calendar c = Calendar.getInstance();
-                c.set(year, month, day);
-                datelong = c.getTimeInMillis();
-            }
-        });*/
-
         button_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,41 +104,13 @@ public class AddTaskActivity extends AppCompatActivity {
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onClick(View view) {
-                    //SaveData();
                     String Title = titleTask.getText().toString();
                     String Desc = descTask.getText().toString();
-                    String Date = button_date.getText().toString();
-                    String Time = button_time.getText().toString();
-                    String Gold = goldTask.getText().toString();
-                    String XP = xpTask.getText().toString();
                     LocalDate ld = localdate;
                     LocalTime lt = localtime;
                     int gold = Integer.parseInt(goldTask.getText().toString());
                     int xp = Integer.parseInt(xpTask.getText().toString());
-                    if (localdate==null){
-                        Log.i("addTaskActivity",  "localdate is null 3");
-                    }
-                    //Task newTask = new Task(Title,Desc,Date,Time,Gold,XP,false );
-                    Task newtask = new Task(Title,Desc,ld,lt,gold,xp,false);
-                    /*Intent calendarIntent = new Intent(Intent.ACTION_INSERT);
-                    if (!Title.isEmpty() && !Desc.isEmpty()) {
-                        calendarIntent.setData(CalendarContract.Events.CONTENT_URI);
-                        calendarIntent.putExtra(CalendarContract.Events.TITLE, Title);
-                        calendarIntent.putExtra(CalendarContract.Events.DESCRIPTION, Desc);
-                        calendarIntent.putExtra(CalendarContract.Events.DTSTART, datelong);
-                        calendarIntent.putExtra(CalendarContract.Events.ALL_DAY, true);
-                        Log.i("AddTaskActivity", "not empty");
-                    }
 
-                    if (calendarIntent.resolveActivity(getPackageManager()) != null){
-                        Log.i("AddTaskActivity", "in if statement");
-                        startActivity(calendarIntent);
-                    } else {
-                        Log.i("AddTaskActivity", "not in if statement");
-                    }*/
-                    if (newtask.getGoldreward()==3){
-                        Log.i("addTaskActivity",  "Bonne reward");
-                    }
                     Intent intent = new Intent(AddTaskActivity.this, TaskActivity.class);
                     intent.putExtra("Title", Title);
                     intent.putExtra("Desc", Desc);
