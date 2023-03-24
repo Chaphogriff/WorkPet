@@ -7,14 +7,9 @@ import java.io.Serializable;
 import java.util.List;
 
 //Class to get data for recycler view
+
+//Class to delete, unused for now
 public class Datasource  {
     public Datasource(){}
     public List<Task> TaskList;
-     public List<Task> loadTasks() {
-        /* Task task1 = new Task(R.string.taskTitle1,R.string.taskDesc1,R.string.taskDate1,R.string.taskReward1);
-         Task task2 = new Task(R.string.taskTitle2,R.string.empty,R.string.taskDate1,R.string.taskReward2);
-         Task task3 = new Task(R.string.taskTitle3,R.string.taskDesc2,R.string.taskDate2,R.string.taskReward1);
-         return List.of(task1,task2,task3); */
-         return TaskList;
-     }
 }

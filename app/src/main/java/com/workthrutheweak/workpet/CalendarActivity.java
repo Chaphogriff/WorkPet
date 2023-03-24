@@ -2,12 +2,14 @@ package com.workthrutheweak.workpet;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -26,6 +28,7 @@ import com.workthrutheweak.workpet.model.Task;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -79,8 +82,8 @@ public class CalendarActivity extends AppCompatActivity {
         } catch (IOException e) {
             System.out.println(e);
             taskList = new ArrayList<>();
-            LocalDate localDate = LocalDate.ofYearDay(2023,1);
-            LocalTime localTime = LocalTime.of(0,0);
+            LocalDate localDate = LocalDate.ofYearDay(2023, 1);
+            LocalTime localTime = LocalTime.of(0, 0);
             taskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", localDate, localTime, 10, 10, false));
         }
 
@@ -91,13 +94,13 @@ public class CalendarActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MainActivity.class))
         );
 
-       // Récupération de la date actuelle
+        // Récupération de la date actuelle
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
-       // Affichage de la date actuelle sur le CalendarView
+        // Affichage de la date actuelle sur le CalendarView
         calendarView.setDate(calendar.getTimeInMillis());
 
         // Ajout d'un listener pour détecter le changement de date sur le CalendarView
@@ -108,7 +111,7 @@ public class CalendarActivity extends AppCompatActivity {
                 // Récupération de la date sélectionnée sur le CalendarView
                 Calendar selectedDate = Calendar.getInstance();
                 selectedDate.set(year, month, dayOfMonth);
-                LocalDate localDate_calendar = LocalDate.of(year,month,dayOfMonth);
+                LocalDate localDate_calendar = LocalDate.of(year, month, dayOfMonth);
 
                 // Affichage de la date sélectionnée dans la console
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
@@ -116,20 +119,20 @@ public class CalendarActivity extends AppCompatActivity {
 
                 taskList_popup.clear();
 
-                if (taskList!=null ) {
-                    if (!taskList.isEmpty()){
-                        for (Task task : taskList){
+                if (taskList != null) {
+                    if (!taskList.isEmpty()) {
+                        for (Task task : taskList) {
                             LocalDate localDate_task = task.getLocalDate();
                             if (localDate_calendar.getDayOfMonth() == localDate_task.getDayOfMonth()
                                     && localDate_calendar.getMonthValue() == localDate_task.getMonthValue()
-                                    && localDate_calendar.getYear() == localDate_task.getYear()){
+                                    && localDate_calendar.getYear() == localDate_task.getYear()) {
                                 taskList_popup.add(task);
                             }
                         }
                     }
                 }
 
-                if (!taskList_popup.isEmpty()){
+                if (!taskList_popup.isEmpty()) {
                     createPopupDialog();
                 }
             }
@@ -170,7 +173,7 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
-    public void createPopupDialog(){
+    public void createPopupDialog() {
         dialogbuilder = new AlertDialog.Builder(this);
         final View calendarPopupView = getLayoutInflater().inflate(R.layout.activity_calendar_popup, null);
         //dialog;
@@ -183,11 +186,29 @@ public class CalendarActivity extends AppCompatActivity {
         dialog.show();
 
         button_popup_back.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
+                if (taskList != null) {
+                    if (!taskList.isEmpty()) {
+                        for (Task task_popup : taskList_popup) {
+                            for (Task task : taskList) {
+                                if (task_popup.isTaskDone && task_popup.get_title() == task.get_title()) {
+                                    taskList.remove(task);
+                                }
+                            }
+                        }
+                    }
+                }
+                File path = getApplicationContext().getFilesDir();
+                try {
+                    FileOutputStream fos = new FileOutputStream(new File(path, "tasklist.json"));
+                    JsonManager.writeJsonStream(fos, taskList);
+                } catch (IOException e) {
+                    System.out.println(e);
+                }
                 dialog.dismiss();
             }
         });
-
     }
 }

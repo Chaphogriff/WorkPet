@@ -81,7 +81,6 @@ public class AddTaskActivity extends AppCompatActivity {
         xpTask = binding.XPTextInput;
 
         // Mettre en place les listeners
-
         // Appuyer le bouton nous envoie vers un autre activité
         button_back.setOnClickListener(view ->
                 startActivity(new Intent(this, TaskActivity.class))
@@ -101,44 +100,41 @@ public class AddTaskActivity extends AppCompatActivity {
             }
         });
         button_add.setOnClickListener(new View.OnClickListener() {
-                @RequiresApi(api = Build.VERSION_CODES.O)
-                @Override
-                public void onClick(View view) {
-                    String Title = titleTask.getText().toString();
-                    String Desc = descTask.getText().toString();
-                    LocalDate ld = localdate;
-                    LocalTime lt = localtime;
-                    int gold = Integer.parseInt(goldTask.getText().toString());
-                    int xp = Integer.parseInt(xpTask.getText().toString());
+                                          @RequiresApi(api = Build.VERSION_CODES.O)
+                                          @Override
+                                          public void onClick(View view) {
+                                              String Title = titleTask.getText().toString();
+                                              String Desc = descTask.getText().toString();
+                                              LocalDate ld = localdate;
+                                              LocalTime lt = localtime;
+                                              int gold = Integer.parseInt(goldTask.getText().toString());
+                                              int xp = Integer.parseInt(xpTask.getText().toString());
 
-                    Intent intent = new Intent(AddTaskActivity.this, TaskActivity.class);
-                    intent.putExtra("Title", Title);
-                    intent.putExtra("Desc", Desc);
-                    intent.putExtra("Year", localdate.getYear());
-                    intent.putExtra("Month", localdate.getMonthValue());
-                    intent.putExtra("Day", localdate.getDayOfMonth());
-                    intent.putExtra("Hour", localtime.getHour());
-                    intent.putExtra("Minute", localtime.getMinute());
-                    intent.putExtra("Gold", gold);
-                    intent.putExtra("XP", xp);
-                    startActivity(intent);
-                }
-            }
+                                              Intent intent = new Intent(AddTaskActivity.this, TaskActivity.class);
+                                              intent.putExtra("Title", Title);
+                                              intent.putExtra("Desc", Desc);
+                                              intent.putExtra("Year", localdate.getYear());
+                                              intent.putExtra("Month", localdate.getMonthValue());
+                                              intent.putExtra("Day", localdate.getDayOfMonth());
+                                              intent.putExtra("Hour", localtime.getHour());
+                                              intent.putExtra("Minute", localtime.getMinute());
+                                              intent.putExtra("Gold", gold);
+                                              intent.putExtra("XP", xp);
+                                              startActivity(intent);
+                                          }
+                                      }
         );
     }
 
-    public void popTimePicker(View view)
-    {
-        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener()
-        {
+    public void popTimePicker(View view) {
+        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
-            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute)
-            {
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 hour = selectedHour;
                 minute = selectedMinute;
-                button_time.setText(String.format(Locale.getDefault(), "%02d:%02d",hour, minute));
+                button_time.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    localtime = LocalTime.of(hour,minute);
+                    localtime = LocalTime.of(hour, minute);
                 }
             }
         };
@@ -149,24 +145,10 @@ public class AddTaskActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
-    private String getTodaysDate()
-    {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        month = month + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        return makeDateString(day, month, year);
-    }
-
-    private void initDatePicker()
-    {
-        Log.i("addTaskActivity", " got near the date");
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener()
-        {
+    private void initDatePicker() {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day)
-            {
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
                 String date = makeDateString(day, month, year);
                 button_date.setText(date);
@@ -178,10 +160,6 @@ public class AddTaskActivity extends AppCompatActivity {
         int day = cal.get(Calendar.DAY_OF_MONTH);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             localdate = of(year, month, day);
-            Log.i("addTaskActivity", " got the date");
-        }
-        if (localdate==null){
-            Log.i("addTaskActivity",  "localdate is null");
         }
         int style = AlertDialog.THEME_HOLO_LIGHT;
 
@@ -190,44 +168,41 @@ public class AddTaskActivity extends AppCompatActivity {
 
     }
 
-    private String makeDateString(int day, int month, int year)
-    {
+    private String makeDateString(int day, int month, int year) {
         return getMonthFormat(month) + " " + day + " " + year;
     }
 
-    private String getMonthFormat(int month)
-    {
-        if(month == 1)
+    private String getMonthFormat(int month) {
+        if (month == 1)
             return "JAN";
-        if(month == 2)
+        if (month == 2)
             return "FEB";
-        if(month == 3)
+        if (month == 3)
             return "MAR";
-        if(month == 4)
+        if (month == 4)
             return "APR";
-        if(month == 5)
+        if (month == 5)
             return "MAY";
-        if(month == 6)
+        if (month == 6)
             return "JUN";
-        if(month == 7)
+        if (month == 7)
             return "JUL";
-        if(month == 8)
+        if (month == 8)
             return "AUG";
-        if(month == 9)
+        if (month == 9)
             return "SEP";
-        if(month == 10)
+        if (month == 10)
             return "OCT";
-        if(month == 11)
+        if (month == 11)
             return "NOV";
-        if(month == 12)
+        if (month == 12)
             return "DEC";
 
         //default should never happen
         return "JAN";
     }
 
-    public void openDatePicker(View view)
-    {
+    public void openDatePicker(View view) {
         datePickerDialog.show();
     }
 }

@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.adapter.TaskAdapter;
 import com.workthrutheweak.workpet.data.Datasource;
 import com.workthrutheweak.workpet.databinding.ActivityMainBinding;
@@ -36,9 +37,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding; //For ViewBinding feature
-
+    List<Task> TaskList;
     // Variables
     ImageButton logo_main;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +56,19 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = binding.recyclerView;
 
         // Ajout des tâches
-        List<Task> TaskList;
-        TaskList = new ArrayList<>();
-        LocalDate localDate = LocalDate.ofYearDay(2023,1);
-        LocalTime localTime = LocalTime.of(0,0);
-        TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", localDate, localTime, 10, 10, false));
+        File path = getApplicationContext().getFilesDir();
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(new File(path, "tasklist.json"));
+            TaskList = JsonManager.readJsonStream(fis);
+        } catch (IOException e) {
+            System.out.println(e);
+            TaskList = new ArrayList<>();
+            LocalDate localDate = LocalDate.ofYearDay(2023, 1);
+            LocalTime localTime = LocalTime.of(0, 0);
+            TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", localDate, localTime, 10, 10, false));
+        }
+
         recyclerView.setAdapter(new TaskAdapter(this, TaskList));
 
         BottomNavigationView bottomNavigationView = binding.nav;
@@ -91,5 +101,27 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    protected void onPause() {
+        if (TaskList != null) {
+            if (!TaskList.isEmpty()) {
+                for (Task task : TaskList) {
+                    if (task.isTaskDone) {
+                        TaskList.remove(task);
+                    }
+                }
+            }
+        }
+        File path = getApplicationContext().getFilesDir();
+        try {
+            FileOutputStream fos = new FileOutputStream(new File(path, "tasklist.json"));
+            JsonManager.writeJsonStream(fos, TaskList);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        super.onPause();
     }
 }

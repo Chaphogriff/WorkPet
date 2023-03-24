@@ -118,14 +118,13 @@ public class JsonManager {
                 XP = reader.nextInt();
             } else if (name.equals("isTaskDone")) {
                 isTaskDone = reader.nextBoolean();
-            }
-            else {
+            } else {
                 reader.skipValue();
             }
         }
         reader.endObject();
-        LocalDate localDate = LocalDate.of(year,month,day);
-        LocalTime localTime = LocalTime.of(hour,minute);
+        LocalDate localDate = LocalDate.of(year, month, day);
+        LocalTime localTime = LocalTime.of(hour, minute);
 
         return new Task(title, description, localDate, localTime, gold, XP, isTaskDone);
     }

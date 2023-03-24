@@ -40,8 +40,8 @@ public class TestActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MainActivity.class))
         );
         // Pivote l'image (c'est juste pour tester les intéractions
-        logo_wttw.setOnClickListener(view->
-            logo_wttw.setRotation(logo_wttw.getRotation() +90 )
+        logo_wttw.setOnClickListener(view ->
+                logo_wttw.setRotation(logo_wttw.getRotation() + 90)
         );
 
 

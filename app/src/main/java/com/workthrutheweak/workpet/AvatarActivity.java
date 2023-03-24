@@ -50,9 +50,9 @@ public class AvatarActivity extends AppCompatActivity {
         pet = binding.pet;
 
         // Initialisation valeurs
-        mp = MediaPlayer.create(this,R.raw.pet_sample);
-        vibe = (Vibrator)this.getSystemService(Context.VIBRATOR_SERVICE);
-        long[] vibrate_pattern = { 0, 200, 0 }; //0 to start now, 200 to vibrate 200 ms, 0 to sleep for 0 ms.
+        mp = MediaPlayer.create(this, R.raw.pet_sample);
+        vibe = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+        long[] vibrate_pattern = {0, 200, 0}; //0 to start now, 200 to vibrate 200 ms, 0 to sleep for 0 ms.
 
         // Mettre en place les listeners
 
@@ -63,7 +63,7 @@ public class AvatarActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     heart.setVisibility(View.VISIBLE);
                     mp.start();
                     vibe.vibrate(vibrate_pattern, 0);
@@ -84,7 +84,7 @@ public class AvatarActivity extends AppCompatActivity {
         });
 
 
-    @SuppressLint({"MissingInflatedId", "LocalSuppress"}) BottomNavigationView bottomNavigationView = binding.nav;
+        @SuppressLint({"MissingInflatedId", "LocalSuppress"}) BottomNavigationView bottomNavigationView = binding.nav;
         bottomNavigationView.setSelectedItemId(R.id.avatar);
         //ajout du navbar
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

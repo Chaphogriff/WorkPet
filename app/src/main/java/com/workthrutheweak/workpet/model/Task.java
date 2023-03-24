@@ -82,26 +82,9 @@ public class Task implements Parcelable {
         return _description;
     }
 
-    public String get_date() {
-        return _date;
-    }
-
-    public String get_reward() {
-        return _reward;
-    }
-
     public boolean isTaskDone() {
         return isTaskDone;
     }
-
-
-
-    /*public Task(int titleId, int descriptionId, int dateId, int rewardId){
-        this.titleId = titleId;
-        this.descriptionId = descriptionId;
-        this.dateId = dateId;
-        this.rewardId = rewardId;
-    }*/
 
     public Task(String title, String Desc, String Date, String Time, String Gold, String xp, boolean isTaskDone) {
         this._title = title;
@@ -120,10 +103,6 @@ public class Task implements Parcelable {
     }
 
     protected Task(Parcel in) {
-        /*titleId = in.readInt();
-        descriptionId = in.readInt();
-        dateId = in.readInt();
-        rewardId = in.readInt();*/
         _title = in.readString();
         _description = in.readString();
         _date = in.readString();
@@ -150,10 +129,6 @@ public class Task implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel parcel, int i) {
-        /*parcel.writeInt(titleId);
-        parcel.writeInt(descriptionId);
-        parcel.writeInt(dateId);
-        parcel.writeInt(rewardId);*/
         parcel.writeString(_title);
         parcel.writeString(_description);
         parcel.writeString(_date);

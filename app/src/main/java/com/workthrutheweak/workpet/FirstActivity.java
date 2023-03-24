@@ -24,13 +24,13 @@ public class FirstActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-        final Intent i=new Intent(FirstActivity.this, MainActivity.class);
+        final Intent i = new Intent(FirstActivity.this, MainActivity.class);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 startActivity(i);
                 finish();
             }
-        },1000);
+        }, 1000);
     }
 }
