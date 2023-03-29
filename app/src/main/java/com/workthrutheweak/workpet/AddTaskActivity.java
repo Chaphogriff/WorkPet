@@ -168,6 +168,9 @@ public class AddTaskActivity extends AppCompatActivity {
                 month = month + 1;
                 String date = makeDateString(day, month, year);
                 button_date.setText(date);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    localdate = of(year, month, day);
+                }
             }
         };
         Calendar cal = Calendar.getInstance();
