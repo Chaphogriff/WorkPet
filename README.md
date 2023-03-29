@@ -37,3 +37,12 @@ Notre équipe WorkThruTheWeak (WTTW) est composée de 4 membres suivants :
 ├── gradlew.bat                           # fichier script wrapper de gradle // ne pas toucher
 └── settings.gradle                       # fichier qui définit les modules à inclure sur gradle
 ```
+
+## Fonctionnement de la version alpha de WorkPet
+
+Le menu présente les différentes tâches si il y en a ( "Bien débuter"  est crée automatiquement ).
+La bar de navigation permet d'accéder aux différentes pages : 
+- la page du calendrier qui affiche une liste des tâches associées à la dates sur laquelle on clique.
+- la page des tâches présente une liste des tâches, on peut en ajouter et les modifier. Pour le moment la suppression des tâches en cliquant longtemps dessus enlève seulement l'affichage d'une tâches ( si le fichier local est recharger les tâches supprimer comme ça réapparaitront. Lorsque l'on quitte une page montrant une liste de tâches, toutes les tâches marquées comme faite sont réellement supprimées, ce modèle de suppression est temporaire. 
+- la page de l'avatar, avec les boutons d'achat et de customisation qui ne sont pas encore fonctionnel. On peut interagir avec le chat au toucher ( il ronronne et fais vibrer l'appareil
+- la page de setting avec plusieurs options pour le moment non implémentées.
