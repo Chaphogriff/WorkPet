@@ -55,6 +55,7 @@ public class AddTaskActivity extends AppCompatActivity {
     LocalTime localtime;
     int hour, minute;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +81,7 @@ public class AddTaskActivity extends AppCompatActivity {
         goldTask = binding.GoldTextInput;
         xpTask = binding.XPTextInput;
 
+        localtime = LocalTime.of(0,0);
         // Mettre en place les listeners
         // Appuyer le bouton nous envoie vers un autre activité
         button_back.setOnClickListener(view ->
@@ -105,10 +107,24 @@ public class AddTaskActivity extends AppCompatActivity {
                                           public void onClick(View view) {
                                               String Title = titleTask.getText().toString();
                                               String Desc = descTask.getText().toString();
+                                              String goldText = goldTask.getText().toString();
+                                              String xpText = xpTask.getText().toString();
                                               LocalDate ld = localdate;
                                               LocalTime lt = localtime;
-                                              int gold = Integer.parseInt(goldTask.getText().toString());
-                                              int xp = Integer.parseInt(xpTask.getText().toString());
+                                              int gold = 0;
+                                              if (!goldText.isEmpty()) {
+                                                  gold = Integer.parseInt(goldTask.getText().toString());
+                                              }
+                                              int xp = 0;
+                                              if (!xpText.isEmpty()) {
+                                                  xp = Integer.parseInt(xpTask.getText().toString());                                              }
+
+                                              if ( Title.isEmpty()) {
+                                                  Title = "Unnamed Task";
+                                              }
+                                              if ( Desc.isEmpty()) {
+                                                  Desc = "";
+                                              }
 
                                               Intent intent = new Intent(AddTaskActivity.this, TaskActivity.class);
                                               intent.putExtra("Title", Title);
