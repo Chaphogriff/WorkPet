@@ -111,7 +111,7 @@ public class CalendarActivity extends AppCompatActivity {
                 // Récupération de la date sélectionnée sur le CalendarView
                 Calendar selectedDate = Calendar.getInstance();
                 selectedDate.set(year, month, dayOfMonth);
-                LocalDate localDate_calendar = LocalDate.of(year, month, dayOfMonth);
+                LocalDate localDate_calendar = LocalDate.of(year, month+1, dayOfMonth);
 
                 // Affichage de la date sélectionnée dans la console
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
