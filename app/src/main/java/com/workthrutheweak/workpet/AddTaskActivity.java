@@ -159,7 +159,7 @@ public class AddTaskActivity extends AppCompatActivity {
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            localdate = of(year, month, day);
+            localdate = of(year, month + 1, day);
         }
         int style = AlertDialog.THEME_HOLO_LIGHT;
 
