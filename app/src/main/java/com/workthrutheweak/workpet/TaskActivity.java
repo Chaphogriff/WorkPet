@@ -157,11 +157,13 @@ public class TaskActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onPause() {
+        List<Task> SaveList = new ArrayList<Task>();
         if (TaskList != null) {
             if (!TaskList.isEmpty()) {
                 for (Task task : TaskList) {
-                    if (task.isTaskDone) {
-                        TaskList.remove(task);
+                    if (!task.isTaskDone) {
+                        //TaskList.remove(task); concurrent modif except
+                        SaveList.add(task);
                     }
                 }
             }
@@ -169,7 +171,7 @@ public class TaskActivity extends AppCompatActivity {
         File path = getApplicationContext().getFilesDir();
         try {
             FileOutputStream fos = new FileOutputStream(new File(path, "tasklist.json"));
-            JsonManager.writeJsonStream(fos, TaskList);
+            JsonManager.writeJsonStream(fos, SaveList);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
