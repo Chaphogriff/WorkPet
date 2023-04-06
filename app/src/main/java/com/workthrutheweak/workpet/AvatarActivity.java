@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,13 @@ public class AvatarActivity extends AppCompatActivity {
     GifImageView pet;
     MediaPlayer mp;
     Vibrator vibe;
+    TextView goldTextView;
+    TextView levelTextView;
+    ProgressBar progressBar;
+
+    int gold=99;
+    int level=2;
+    int exp=75; // entre 0 et 100 ! ( si > 100, on level up )
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -48,17 +56,30 @@ public class AvatarActivity extends AppCompatActivity {
         // Récupérer les éléments du xml
         heart = binding.heart;
         pet = binding.pet;
+        goldTextView = binding.goldText;
+        levelTextView = binding.lvlText;
+        progressBar = binding.expBar;
 
         // Initialisation valeurs
         mp = MediaPlayer.create(this, R.raw.pet_sample);
         vibe = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
-        long[] vibrate_pattern = {0, 200, 0}; //0 to start now, 200 to vibrate 200 ms, 0 to sleep for 0 ms.
-
-        // Mettre en place les listeners
-
-        // Appuyer le bouton nous envoie vers un autre activité
         heart.setVisibility(View.INVISIBLE);
-        // onHold
+
+        // Set valeurs
+        levelTextView.setText("Lv. "+level);
+        goldTextView.setText("Gold: "+gold);
+        progressBar.setProgress(exp);
+
+        // ajouter tous les listeners
+        setListeners();
+    }
+
+    // Méthode qui assemble tous les listeners : appelée dans onCreate
+    public void setListeners(){
+
+        // PET GIF
+        long[] vibrate_pattern = {0, 200, 0}; //0 to start now, 200 to vibrate 200 ms, 0 to sleep for 0 ms.
+        // on Hold
         pet.setOnTouchListener(new View.OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
@@ -83,7 +104,7 @@ public class AvatarActivity extends AppCompatActivity {
             }
         });
 
-
+        // BARRE DE NAVIGATION
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) BottomNavigationView bottomNavigationView = binding.nav;
         bottomNavigationView.setSelectedItemId(R.id.avatar);
         //ajout du navbar
