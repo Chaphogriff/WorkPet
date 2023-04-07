@@ -128,4 +128,64 @@ public class JsonManager {
 
         return new Task(title, description, localDate, localTime, gold, XP, isTaskDone);
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static List<Integer> readProfileStream(InputStream in) throws IOException {
+        reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
+        List<Integer> profileList = null;
+        try {
+
+            reader.beginArray();
+            while (reader.hasNext()) {
+                profileList = readProfileInteger(reader);
+            }
+            reader.endArray();
+        } finally {
+            reader.close();
+        }
+        return profileList;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static List<Integer> readProfileInteger(JsonReader reader) throws IOException {
+        int level = 0;
+        int exp = 0;
+        int gold = 0;
+
+        reader.beginObject();
+        while (reader.hasNext()) {
+            String name = reader.nextName();
+            if (name.equals("Level")) {
+                level = reader.nextInt();
+            } else if (name.equals("Exp")) {
+                exp = reader.nextInt();
+            } else if (name.equals("Gold")) {
+                gold = reader.nextInt();
+            } else {
+                reader.skipValue();
+            }
+        }
+        reader.endObject();
+        List<Integer> profileVar = new ArrayList<Integer>();
+        profileVar.add(level);
+        profileVar.add(exp);
+        profileVar.add(gold);
+        return profileVar;
+    }
+
+    public static void writeProfileStream(OutputStream out, List<Integer> profileList) throws IOException {
+        writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
+        writer.setIndent("  ");
+        writer.beginArray();
+        writer.beginObject();
+        writer.name("Level").value(profileList.get(0));
+        writer.name("Exp").value(profileList.get(1));
+        writer.name("Gold").value(profileList.get(2));
+        writer.endObject();
+        writer.endArray();
+        writer.close();
+    }
+
+
 }
+

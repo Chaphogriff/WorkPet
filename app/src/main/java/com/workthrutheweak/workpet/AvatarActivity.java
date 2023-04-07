@@ -22,7 +22,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.JsonObject;
+import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.databinding.ActivityAvatarBinding;
+import com.workthrutheweak.workpet.model.Task;
+
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -42,6 +57,7 @@ public class AvatarActivity extends AppCompatActivity {
     int level=2;
     int exp=75; // entre 0 et 100 ! ( si > 100, on level up )
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +80,9 @@ public class AvatarActivity extends AppCompatActivity {
         mp = MediaPlayer.create(this, R.raw.pet_sample);
         vibe = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
         heart.setVisibility(View.INVISIBLE);
+
+        // Récupération des données
+        recoverDataFromJson();
 
         // Set valeurs
         levelTextView.setText("Lv. "+level);
@@ -88,6 +107,9 @@ public class AvatarActivity extends AppCompatActivity {
                     heart.setVisibility(View.VISIBLE);
                     mp.start();
                     vibe.vibrate(vibrate_pattern, 0);
+                    // Gold test = one click gold up : TODO : remove this
+                    gold++;
+                    goldTextView.setText("Gold: "+gold);
 
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     // ne fonctionne pas -> voir onClick
@@ -142,5 +164,45 @@ public class AvatarActivity extends AppCompatActivity {
 
 
         });
+    }
+
+    // Récupère des données de JSON
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void recoverDataFromJson(){
+
+        File path = getApplicationContext().getFilesDir();
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(new File(path, "profile.json"));
+            List<Integer> listIntegerFromProfile= JsonManager.readProfileStream(fis);
+            level = listIntegerFromProfile.get(0);
+            exp = listIntegerFromProfile.get(1);
+            gold = listIntegerFromProfile.get(2);
+        } catch (IOException e) {
+            gold=0;
+            level=1;
+            exp=0;
+        }
+    }
+
+    public void updateDataToJson(){
+        File path = getApplicationContext().getFilesDir();
+        try {
+            FileOutputStream fos = new FileOutputStream(new File(path, "profile.json"));
+            List<Integer> integerList = new ArrayList<>();
+            integerList.add(level);
+            integerList.add(exp);
+            integerList.add(gold);
+            JsonManager.writeProfileStream(fos,integerList);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    protected void onPause() {
+        updateDataToJson();
+        super.onPause();
     }
 }
