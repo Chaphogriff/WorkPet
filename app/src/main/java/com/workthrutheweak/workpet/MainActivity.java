@@ -74,10 +74,7 @@ public class MainActivity extends AppCompatActivity {
         recoverDataFromJson();
 
         // Set valeurs
-        levelTextView.setText("Lv. "+level);
-        goldTextView.setText("Gold: "+gold);
-        progressBar.setProgress(exp);
-
+        refreshProfileVar();
 
         BottomNavigationView bottomNavigationView = binding.nav;
         bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
@@ -190,4 +187,12 @@ public class MainActivity extends AppCompatActivity {
         updateDataToJson();
         super.onPause();
     }
+
+    void refreshProfileVar(){
+        levelTextView.setText("Lv. "+level);
+        goldTextView.setText("Gold: "+gold);
+        progressBar.setProgress(exp);
+    }
+
+
 }
