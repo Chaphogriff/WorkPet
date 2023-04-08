@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.workthrutheweak.workpet.JsonManagement.JsonManager;
@@ -37,10 +39,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    // Variables
     private ActivityMainBinding binding; //For ViewBinding feature
     List<Task> TaskList;
-    // Variables
-    ImageButton logo_main;
+    TextView goldTextView;
+    TextView levelTextView;
+    ProgressBar progressBar;
+    RecyclerView recyclerView;
+    int gold=99;
+    int level=2;
+    int exp=75; // entre 0 et 100 ! ( si > 100, on level up )
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -54,23 +64,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(v);
 
         // Récupérer les éléments du xml
-        RecyclerView recyclerView = binding.recyclerView;
+        recyclerView = binding.recyclerView;
+        goldTextView = binding.goldTextHome;
+        levelTextView = binding.lvlText;
+        progressBar = binding.expBar;
 
-        // Ajout des tâches
-        File path = getApplicationContext().getFilesDir();
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(new File(path, "tasklist.json"));
-            TaskList = JsonManager.readJsonStream(fis);
-        } catch (IOException e) {
-            System.out.println(e);
-            TaskList = new ArrayList<>();
-            LocalDate localDate = LocalDate.ofYearDay(2023, 1);
-            LocalTime localTime = LocalTime.of(0, 0);
-            TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", localDate, localTime, 10, 10, false));
-        }
+        // Récupérer les données depuis des fichiers .json
+        recoverDataFromJson();
 
-        recyclerView.setAdapter(new TaskAdapter(this, TaskList));
+        // Set valeurs
+        levelTextView.setText("Lv. "+level);
+        goldTextView.setText("Gold: "+gold);
+        progressBar.setProgress(exp);
+
 
         BottomNavigationView bottomNavigationView = binding.nav;
         bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
@@ -126,5 +132,39 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
         super.onPause();
+    }
+
+    // Récupération des données
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void recoverDataFromJson(){
+
+        File path = getApplicationContext().getFilesDir();
+        FileInputStream fis = null;
+
+        // Profile
+        try {
+            fis = new FileInputStream(new File(path, "profile.json"));
+            List<Integer> listIntegerFromProfile= JsonManager.readProfileStream(fis);
+            level = listIntegerFromProfile.get(0);
+            exp = listIntegerFromProfile.get(1);
+            gold = listIntegerFromProfile.get(2);
+        } catch (IOException e) {
+            gold=0;
+            level=1;
+            exp=0;
+        }
+
+        // Liste des tâches
+        try {
+            fis = new FileInputStream(new File(path, "tasklist.json"));
+            TaskList = JsonManager.readJsonStream(fis);
+        } catch (IOException e) {
+            System.out.println(e);
+            TaskList = new ArrayList<>();
+            LocalDate localDate = LocalDate.ofYearDay(2023, 1);
+            LocalTime localTime = LocalTime.of(0, 0);
+            TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", localDate, localTime, 10, 10, false));
+        }
+        recyclerView.setAdapter(new TaskAdapter(this, TaskList));
     }
 }
