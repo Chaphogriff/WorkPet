@@ -37,6 +37,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -110,30 +111,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    protected void onPause() {
-        List<Task> SaveList = new ArrayList<Task>();
-        if (TaskList != null) {
-            if (!TaskList.isEmpty()) {
-                for (Task task : TaskList) {
-                    if (!task.isTaskDone) {
-                        //TaskList.remove(task); concurrent modif except
-                        SaveList.add(task);
-                    }
-                }
-            }
-        }
-        File path = getApplicationContext().getFilesDir();
-        try {
-            FileOutputStream fos = new FileOutputStream(new File(path, "tasklist.json"));
-            JsonManager.writeJsonStream(fos, SaveList);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        super.onPause();
-    }
-
     // Récupération des données
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void recoverDataFromJson(){
@@ -154,10 +131,13 @@ public class MainActivity extends AppCompatActivity {
             exp=0;
         }
 
+        List<Task> top5TaskList = new ArrayList<>();
         // Liste des tâches
         try {
             fis = new FileInputStream(new File(path, "tasklist.json"));
             TaskList = JsonManager.readJsonStream(fis);
+            // On garde les 5 premières tâches pour  !
+            top5TaskList = TaskList.stream().limit(5).collect(Collectors.toList());
         } catch (IOException e) {
             System.out.println(e);
             TaskList = new ArrayList<>();
@@ -165,6 +145,49 @@ public class MainActivity extends AppCompatActivity {
             LocalTime localTime = LocalTime.of(0, 0);
             TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", localDate, localTime, 10, 10, false));
         }
-        recyclerView.setAdapter(new TaskAdapter(this, TaskList));
+        recyclerView.setAdapter(new TaskAdapter(this, top5TaskList));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void updateDataToJson(){
+        File path = getApplicationContext().getFilesDir();
+
+        // Save profile
+        try {
+            FileOutputStream fos = new FileOutputStream(new File(path, "profile.json"));
+            List<Integer> integerList = new ArrayList<>();
+            integerList.add(level);
+            integerList.add(exp);
+            integerList.add(gold);
+            JsonManager.writeProfileStream(fos,integerList);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Save Task List
+        List<Task> SaveList = new ArrayList<Task>();
+        if (TaskList != null) {
+            if (!TaskList.isEmpty()) {
+                for (Task task : TaskList) {
+                    if (!task.isTaskDone) {
+                        //TaskList.remove(task); concurrent modif except
+                        SaveList.add(task);
+                    }
+                }
+            }
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(new File(path, "tasklist.json"));
+            JsonManager.writeJsonStream(fos, SaveList);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    protected void onPause() {
+        updateDataToJson();
+        super.onPause();
     }
 }
