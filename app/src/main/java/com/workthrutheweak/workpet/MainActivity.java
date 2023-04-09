@@ -149,6 +149,31 @@ public class MainActivity extends AppCompatActivity {
     public void updateDataToJson(){
         File path = getApplicationContext().getFilesDir();
 
+        // Save Task List
+        List<Task> SaveList = new ArrayList<Task>();
+        List<Task> DoneList = new ArrayList<Task>();
+        if (TaskList != null) {
+            if (!TaskList.isEmpty()) {
+                for (Task task : TaskList) {
+                    if (!task.isTaskDone) {
+                        //TaskList.remove(task); concurrent modif except
+                        SaveList.add(task);
+                    }else{
+                        DoneList.add(task);
+                    }
+                }
+            }
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(new File(path, "tasklist.json"));
+            JsonManager.writeJsonStream(fos, SaveList);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Maj exp, level et gold selon les tâches validées
+        addExpGold(DoneList);
+
         // Save profile
         try {
             FileOutputStream fos = new FileOutputStream(new File(path, "profile.json"));
@@ -161,24 +186,6 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-        // Save Task List
-        List<Task> SaveList = new ArrayList<Task>();
-        if (TaskList != null) {
-            if (!TaskList.isEmpty()) {
-                for (Task task : TaskList) {
-                    if (!task.isTaskDone) {
-                        //TaskList.remove(task); concurrent modif except
-                        SaveList.add(task);
-                    }
-                }
-            }
-        }
-        try {
-            FileOutputStream fos = new FileOutputStream(new File(path, "tasklist.json"));
-            JsonManager.writeJsonStream(fos, SaveList);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -192,6 +199,23 @@ public class MainActivity extends AppCompatActivity {
         levelTextView.setText("Lv. "+level);
         goldTextView.setText("Gold: "+gold);
         progressBar.setProgress(exp);
+    }
+
+    // Ajouter les exp et gold quand on valide des tâches
+    void addExpGold(List<Task> listTaskDone){
+        if (listTaskDone != null && !listTaskDone.isEmpty()) {
+            for (Task task : listTaskDone) {
+                int taskExp = task.getXpreward();
+                int taskGold = task.getGoldreward();
+                exp+= taskExp;
+                // vérifier si on level up (si exp>100 -> level+1)
+                if(exp>=100){
+                    exp-=100;
+                    level++;
+                }
+                gold+= taskGold;
+            }
+        }
     }
 
 
