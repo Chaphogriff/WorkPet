@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "654416763812",
+    "project_id": "workpetdb",
+    "storage_bucket": "workpetdb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:654416763812:android:8bb12313e371db6fe1ff31",
+        "android_client_info": {
+          "package_name": "com.workthrutheweak.workpet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "654416763812-t647busah8mcron0lptpuupa7oo70ga1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgz2tZM8rocL3MQLbG87kFWNV7Lw244Ds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "654416763812-t647busah8mcron0lptpuupa7oo70ga1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

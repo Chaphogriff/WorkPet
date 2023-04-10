@@ -17,8 +17,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.adapter.TaskAdapter;
 import com.workthrutheweak.workpet.data.Datasource;
@@ -36,13 +42,20 @@ import java.io.OutputStreamWriter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
 
     // Variables
     private ActivityMainBinding binding; //For ViewBinding feature
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private static final String KEY_EMAIL = "email";
+    private static final String KEY_USERGOLD = "gold";
+    private static final String KEY_USERXP= "xp";
     List<Task> TaskList;
     TextView goldTextView;
     TextView levelTextView;
@@ -72,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Récupérer les données depuis des fichiers .json
         recoverDataFromJson();
+
+        LoadUser();
 
         // Set valeurs
         refreshProfileVar();
@@ -216,6 +231,30 @@ public class MainActivity extends AppCompatActivity {
                 gold+= taskGold;
             }
         }
+    }
+
+    public void LoadUser(){
+        String email = user.getEmail();
+        int usergold = 0;
+        int userxp = 0;
+
+        Map<String, Object> profil = new HashMap<>();
+        profil.put(KEY_EMAIL, email);
+        profil.put(KEY_USERGOLD, usergold);
+        profil.put(KEY_USERXP, userxp);
+
+        db.collection("Users").document(user.getUid()).set(profil)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(MainActivity.this,"Profile loaded successfully",Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(MainActivity.this,"Failed to load profile",Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
 

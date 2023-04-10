@@ -45,6 +45,9 @@
             android:name=".AddTaskActivity"
             android:exported="false" />
         <activity
+            android:name=".EmailPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
         </activity>

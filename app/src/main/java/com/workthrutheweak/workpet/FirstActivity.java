@@ -24,7 +24,7 @@ public class FirstActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-        final Intent i = new Intent(FirstActivity.this, MainActivity.class);
+        final Intent i = new Intent(FirstActivity.this, EmailPasswordActivity.class);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

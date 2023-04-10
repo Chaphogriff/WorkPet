@@ -17,12 +17,19 @@ import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.workthrutheweak.workpet.adapter.TaskAdapter;
 import com.workthrutheweak.workpet.data.Datasource;
 import com.workthrutheweak.workpet.databinding.ActivityAddtaskBinding;
@@ -35,14 +42,27 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimerTask;
 
 public class AddTaskActivity extends AppCompatActivity {
     // Variables
     private ActivityAddtaskBinding binding;//For ViewBinding feature
     private DatePickerDialog datePickerDialog;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private static final String KEY_TITLE = "title";
+    private static final String KEY_DESCRITPION = "description";
+    private static final String KEY_DATE = "date";
+    private static final String KEY_TIME = "time";
+    private static final String KEY_GOLD = "gold";
+    private static final String KEY_XP = "experience";
+    private static final String KEY_DONE = "IsTaskDone";
+    private static final String KEY_REPEAT = "repeat";
+
     Button button_back;
     Button button_time;
     Button button_date;
@@ -223,5 +243,59 @@ public class AddTaskActivity extends AppCompatActivity {
 
     public void openDatePicker(View view) {
         datePickerDialog.show();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void saveTask(){
+        String Title = titleTask.getText().toString();
+        String Desc = descTask.getText().toString();
+        String goldText = goldTask.getText().toString();
+        String xpText = xpTask.getText().toString();
+        String repeat = "to do";
+        boolean istaskdone = false;
+        LocalDate ld = localdate;
+        LocalTime lt = localtime;
+        int gold = 0;
+        if (!goldText.isEmpty()) {
+            gold = Integer.parseInt(goldTask.getText().toString());
+        }
+        int xp = 0;
+        if (!xpText.isEmpty()) {
+            xp = Integer.parseInt(xpTask.getText().toString());                                              }
+
+        if ( Title.isEmpty()) {
+            Title = "Unnamed Task";
+        }
+        if ( Desc.isEmpty()) {
+            Desc = "";
+        }
+        int year = localdate.getYear();
+        int month = localdate.getMonthValue();
+        int day = localdate.getDayOfMonth();
+        int hour = localtime.getHour();
+        int minute = localtime.getMinute();
+
+        Map<String, Object> task = new HashMap<>();
+        task.put(KEY_TITLE, Title);
+        task.put(KEY_DESCRITPION, Desc);
+        task.put(KEY_DATE, localdate);
+        task.put(KEY_TIME, localtime);
+        task.put(KEY_GOLD, goldText);
+        task.put(KEY_XP, xpText);
+        task.put(KEY_DONE, istaskdone);
+        task.put(KEY_REPEAT, repeat);
+
+        db.collection("Users").document(user.getUid()).collection("Tasks").document().set(task)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(AddTaskActivity.this,"Task added",Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(AddTaskActivity.this,"Failed to add task",Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
