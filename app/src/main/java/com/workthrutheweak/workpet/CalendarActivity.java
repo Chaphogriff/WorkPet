@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.adapter.TaskAdapter;
 import com.workthrutheweak.workpet.databinding.ActivityCalendarBinding;
@@ -52,6 +53,7 @@ public class CalendarActivity extends AppCompatActivity {
     private List<Task> taskList;
     private List<Task> taskList_popup;
     Button button_back;
+    FloatingActionButton button_addT;
     CalendarView calendarView;
     long date;
 
@@ -184,6 +186,7 @@ public class CalendarActivity extends AppCompatActivity {
         dialogbuilder.setView(calendarPopupView);
         dialog = dialogbuilder.create();
         dialog.show();
+        button_addT = calendarPopupView.findViewById(R.id.edit2);
 
         button_popup_back.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -210,5 +213,10 @@ public class CalendarActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+
+        button_addT.setOnClickListener(view ->
+                startActivity(new Intent(this, AddTaskActivity.class))
+        );
+
     }
 }

@@ -9,41 +9,60 @@
     tools:context=".TaskActivity">
 
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/edit2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/tint"
+        android:src="@drawable/baseline_edit_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.078"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.961"
+        android:contentDescription="@string/add_a_task" />
+
     <Button
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="664dp"
-        android:layout_marginEnd="39dp"
-        android:text="Back"
+        android:text="@string/close"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.95" />
 
     <TextView
         android:id="@+id/daytask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="88dp"
-        android:layout_marginTop="16dp"
-        android:text="This day's tasks"
+        android:text="@string/day_tasks"
         android:textColor="@android:color/black"
         android:textSize="32sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.052" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tasksRecyclerView"
-        android:layout_width="413dp"
-        android:layout_height="523dp"
-        android:layout_marginTop="72dp"
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:nestedScrollingEnabled="true"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/back"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/daytask" />
+        app:layout_constraintTop_toBottomOf="@id/daytask"
+        app:layout_constraintVertical_bias="0.142" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
