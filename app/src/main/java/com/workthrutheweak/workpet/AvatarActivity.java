@@ -52,6 +52,7 @@ public class AvatarActivity extends AppCompatActivity {
     TextView goldTextView;
     TextView levelTextView;
     ProgressBar progressBar;
+    Button shopButton;
 
     int gold=99;
     int level=2;
@@ -75,6 +76,7 @@ public class AvatarActivity extends AppCompatActivity {
         goldTextView = binding.goldText;
         levelTextView = binding.lvlText;
         progressBar = binding.expBar;
+        shopButton = binding.shop;
 
         // Initialisation valeurs
         mp = MediaPlayer.create(this, R.raw.pet_sample);
@@ -125,6 +127,11 @@ public class AvatarActivity extends AppCompatActivity {
                 vibe.cancel();
             }
         });
+
+        // Appuyer le bouton nous envoie vers un autre activité
+        shopButton.setOnClickListener(view ->
+                startActivity(new Intent(this, ListActivity.class))
+        );
 
         // BARRE DE NAVIGATION
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) BottomNavigationView bottomNavigationView = binding.nav;
