@@ -7,7 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,8 +17,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +33,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -53,7 +57,6 @@ import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Variables
     private ActivityMainBinding binding; //For ViewBinding feature
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -64,7 +67,9 @@ public class MainActivity extends AppCompatActivity {
     TextView levelTextView;
     ProgressBar progressBar;
     RecyclerView recyclerView;
+    Button logoutbutton;
     private FirestoreRecyclerAdapter adapter;
+    private DialogInterface.OnClickListener dialogClickListener;
     int gold = 99;
     int level = 2;
     int exp = 75; // entre 0 et 100 ! ( si > 100, on level up )
@@ -82,10 +87,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(v);
 
         // Récupérer les éléments du xml
-        recyclerView = binding.recyclerView;
+        recyclerView = findViewById(R.id.recyclerView);
         goldTextView = binding.goldTextHome;
         levelTextView = binding.lvlText;
         progressBar = binding.expBar;
+        logoutbutton = binding.logoutbutton;
+
+        logoutbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getApplicationContext(), EmailPasswordActivity.class));
+            }
+        });
 
         // Récupérer les données depuis des fichiers .json
         //recoverDataFromJson();
@@ -93,33 +107,81 @@ public class MainActivity extends AppCompatActivity {
         // Récupérer les données depuis Firestore
         //recyclerView.setAdapter(new TaskAdapter(MainActivity.this, TaskList2));
 
-        Query query = docref.collection("Tasks");
+        Query query = docref.collection("Tasks").whereEqualTo("taskDone",false);
 
         FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
                 .setQuery(query, Task.class)
                 .build();
 
-        adapter = new FirestoreRecyclerAdapter<Task, TaskViewHolder>(options) {
+        adapter = new FirestoreRecyclerAdapter<Task, MainActivity.TaskViewHolder>(options) {
             @NonNull
             @Override
-            public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.task_list,parent,false);
-                return new TaskViewHolder(view);
+            public MainActivity.TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.taskholder_list,parent,false);
+                return new MainActivity.TaskViewHolder(view);
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull TaskViewHolder holder, int position, @NonNull Task model) {
+            protected void onBindViewHolder(@NonNull MainActivity.TaskViewHolder holder, int position, @NonNull Task model) {
                 //Task model = model.get(position); //changer pour FF
+                DocumentSnapshot snapshot = options.getSnapshots().getSnapshot(position);
+                String dbKey = snapshot.getId();
+                model.setTaskId(dbKey);
                 List<String> TaskString = model.inString();
+                Log.i("task", String.valueOf(model.getDay()));
                 holder.taskTitleTextView.setText(TaskString.get(0));
                 holder.taskDescTextView.setText(TaskString.get(1));
                 holder.taskDateTextView.setText(TaskString.get(2));
                 holder.taskRewardTextView.setText(TaskString.get(3));
-                holder.taskCompletionCheckBox.setChecked(model.isTaskDone());
-                holder.taskCompletionCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                holder.validateButton.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        model.setTaskDone(isChecked); //changer pour FF
+                    public void onClick(View view) {
+                        model.setTaskDone(true);
+                        docref.collection("Tasks").document(model.getTaskId()).update("taskDone", true);
+                    }
+                });
+                holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogClickListener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    // on below line we are setting a click listener
+                                    // for our positive button
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                        // on below line we are displaying a toast message.
+                                        Toast.makeText(MainActivity.this, "Yes clicked", Toast.LENGTH_SHORT).show();
+                                        docref.collection("Tasks").document(model.getTaskId()).delete();
+                                        break;
+                                    // on below line we are setting click listener
+                                    // for our negative button.
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                        // on below line we are dismissing our dialog box.
+                                        dialog.dismiss();
+
+                                }
+                            }
+                        };
+                        // on below line we are creating a builder variable for our alert dialog
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        // on below line we are setting message for our dialog box.
+                        builder.setMessage("Select yes to display toast message and no to dismiss the dialog ?")
+                                // on below line we are setting positive button
+                                // and setting text to it.
+                                .setPositiveButton("Yes", dialogClickListener)
+                                // on below line we are setting negative button
+                                // and setting text to it.
+                                .setNegativeButton("No", dialogClickListener)
+                                // on below line we are calling
+                                // show to display our dialog.
+                                .show();
+                    }
+                });
+                holder.modifyButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        modifyTask(model);
                     }
                 });
             }
@@ -135,9 +197,8 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     Task task = documentSnapshot.toObject(Task.class);
+                    task.setTaskId(documentSnapshot.getId());
                     TaskList2.add(task);
-                    Log.i("main", "filling tasklist");
-                    Log.i("main", task.inString().get(2));
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -146,8 +207,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Failed to load tasks", Toast.LENGTH_LONG);
             }
         });
-
-        Log.i("main", "recyclerView");
 
 
         // Set valeurs
@@ -183,28 +242,6 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-    }
-
-
-    private void recoverDataFromFF() {
-        docref.collection("Tasks").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                    Task task = documentSnapshot.toObject(Task.class);
-                    TaskList2.add(task);
-                    Log.i("main", "filling tasklist");
-                    Log.i("main", task.inString().get(2));
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), "Failed to load tasks", Toast.LENGTH_LONG);
-            }
-        });
-
-        Log.i("main", "task adapt");
     }
 
     // Récupération des données
@@ -328,17 +365,18 @@ public class MainActivity extends AppCompatActivity {
         private TextView taskDescTextView;
         private TextView taskDateTextView;
         private TextView taskRewardTextView;
-        private CheckBox taskCompletionCheckBox;
-
-        private android.content.Context Context;
-
+        private ImageButton validateButton;
+        private ImageButton modifyButton;
+        private ImageButton deleteButton;
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
             taskTitleTextView = itemView.findViewById(R.id.task_title);
             taskDescTextView = itemView.findViewById(R.id.task_desc);
             taskDateTextView = itemView.findViewById(R.id.task_date);
             taskRewardTextView = itemView.findViewById(R.id.task_reward);
-            taskCompletionCheckBox = itemView.findViewById(R.id.task_completion);
+            validateButton = itemView.findViewById(R.id.validate_button);
+            modifyButton = itemView.findViewById(R.id.modify_button);
+            deleteButton = itemView.findViewById(R.id.delete_button);
         }
     }
 
@@ -346,5 +384,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+    public void modifyTask(Task task){
+        //Intent Creation
+        Intent intent = new Intent(MainActivity.this, ModifyTaskActivity.class);
+        intent.putExtra("Title", task.getTitle());
+        intent.putExtra("Desc", task.getDescription());
+        intent.putExtra("Year", task.getYear());
+        intent.putExtra("Month", task.getMonth());
+        intent.putExtra("Day", task.getDay());
+        intent.putExtra("Hour", task.getHour());
+        intent.putExtra("Minute", task.getMinute());
+        intent.putExtra("Gold", task.getGoldreward());
+        intent.putExtra("XP", task.getXpreward());
+        intent.putExtra("isTaskDone", task.isTaskDone());
+        intent.putExtra("Mode", task.getMode());
+        intent.putExtra("TaskId", task.getTaskId());
+        intent.putExtra("origin", "mainactivity");
+        startActivity(intent);
     }
 }

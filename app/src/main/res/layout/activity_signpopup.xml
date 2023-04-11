@@ -12,8 +12,10 @@
         android:text="Sign up"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSignPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextSignPassword"
+        app:layout_constraintVertical_bias="0.285" />
 
     <EditText
         android:id="@+id/editTextSignEmail"
@@ -24,9 +26,10 @@
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@+id/editTextSignPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.517" />
 
     <EditText
         android:id="@+id/editTextSignPassword"
@@ -39,18 +42,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.481" />
 
     <TextView
         android:id="@+id/signemail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
         android:text="Enter your Email adress"
         app:layout_constraintBottom_toTopOf="@+id/editTextSignEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.283"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signbackbutton"
         app:layout_constraintVertical_bias="0.814" />
 
     <TextView
@@ -60,10 +65,10 @@
         android:text="Enter your password"
         app:layout_constraintBottom_toTopOf="@+id/editTextSignPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.283"
+        app:layout_constraintHorizontal_bias="0.265"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextSignEmail"
-        app:layout_constraintVertical_bias="0.687" />
+        app:layout_constraintVertical_bias="0.843" />
 
     <TextView
         android:id="@+id/signtitle"

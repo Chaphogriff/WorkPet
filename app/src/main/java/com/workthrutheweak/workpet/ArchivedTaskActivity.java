@@ -1,11 +1,5 @@
 package com.workthrutheweak.workpet;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -18,11 +12,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -35,29 +33,23 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.workthrutheweak.workpet.JsonManagement.JsonManager;
-import com.workthrutheweak.workpet.adapter.TaskAdapter;
+import com.workthrutheweak.workpet.databinding.ActivityArchivedtaskBinding;
 import com.workthrutheweak.workpet.databinding.ActivityTaskBinding;
 import com.workthrutheweak.workpet.model.Task;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskActivity extends AppCompatActivity {
-
+public class ArchivedTaskActivity extends AppCompatActivity {
     // Variables
-    private ActivityTaskBinding binding;//For ViewBinding feature
+    private ActivityArchivedtaskBinding binding;//For ViewBinding feature
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private DocumentReference docref = db.collection("Users").document(user.getUid());
     Button button_back;
-    Button archivebutton;
-    Button addtbutton;
     TextView textView;
     List<Task> TaskList;
     private FirestoreRecyclerAdapter adapter;
@@ -71,34 +63,32 @@ public class TaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task);
 
         //Setup View Binding variable
-        binding = ActivityTaskBinding.inflate(getLayoutInflater());
+        binding = ActivityArchivedtaskBinding.inflate(getLayoutInflater());
         View v = binding.getRoot();
         setContentView(v);
 
         getSupportActionBar().hide();
         // Récupérer les éléments du xml
         button_back = binding.back;
-        addtbutton = binding.addtbutton;
-        archivebutton = binding.archivesbutton;
         textView = binding.tasksText;
         recyclerView = binding.tasksRecyclerView;
 
-        Query query = docref.collection("Tasks").whereEqualTo("taskDone",false);
+        Query query = docref.collection("Tasks").whereEqualTo("taskDone",true);
 
         FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
                 .setQuery(query, Task.class)
                 .build();
 
-        adapter = new FirestoreRecyclerAdapter<Task, TaskActivity.TaskViewHolder>(options) {
+        adapter = new FirestoreRecyclerAdapter<Task, ArchivedTaskActivity.TaskViewHolder>(options) {
             @NonNull
             @Override
-            public TaskActivity.TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.taskholder_list,parent,false);
-                return new TaskActivity.TaskViewHolder(view);
+            public ArchivedTaskActivity.TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.taskarchived_list,parent,false);
+                return new ArchivedTaskActivity.TaskViewHolder(view);
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull TaskActivity.TaskViewHolder holder, int position, @NonNull Task model) {
+            protected void onBindViewHolder(@NonNull ArchivedTaskActivity.TaskViewHolder holder, int position, @NonNull Task model) {
                 //Task model = model.get(position); //changer pour FF
                 DocumentSnapshot snapshot = options.getSnapshots().getSnapshot(position);
                 String dbKey = snapshot.getId();
@@ -109,11 +99,11 @@ public class TaskActivity extends AppCompatActivity {
                 holder.taskDescTextView.setText(TaskString.get(1));
                 holder.taskDateTextView.setText(TaskString.get(2));
                 holder.taskRewardTextView.setText(TaskString.get(3));
-                holder.validateButton.setOnClickListener(new View.OnClickListener() {
+                holder.unarchiveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         model.setTaskDone(true);
-                        docref.collection("Tasks").document(model.getTaskId()).update("taskDone", true);
+                        docref.collection("Tasks").document(model.getTaskId()).update("taskDone", false);
                     }
                 });
                 holder.deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +117,7 @@ public class TaskActivity extends AppCompatActivity {
                                     // for our positive button
                                     case DialogInterface.BUTTON_POSITIVE:
                                         // on below line we are displaying a toast message.
-                                        Toast.makeText(TaskActivity.this, "Yes clicked", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ArchivedTaskActivity.this, "Yes clicked", Toast.LENGTH_SHORT).show();
                                         docref.collection("Tasks").document(model.getTaskId()).delete();
                                         break;
                                     // on below line we are setting click listener
@@ -140,7 +130,7 @@ public class TaskActivity extends AppCompatActivity {
                             }
                         };
                         // on below line we are creating a builder variable for our alert dialog
-                        AlertDialog.Builder builder = new AlertDialog.Builder(TaskActivity.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ArchivedTaskActivity.this);
                         // on below line we are setting message for our dialog box.
                         builder.setMessage("Select yes to display toast message and no to dismiss the dialog ?")
                                 // on below line we are setting positive button
@@ -154,12 +144,6 @@ public class TaskActivity extends AppCompatActivity {
                                 .show();
                     }
                 });
-                holder.modifyButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        modifyTask(model);
-                    }
-                });
             }
         };
 
@@ -167,61 +151,11 @@ public class TaskActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        /*File path = getApplicationContext().getFilesDir();
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(new File(path, "tasklist.json"));
-            TaskList = JsonManager.readJsonStream(fis);
-        } catch (IOException e) {
-            System.out.println(e);
-            TaskList = new ArrayList<>();
-            LocalDate localDate = LocalDate.ofYearDay(2023, 1);
-            LocalTime localTime = LocalTime.of(0, 0);
-            TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", 2023, 1, 1, 0, 0, 10, 10, false, "Once"));
-        }
-
-        String titleIntent = getIntent().getStringExtra("Title");
-        String descIntent = getIntent().getStringExtra("Desc");
-        int yearIntent = getIntent().getIntExtra("Year", 0);
-        int monthIntent = getIntent().getIntExtra("Month", 0);
-        int dayIntent = getIntent().getIntExtra("Day", 0);
-        int hourIntent = getIntent().getIntExtra("Hour", 0);
-        int minuteIntent = getIntent().getIntExtra("Minute", 0);
-        int goldIntent = getIntent().getIntExtra("Gold", 0);
-        int xpIntent = getIntent().getIntExtra("XP", 0);
-        boolean itdIntent = getIntent().getBooleanExtra("isTaskDone", false);
-        String modeIntent = getIntent().getStringExtra("Mode");
-        if (yearIntent != 0) {
-            LocalTime localTimeI = LocalTime.of(hourIntent, minuteIntent);
-            LocalDate localDateI = LocalDate.of(yearIntent, monthIntent, dayIntent);
-            Task task = new Task(titleIntent, descIntent, yearIntent, monthIntent, dayIntent, hourIntent, minuteIntent, goldIntent, xpIntent, itdIntent, modeIntent);
-            TaskList.add(task);
-        } */
-
-        /*recyclerView = binding.tasksRecyclerView;
-        recyclerView.setAdapter(new TaskAdapter(this, TaskList));*/
-        // Mettre en place les listeners
-
 
         // Appuyer le bouton nous envoie vers un autre activité
         button_back.setOnClickListener(view ->
-                startActivity(new Intent(this, MainActivity.class))
+                startActivity(new Intent(this, TaskActivity.class))
         );
-
-        addtbutton.setOnClickListener(view ->
-                startActivity(new Intent(this, AddTaskActivity.class))
-        );
-
-        archivebutton.setOnClickListener(view ->
-                startActivity(new Intent(this, ArchivedTaskActivity.class)));
-
-        /*try {
-            FileOutputStream fos = new FileOutputStream(new File(path, "tasklist.json"));
-            JsonManager.writeJsonStream(fos, TaskList);
-            Log.i("app", "saving");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }*/
 
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) BottomNavigationView bottomNavigationView = binding.nav;
         bottomNavigationView.setSelectedItemId(R.id.task);
@@ -290,8 +224,7 @@ public class TaskActivity extends AppCompatActivity {
         private TextView taskDescTextView;
         private TextView taskDateTextView;
         private TextView taskRewardTextView;
-        private ImageButton validateButton;
-        private ImageButton modifyButton;
+        private ImageButton unarchiveButton;
         private ImageButton deleteButton;
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -299,8 +232,7 @@ public class TaskActivity extends AppCompatActivity {
             taskDescTextView = itemView.findViewById(R.id.task_desc);
             taskDateTextView = itemView.findViewById(R.id.task_date);
             taskRewardTextView = itemView.findViewById(R.id.task_reward);
-            validateButton = itemView.findViewById(R.id.validate_button);
-            modifyButton = itemView.findViewById(R.id.modify_button);
+            unarchiveButton = itemView.findViewById(R.id.unarchive_button);
             deleteButton = itemView.findViewById(R.id.delete_button);
         }
     }
@@ -313,7 +245,7 @@ public class TaskActivity extends AppCompatActivity {
 
     public void modifyTask(Task task){
         //Intent Creation
-        Intent intent = new Intent(TaskActivity.this, ModifyTaskActivity.class);
+        Intent intent = new Intent(ArchivedTaskActivity.this, ModifyTaskActivity.class);
         intent.putExtra("Title", task.getTitle());
         intent.putExtra("Desc", task.getDescription());
         intent.putExtra("Year", task.getYear());
@@ -330,3 +262,4 @@ public class TaskActivity extends AppCompatActivity {
         startActivity(intent);
     }
 }
+

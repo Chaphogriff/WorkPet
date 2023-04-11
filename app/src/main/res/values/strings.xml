@@ -21,7 +21,7 @@
 
     <string-array name="difficulty_array">
         <item>Easy</item>
-        <item>Meduim</item>
+        <item>Medium</item>
         <item>Hard</item>
         <item>Very Hard</item>
     </string-array>

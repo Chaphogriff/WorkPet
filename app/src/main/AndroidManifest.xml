@@ -56,6 +56,12 @@
             android:name=".MainActivity"
             android:exported="true"></activity>
         <activity
+            android:name=".ModifyTaskActivity"
+            android:exported="true"></activity>
+        <activity
+            android:name=".ArchivedTaskActivity"
+            android:exported="true"></activity>
+        <activity
             android:name=".TestActivity"
             android:exported="true">
             <intent-filter>

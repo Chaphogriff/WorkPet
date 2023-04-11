@@ -123,7 +123,6 @@ public class EmailPasswordActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-                Log.i("email", saddress.toString());
                 signInWithEmailAndPassword(laddress.getText().toString().trim(), lpassword.getText().toString().trim());
             }
         });
