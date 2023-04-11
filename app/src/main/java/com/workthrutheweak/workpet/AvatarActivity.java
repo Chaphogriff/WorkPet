@@ -52,6 +52,9 @@ public class AvatarActivity extends AppCompatActivity {
     TextView goldTextView;
     TextView levelTextView;
     ProgressBar progressBar;
+    Button shopButton;
+    Button inventoryButton;
+    Button customizeButton;
 
     int gold=99;
     int level=2;
@@ -75,6 +78,9 @@ public class AvatarActivity extends AppCompatActivity {
         goldTextView = binding.goldText;
         levelTextView = binding.lvlText;
         progressBar = binding.expBar;
+        shopButton = binding.shop;
+        inventoryButton = binding.inventory;
+        customizeButton = binding.customize;
 
         // Initialisation valeurs
         mp = MediaPlayer.create(this, R.raw.pet_sample);
@@ -125,6 +131,32 @@ public class AvatarActivity extends AppCompatActivity {
                 vibe.cancel();
             }
         });
+
+        // Listener pour les trois boutons
+        Intent i = new Intent(this, ListActivity.class);
+        shopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                i.putExtra("collection", "shop");
+                startActivity(i);
+            }
+        });
+        inventoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                i.putExtra("collection", "inventory");
+                startActivity(i);
+            }
+        });
+        customizeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                i.putExtra("collection", "customize");
+                startActivity(i);
+            }
+        });
+
+
 
         // BARRE DE NAVIGATION
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) BottomNavigationView bottomNavigationView = binding.nav;
