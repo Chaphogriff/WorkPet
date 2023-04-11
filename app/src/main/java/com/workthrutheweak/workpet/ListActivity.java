@@ -126,7 +126,7 @@ public class ListActivity extends AppCompatActivity {
         prices.add("100 Gold");
         prices.add("500 Gold");
 
-        adapter = new ListAdapter(this,titles,images,prices);
+        adapter = new ListAdapter(this,titles,images,prices,"shop");
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2,GridLayoutManager.VERTICAL,false);
         dataList.setLayoutManager(gridLayoutManager);
@@ -135,7 +135,7 @@ public class ListActivity extends AppCompatActivity {
     }
 
     public void generateInventory(){
-        adapter = new ListAdapter(this,titles,images,prices);
+        adapter = new ListAdapter(this,titles,images,prices,"inventory");
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2,GridLayoutManager.VERTICAL,false);
         dataList.setLayoutManager(gridLayoutManager);
@@ -144,7 +144,7 @@ public class ListActivity extends AppCompatActivity {
 
     public void generateCustomized(){
 
-        titles.add("Cat1");
+        titles.add("Cat");
         titles.add("Panda");
         titles.add("Rabbit");
         titles.add("Cat2");
@@ -162,7 +162,7 @@ public class ListActivity extends AppCompatActivity {
         prices.add("Meeeeeow !");
         prices.add("Bark bark!");
 
-        adapter = new ListAdapter(this,titles,images,prices);
+        adapter = new ListAdapter(this,titles,images,prices,"customize");
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2,GridLayoutManager.VERTICAL,false);
         dataList.setLayoutManager(gridLayoutManager);

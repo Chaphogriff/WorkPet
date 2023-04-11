@@ -91,6 +91,10 @@ public class AvatarActivity extends AppCompatActivity {
 
         // Récupération des données
         recoverDataFromJson();
+        Intent intent = getIntent();
+        if(intent.hasExtra("avatar")) {
+            avatarName = intent.getExtras().getString("avatar");
+        }
 
         // Set valeurs
         levelTextView.setText("Lv. "+level);
@@ -200,7 +204,6 @@ public class AvatarActivity extends AppCompatActivity {
                 }
                 return false;
             }
-
 
         });
     }
