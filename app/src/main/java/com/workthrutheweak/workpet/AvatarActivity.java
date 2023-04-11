@@ -55,10 +55,11 @@ public class AvatarActivity extends AppCompatActivity {
     Button shopButton;
     Button inventoryButton;
     Button customizeButton;
-
+    GifImageView avatarView;
     int gold=99;
     int level=2;
     int exp=75; // entre 0 et 100 ! ( si > 100, on level up )
+    String avatarName="cat";
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
@@ -81,6 +82,7 @@ public class AvatarActivity extends AppCompatActivity {
         shopButton = binding.shop;
         inventoryButton = binding.inventory;
         customizeButton = binding.customize;
+        avatarView = binding.pet;
 
         // Initialisation valeurs
         mp = MediaPlayer.create(this, R.raw.pet_sample);
@@ -94,6 +96,11 @@ public class AvatarActivity extends AppCompatActivity {
         levelTextView.setText("Lv. "+level);
         goldTextView.setText("Gold: "+gold);
         progressBar.setProgress(exp);
+        try {
+            setAvatar(avatarName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         // ajouter tous les listeners
         setListeners();
@@ -198,34 +205,44 @@ public class AvatarActivity extends AppCompatActivity {
         });
     }
 
+    public void setAvatar(String fileName) throws IOException {
+        int id = this.getResources().getIdentifier("drawable/"+fileName, null, getPackageName());
+        avatarView.setImageResource(id);
+    }
+
     // Récupère des données de JSON
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void recoverDataFromJson(){
 
         File path = getApplicationContext().getFilesDir();
         FileInputStream fis = null;
+        // Profile
         try {
             fis = new FileInputStream(new File(path, "profile.json"));
-            List<Integer> listIntegerFromProfile= JsonManager.readProfileStream(fis);
-            level = listIntegerFromProfile.get(0);
-            exp = listIntegerFromProfile.get(1);
-            gold = listIntegerFromProfile.get(2);
+            List<String> listStringFromProfile = JsonManager.readProfileStream(fis);
+            level = Integer.parseInt(listStringFromProfile.get(0));
+            exp = Integer.parseInt(listStringFromProfile.get(1));
+            gold = Integer.parseInt(listStringFromProfile.get(2));
+            avatarName = listStringFromProfile.get(3);
         } catch (IOException e) {
-            gold=0;
-            level=1;
-            exp=0;
+            gold = 0;
+            level = 1;
+            exp = 0;
+            avatarName = "cat";
         }
     }
 
     public void updateDataToJson(){
         File path = getApplicationContext().getFilesDir();
+        // Save profile
         try {
             FileOutputStream fos = new FileOutputStream(new File(path, "profile.json"));
-            List<Integer> integerList = new ArrayList<>();
-            integerList.add(level);
-            integerList.add(exp);
-            integerList.add(gold);
-            JsonManager.writeProfileStream(fos,integerList);
+            List<String> stringList = new ArrayList<>();
+            stringList.add(Integer.toString(level));
+            stringList.add(Integer.toString(exp));
+            stringList.add(Integer.toString(gold));
+            stringList.add(avatarName);
+            JsonManager.writeProfileStream(fos, stringList);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

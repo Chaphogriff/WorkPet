@@ -134,9 +134,9 @@ public class JsonManager {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static List<Integer> readProfileStream(InputStream in) throws IOException {
+    public static List<String> readProfileStream(InputStream in) throws IOException {
         reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
-        List<Integer> profileList = null;
+        List<String> profileList = null;
         try {
 
             reader.beginArray();
@@ -151,33 +151,37 @@ public class JsonManager {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static List<Integer> readProfileInteger(JsonReader reader) throws IOException {
-        int level = 0;
-        int exp = 0;
-        int gold = 0;
+    public static List<String> readProfileInteger(JsonReader reader) throws IOException {
+        String level = "";
+        String exp = "";
+        String gold = "";
+        String avatar = "";
 
         reader.beginObject();
         while (reader.hasNext()) {
             String name = reader.nextName();
             if (name.equals("Level")) {
-                level = reader.nextInt();
+                level = Integer.toString(reader.nextInt());
             } else if (name.equals("Exp")) {
-                exp = reader.nextInt();
+                exp = Integer.toString(reader.nextInt());
             } else if (name.equals("Gold")) {
-                gold = reader.nextInt();
+                gold = Integer.toString(reader.nextInt());
+            }else if(name.equals("Avatar")){
+                avatar = reader.nextString();
             } else {
                 reader.skipValue();
             }
         }
         reader.endObject();
-        List<Integer> profileVar = new ArrayList<Integer>();
+        List<String> profileVar = new ArrayList<String>();
         profileVar.add(level);
         profileVar.add(exp);
         profileVar.add(gold);
+        profileVar.add(avatar);
         return profileVar;
     }
 
-    public static void writeProfileStream(OutputStream out, List<Integer> profileList) throws IOException {
+    public static void writeProfileStream(OutputStream out, List<String> profileList) throws IOException {
         writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
         writer.setIndent("  ");
         writer.beginArray();
@@ -185,6 +189,7 @@ public class JsonManager {
         writer.name("Level").value(profileList.get(0));
         writer.name("Exp").value(profileList.get(1));
         writer.name("Gold").value(profileList.get(2));
+        writer.name("Avatar").value(profileList.get(3));
         writer.endObject();
         writer.endArray();
         writer.close();

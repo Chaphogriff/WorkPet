@@ -110,9 +110,9 @@ public class ListActivity extends AppCompatActivity {
 
         titles.add("Cookie");
         titles.add("Bread");
-        titles.add("Can of food");
+        titles.add("Can");
         titles.add("Meat");
-        titles.add("Star fruit");
+        titles.add("Starfruit");
 
         images.add(R.drawable.cookie);
         images.add(R.drawable.bread);
@@ -144,10 +144,10 @@ public class ListActivity extends AppCompatActivity {
 
     public void generateCustomized(){
 
-        titles.add("Brown cat");
+        titles.add("Cat1");
         titles.add("Panda");
-        titles.add("Bunny");
-        titles.add("Gray Cat");
+        titles.add("Rabbit");
+        titles.add("Cat2");
         titles.add("Dog");
 
         images.add(R.drawable.cat);
