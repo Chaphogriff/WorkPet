@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.workthrutheweak.workpet.adapter.ListAdapter;
@@ -30,11 +31,15 @@ public class ListActivity extends AppCompatActivity {
     List<String> prices;
     ListAdapter adapter;
     Button button_back;
+    String mode;
+    TextView modeText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+        Bundle bundle = getIntent().getExtras();
+        mode = bundle.getString("collection");
 
         //Setup View Binding variable
         binding = ActivityListBinding.inflate(getLayoutInflater());
@@ -44,6 +49,8 @@ public class ListActivity extends AppCompatActivity {
         // Récupérer les éléments du xml
         dataList = binding.dataList;
         button_back = binding.back;
+        modeText = binding.mode;
+        modeText.setText(mode.substring(0,1).toUpperCase() + mode.substring(1).toLowerCase());
 
         // Initialisation variables
         titles = new ArrayList<>();
@@ -51,7 +58,13 @@ public class ListActivity extends AppCompatActivity {
         prices = new ArrayList<>();
 
         // Générer la liste
-        generateList();
+        if(mode.equals("shop")){
+            generateShop();
+        }else if(mode.equals("inventory")){
+            generateInventory();
+        }else if(mode.equals("customize")){
+            generateCustomized();
+        }
 
         BottomNavigationView bottomNavigationView = binding.nav;
         bottomNavigationView.getMenu().findItem(R.id.avatar).setChecked(true);
@@ -88,12 +101,12 @@ public class ListActivity extends AppCompatActivity {
 
         // Appuyer le bouton nous envoie vers un autre activité
         button_back.setOnClickListener(view ->
-                startActivity(new Intent(this, MainActivity.class))
+                startActivity(new Intent(this, AvatarActivity.class))
         );
 
     }
 
-    void generateList(){
+    void generateShop(){
 
         titles.add("Cookie");
         titles.add("Bread");
@@ -119,6 +132,41 @@ public class ListActivity extends AppCompatActivity {
         dataList.setLayoutManager(gridLayoutManager);
         dataList.setAdapter(adapter);
 
+    }
+
+    public void generateInventory(){
+        adapter = new ListAdapter(this,titles,images,prices);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2,GridLayoutManager.VERTICAL,false);
+        dataList.setLayoutManager(gridLayoutManager);
+        dataList.setAdapter(adapter);
+    }
+
+    public void generateCustomized(){
+
+        titles.add("Brown cat");
+        titles.add("Panda");
+        titles.add("Bunny");
+        titles.add("Gray Cat");
+        titles.add("Dog");
+
+        images.add(R.drawable.cat);
+        images.add(R.drawable.panda);
+        images.add(R.drawable.rabbit);
+        images.add(R.drawable.cat2);
+        images.add(R.drawable.dog);
+
+        prices.add("Meow meow !");
+        prices.add("Honk honk !");
+        prices.add("Squeak squeak !");
+        prices.add("Meeeeeow !");
+        prices.add("Bark bark!");
+
+        adapter = new ListAdapter(this,titles,images,prices);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2,GridLayoutManager.VERTICAL,false);
+        dataList.setLayoutManager(gridLayoutManager);
+        dataList.setAdapter(adapter);
     }
 
 }
