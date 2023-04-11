@@ -3,8 +3,6 @@ package com.workthrutheweak.workpet.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,23 +12,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.R;
 import com.workthrutheweak.workpet.model.Task;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 
 
 //Adapter for Task List Recycler View
@@ -94,17 +81,17 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull TaskAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        Task item = dataset.get(position);
+        Task item = dataset.get(position); //changer pour FF
         List<String> TaskString = item.inString();
         holder.getTaskTitleTextView().setText(TaskString.get(0));
         holder.getTaskDescTextView().setText(TaskString.get(1));
         holder.getTaskDateTextView().setText(TaskString.get(2));
         holder.getTaskRewardTextView().setText(TaskString.get(3));
-        holder.getTaskCompletionCheckBox().setChecked(item.isTaskDone);
+        holder.getTaskCompletionCheckBox().setChecked(item.isTaskDone());
         holder.getTaskCompletionCheckBox().setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                item.isTaskDone = isChecked;
+                item.setTaskDone(isChecked); //changer pour FF
             }
         });
         //delete Task

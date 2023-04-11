@@ -47,16 +47,17 @@ public class JsonManager {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static void writeTask(JsonWriter writer, Task task) throws IOException {
         writer.beginObject();
-        writer.name("Title").value(task.get_title());
-        writer.name("Description").value(task.get_description());
-        writer.name("Year").value(task.getLocalDate().getYear());
-        writer.name("Month").value(task.getLocalDate().getMonthValue());
-        writer.name("Day").value(task.getLocalDate().getDayOfMonth());
-        writer.name("Hour").value(task.getLocalTime().getHour());
-        writer.name("Minute").value(task.getLocalTime().getMinute());
+        writer.name("Title").value(task.getTitle());
+        writer.name("Description").value(task.getDescription());
+        writer.name("Year").value(task.getYear());
+        writer.name("Month").value(task.getMonth());
+        writer.name("Day").value(task.getDay());
+        writer.name("Hour").value(task.getHour());
+        writer.name("Minute").value(task.getMinute());
         writer.name("Gold").value(task.getGoldreward());
         writer.name("XP").value(task.getXpreward());
         writer.name("isTaskDone").value(task.isTaskDone());
+        writer.name("Mode").value(task.getMode());
         writer.endObject();
     }
 
@@ -94,6 +95,7 @@ public class JsonManager {
         int gold = 0;
         int XP = 0;
         Boolean isTaskDone = null;
+        String mode = null;
 
         reader.beginObject();
         while (reader.hasNext()) {
@@ -118,7 +120,9 @@ public class JsonManager {
                 XP = reader.nextInt();
             } else if (name.equals("isTaskDone")) {
                 isTaskDone = reader.nextBoolean();
-            } else {
+            } else if (name.equals("Mode")) {
+                mode = reader.nextString();
+            }else {
                 reader.skipValue();
             }
         }
@@ -126,7 +130,7 @@ public class JsonManager {
         LocalDate localDate = LocalDate.of(year, month, day);
         LocalTime localTime = LocalTime.of(hour, minute);
 
-        return new Task(title, description, localDate, localTime, gold, XP, isTaskDone);
+        return new Task(title, description, year, month, day, hour, minute, gold, XP, isTaskDone, mode);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

@@ -18,4 +18,20 @@
     <string name="add_a_task">Add a task</string>
     <string name="close">Close</string>
     <string name="edit_a_task">Edit a task</string>
+
+    <string-array name="difficulty_array">
+        <item>Easy</item>
+        <item>Meduim</item>
+        <item>Hard</item>
+        <item>Very Hard</item>
+    </string-array>
+
+    <string-array name="mode_array">
+        <item>Once</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+        <item>Yearly</item>
+    </string-array>
+
 </resources>

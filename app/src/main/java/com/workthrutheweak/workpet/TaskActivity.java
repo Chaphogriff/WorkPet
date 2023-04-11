@@ -7,11 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.JsonReader;
-import android.util.JsonWriter;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,22 +19,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.adapter.TaskAdapter;
-import com.workthrutheweak.workpet.data.Datasource;
 import com.workthrutheweak.workpet.databinding.ActivityTaskBinding;
 import com.workthrutheweak.workpet.model.Task;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -80,7 +68,7 @@ public class TaskActivity extends AppCompatActivity {
             TaskList = new ArrayList<>();
             LocalDate localDate = LocalDate.ofYearDay(2023, 1);
             LocalTime localTime = LocalTime.of(0, 0);
-            TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", localDate, localTime, 10, 10, false));
+            TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", 2023, 1, 1, 0, 0, 10, 10, false, "Once"));
         }
 
         String titleIntent = getIntent().getStringExtra("Title");
@@ -92,12 +80,13 @@ public class TaskActivity extends AppCompatActivity {
         int minuteIntent = getIntent().getIntExtra("Minute", 0);
         int goldIntent = getIntent().getIntExtra("Gold", 0);
         int xpIntent = getIntent().getIntExtra("XP", 0);
+        boolean itdIntent = getIntent().getBooleanExtra("isTaskDone", false);
+        String modeIntent = getIntent().getStringExtra("Mode");
         if (yearIntent != 0) {
             LocalTime localTimeI = LocalTime.of(hourIntent, minuteIntent);
             LocalDate localDateI = LocalDate.of(yearIntent, monthIntent, dayIntent);
-            Task task = new Task(titleIntent, descIntent, localDateI, localTimeI, goldIntent, xpIntent, false);
+            Task task = new Task(titleIntent, descIntent, yearIntent, monthIntent, dayIntent, hourIntent, minuteIntent, goldIntent, xpIntent, itdIntent, modeIntent);
             TaskList.add(task);
-
         }
 
         RecyclerView recyclerView = binding.tasksRecyclerView;
@@ -161,7 +150,7 @@ public class TaskActivity extends AppCompatActivity {
         if (TaskList != null) {
             if (!TaskList.isEmpty()) {
                 for (Task task : TaskList) {
-                    if (!task.isTaskDone) {
+                    if (!task.isTaskDone()) {
                         //TaskList.remove(task); concurrent modif except
                         SaveList.add(task);
                     }

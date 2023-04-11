@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.Exclude;
 import com.google.gson.annotations.SerializedName;
 
 import androidx.annotation.NonNull;
@@ -16,123 +17,155 @@ import java.util.ArrayList;
 import java.util.List;
 
 //Class for a Task item for recycler view
-public class Task implements Parcelable {
+public class Task {
+    private String TaskId;
     @SerializedName("Title")
-    public String _title;
+    private String title;
     @SerializedName("Description")
-    public String _description;
-    @SerializedName("Date")
-    public String _date;
-    @SerializedName("Reward")
-    public String _reward;
-    public LocalDate localDate;
-    public LocalTime localTime;
+    private String description;
+    //public LocalDate localDate;
+    @SerializedName("Year")
+    private int year;
+    @SerializedName("Month")
+    private int month;
+    @SerializedName("Day")
+    private int day;
+    //private LocalTime localTime;
+    @SerializedName("Hour")
+    private int hour;
+    @SerializedName("Minute")
+    private int minute;
     @SerializedName("Gold")
-    public int goldreward;
+    private int goldreward;
     @SerializedName("XP")
-    public int xpreward;
-    //Task boolean to check if Task is done for checkbox
+    private int xpreward;
     @SerializedName("isTaskDone")
-    public boolean isTaskDone = false;
+    private boolean isTaskDone = false;
+    @SerializedName("Mode")
+    private String mode = "Once";
 
     List<String> TaskString;
 
+    public Task(){};
     @SuppressLint("NewApi")
-    public Task(String _title, String _description, LocalDate localDate, LocalTime localTime, int goldreward, int xpreward, boolean isTaskDone) {
-        this._title = _title;
-        this._description = _description;
-        this.localDate = localDate;
-        this.localTime = localTime;
-        this.goldreward = goldreward;
-        this.xpreward = xpreward;
-        this.isTaskDone = isTaskDone;
+    public Task(String _title, String _description,int _year, int _month, int _day, int _hour,int _minute,
+                int _goldreward, int _xpreward, boolean _isTaskDone, String _mode) {
+        this.title = _title;
+        this.description = _description;
+        this.year = _year;
+        this.month = _month;
+        this.day = _day;
+        //this.localDate = LocalDate.of(this.year,this.month,this.day);
+        this.hour = _hour;
+        this.minute = _minute;
+        //this.localTime = LocalTime.of(this.hour,this.minute);
+        this.goldreward = _goldreward;
+        this.xpreward = _xpreward;
+        this.isTaskDone = _isTaskDone;
+        this.mode = _mode;
     }
-
     public List<String> inString() {
         List<String> list = new ArrayList<>();
-        list.add(this._title);
-        list.add(this._description);
-        list.add(this.localDate.toString() + " " + this.localTime.toString());
+        list.add(this.title);
+        list.add(this.description);
+        list.add(this.day + "/" + this.month + "/"+ this.year + " at " + this.hour+":"+this.minute);
         list.add(this.goldreward + " gold, " + this.xpreward + " xp");
         return list;
     }
 
-    public LocalDate getLocalDate() {
-        return localDate;
+    @Exclude
+    public String getTaskId() {
+        return TaskId;
     }
 
-    public LocalTime getLocalTime() {
-        return localTime;
+    public void setTaskId(String taskId) {
+        TaskId = taskId;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
     public int getGoldreward() {
         return goldreward;
+    }
+
+    public void setGoldreward(int goldreward) {
+        this.goldreward = goldreward;
     }
 
     public int getXpreward() {
         return xpreward;
     }
 
-
-    public String get_title() {
-        return _title;
-    }
-
-    public String get_description() {
-        return _description;
+    public void setXpreward(int xpreward) {
+        this.xpreward = xpreward;
     }
 
     public boolean isTaskDone() {
         return isTaskDone;
     }
 
-    public Task(String title, String Desc, String Date, String Time, String Gold, String xp, boolean isTaskDone) {
-        this._title = title;
-        this._description = Desc;
-        this._date = Date + " " + Time;
-        this._reward = Gold + " gold and " + xp + " xp";
-        this.isTaskDone = isTaskDone;
+    public void setTaskDone(boolean taskDone) {
+        isTaskDone = taskDone;
     }
 
-    public Task(String title, String Desc, String Date, String Reward, boolean isTaskDone) {
-        this._title = title;
-        this._date = Date;
-        this._description = Desc;
-        this._reward = Reward;
-        this.isTaskDone = isTaskDone;
+    public int getYear() {
+        return year;
     }
 
-    protected Task(Parcel in) {
-        _title = in.readString();
-        _description = in.readString();
-        _date = in.readString();
-        _reward = in.readString();
-        isTaskDone = in.readByte() != 0;
+    public void setYear(int year) {
+        this.year = year;
     }
 
-    public static final Creator<Task> CREATOR = new Creator<Task>() {
-        @Override
-        public Task createFromParcel(Parcel in) {
-            return new Task(in);
-        }
-
-        @Override
-        public Task[] newArray(int size) {
-            return new Task[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public int getMonth() {
+        return month;
     }
 
-    @Override
-    public void writeToParcel(@NonNull Parcel parcel, int i) {
-        parcel.writeString(_title);
-        parcel.writeString(_description);
-        parcel.writeString(_date);
-        parcel.writeString(_reward);
-        parcel.writeByte((byte) (isTaskDone ? 1 : 0));
+    public void setMonth(int month) {
+        this.month = month;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
+    public int getHour() {
+        return hour;
+    }
+
+    public void setHour(int hour) {
+        this.hour = hour;
+    }
+
+    public int getMinute() {
+        return minute;
+    }
+
+    public void setMinute(int minute) {
+        this.minute = minute;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
     }
 }

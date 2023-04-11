@@ -8,122 +8,150 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="16dp">
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="152dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/back2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginBottom="32dp"
                 android:text="Back"
+                app:layout_constraintBottom_toTopOf="@+id/TaskTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="MissingConstraints" />
 
             <TextView
                 android:id="@+id/TaskTitle"
                 android:layout_width="39dp"
-                android:layout_height="19dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="32dp"
-                android:text="Title :" />
+                android:layout_marginLeft="24dp"
+                android:layout_marginBottom="1dp"
+                android:text="Title :"
+                app:layout_constraintBottom_toTopOf="@+id/TitleInputField"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/back2" />
 
             <EditText
                 android:id="@+id/TitleInputField"
-                android:layout_width="220dp"
-                android:layout_height="52dp"
-                android:layout_gravity = "center_horizontal"
+                android:layout_width="240dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="32dp"
                 android:ems="10"
                 android:hint="Task title"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                app:layout_constraintBottom_toTopOf="@+id/TaskDesc"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/TaskTitle" />
 
             <TextView
                 android:id="@+id/TaskDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="32dp"
-                android:text="Description :" />
+                android:layout_marginStart="16dp"
+                android:text="Description :"
+                app:layout_constraintBottom_toTopOf="@+id/DescInputField"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/TitleInputField" />
 
             <EditText
                 android:id="@+id/DescInputField"
-                android:layout_width="224dp"
-                android:layout_height="55dp"
-                android:layout_gravity = "center_horizontal"
+                android:layout_width="240dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="32dp"
                 android:ems="10"
                 android:hint="Task description"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                app:layout_constraintBottom_toTopOf="@+id/TaskDeadline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/TaskDesc" />
 
             <TextView
                 android:id="@+id/TaskDeadline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="32dp"
-                android:text="Deadline" />
+                android:layout_marginLeft="24dp"
+                android:layout_marginBottom="32dp"
+                android:text="Deadline"
+                app:layout_constraintBottom_toTopOf="@+id/Datebutton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/DescInputField" />
+
 
             <Button
                 android:id="@+id/Datebutton"
-                android:layout_width="154dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="32dp"
-                android:text="Select Date" />
+                android:layout_marginTop="8dp"
+                android:text="Select Date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.462"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/TaskDeadline" />
 
             <Button
                 android:id="@+id/Timebutton"
-                android:layout_width="133dp"
-                android:layout_marginTop="32dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Select Time" />
-
-
-            <TextView
-                android:id="@+id/TaskReward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginTop="372dp"
+                android:layout_marginBottom="32dp"
+                android:text="Select Time"
+                app:layout_constraintBottom_toTopOf="@+id/mode_spinner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.458"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Spinner
+                android:id="@+id/difficulty_spinner"
+                android:layout_width="240dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="32dp"
-                android:text="Reward :" />
+                android:layout_marginBottom="32dp"
+                android:hint="choose the difficulty"
+                app:layout_constraintBottom_toTopOf="@+id/AddButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mode_spinner"
+                app:layout_constraintVertical_bias="1.0" />
 
-            <EditText
-                android:id="@+id/GoldTextInput"
-                android:layout_width="103dp"
-                android:layout_height="68dp"
-                android:layout_gravity = "center_horizontal"
-                android:ems="10"
-                android:hint="Enter Gold"
-                android:inputType="number" />
+            <Spinner
+                android:id="@+id/mode_spinner"
+                android:layout_width="240dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="32dp"
+                android:hint="choose a frequency"
+                app:layout_constraintBottom_toTopOf="@+id/difficulty_spinner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.502"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Timebutton" />
 
-            <EditText
-                android:id="@+id/XPTextInput"
-                android:layout_width="107dp"
-                android:layout_height="52dp"
-                android:layout_gravity = "center_horizontal"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:hint="Enter XP"
-                android:inputType="number" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <Button
                 android:id="@+id/AddButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="60dp"
-                android:backgroundTint="@color/tint"
-                android:src="@drawable/baseline_add" />
+                android:text="Add task"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.501"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
 

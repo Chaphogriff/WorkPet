@@ -19,7 +19,6 @@ import android.widget.CalendarView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.adapter.TaskAdapter;
@@ -28,7 +27,6 @@ import com.workthrutheweak.workpet.model.Task;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -36,7 +34,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -84,9 +81,9 @@ public class CalendarActivity extends AppCompatActivity {
         } catch (IOException e) {
             System.out.println(e);
             taskList = new ArrayList<>();
-            LocalDate localDate = LocalDate.ofYearDay(2023, 1);
+            /*LocalDate localDate = LocalDate.ofYearDay(2023, 1);
             LocalTime localTime = LocalTime.of(0, 0);
-            taskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", localDate, localTime, 10, 10, false));
+            taskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", localDate, localTime, 10, 10, false));*/
         }
 
         taskList_popup = new ArrayList<Task>();
@@ -124,7 +121,7 @@ public class CalendarActivity extends AppCompatActivity {
                 if (taskList != null) {
                     if (!taskList.isEmpty()) {
                         for (Task task : taskList) {
-                            LocalDate localDate_task = task.getLocalDate();
+                            LocalDate localDate_task = LocalDate.of(task.getYear(),task.getMonth(),task.getDay());
                             if (localDate_calendar.getDayOfMonth() == localDate_task.getDayOfMonth()
                                     && localDate_calendar.getMonthValue() == localDate_task.getMonthValue()
                                     && localDate_calendar.getYear() == localDate_task.getYear()) {
@@ -178,7 +175,6 @@ public class CalendarActivity extends AppCompatActivity {
     public void createPopupDialog() {
         dialogbuilder = new AlertDialog.Builder(this);
         final View calendarPopupView = getLayoutInflater().inflate(R.layout.activity_calendar_popup, null);
-        //dialog;
         popup_title = (TextView) calendarPopupView.findViewById(R.id.daytask);
         recyclerView = (RecyclerView) calendarPopupView.findViewById(R.id.tasksRecyclerView);
         recyclerView.setAdapter(new TaskAdapter(this, taskList_popup));
@@ -196,7 +192,7 @@ public class CalendarActivity extends AppCompatActivity {
                     if (!taskList.isEmpty()) {
                         for (Task task_popup : taskList_popup) {
                             for (Task task : taskList) {
-                                if (task_popup.isTaskDone && task_popup.get_title() == task.get_title()) {
+                                if (task_popup.isTaskDone() && task_popup.getTitle() == task.getTitle()) {
                                     taskList.remove(task);
                                 }
                             }
