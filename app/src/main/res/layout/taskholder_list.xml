@@ -11,93 +11,93 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Task Title"
+        android:text="@string/task_title"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/task_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="16dp"
-        android:text="Task Description"
+        android:text="@string/task_description"
         android:textSize="15sp"
         android:textStyle="italic"
+        android:maxWidth="150dip"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/task_title"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintVertical_bias="0.015"  />
 
     <TextView
         android:id="@+id/task_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Task Date"
+        android:text="@string/task_date"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/task_desc"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintTop_toBottomOf="@id/task_desc" />
 
     <TextView
         android:id="@+id/task_reward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Task Reward"
+        android:text="@string/task_reward"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.046"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/task_date"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintTop_toBottomOf="@id/task_date" />
 
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="148dp"
+        android:layout_marginTop="7dp"
         android:background="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/task_reward" />
 
     <ImageButton
         android:id="@+id/delete_button"
         android:layout_width="54dp"
         android:layout_height="49dp"
-        android:contentDescription="delete task"
+        android:background="@drawable/roundcorners"
+        android:contentDescription="@string/delete_task"
         app:layout_constraintBottom_toTopOf="@+id/task_date"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.27"
         app:layout_constraintStart_toEndOf="@+id/modify_button"
         app:layout_constraintTop_toBottomOf="@+id/task_title"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/baseline_delete_outline_24"
-        android:background="@drawable/roundcorners"
-        tools:ignore="SmallSp"
-        app:tint="#000000" />
+        app:tint="#000000"
+        tools:ignore="SmallSp" />
 
     <ImageButton
         android:id="@+id/modify_button"
         android:layout_width="54dp"
         android:layout_height="49dp"
-        android:contentDescription="modify task"
+        android:background="@drawable/roundcorners"
+        android:contentDescription="@string/modify_task"
         app:layout_constraintBottom_toTopOf="@+id/task_date"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.662"
-        app:layout_constraintStart_toEndOf="@+id/task_desc"
+        app:layout_constraintEnd_toStartOf="@+id/delete_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/validate_button"
         app:layout_constraintTop_toBottomOf="@+id/task_title"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/baseline_edit_24"
-        android:background="@drawable/roundcorners"
         app:tint="#000000"
         tools:ignore="SmallSp" />
 
@@ -105,15 +105,16 @@
         android:id="@+id/validate_button"
         android:layout_width="54dp"
         android:layout_height="49dp"
-        android:contentDescription="validate task"
+        android:layout_marginStart="200dp"
+        android:background="@drawable/roundcorners"
+        android:contentDescription="@string/validate_task"
         app:layout_constraintBottom_toTopOf="@+id/task_date"
         app:layout_constraintEnd_toStartOf="@+id/modify_button"
-        app:layout_constraintHorizontal_bias="0.901"
-        app:layout_constraintStart_toEndOf="@+id/task_desc"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/task_title"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/baseline_task_24"
-        android:background="@drawable/roundcorners"
         tools:ignore="SmallSp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
