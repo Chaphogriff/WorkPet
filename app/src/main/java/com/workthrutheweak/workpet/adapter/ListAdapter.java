@@ -113,14 +113,14 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
                                 @Override
                                 public void onCompletion(MediaPlayer mp) {
                                     mp.release();
+                                    Item item = new Item(title,"",Integer.parseInt(description.split(" ")[0]),25);
+                                    Intent i = new Intent(ctx, AvatarActivity.class);
+                                    i.putExtra("newitem", item);
+                                    mp.release();
+                                    ctx.startActivity(i);
                                 }
                             });
                             Toast.makeText(view.getContext(),"Buy "+ title, Toast.LENGTH_SHORT).show();
-                            Item item = new Item(title,"",Integer.parseInt(description.split(" ")[0]),25);
-                            Intent i = new Intent(ctx, AvatarActivity.class);
-                            i.putExtra("newitem", item);
-                            mp.release();
-                            ctx.startActivity(i);
                         }
 
                     }else if(mode.equals("inventory")){
