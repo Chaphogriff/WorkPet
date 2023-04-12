@@ -149,6 +149,7 @@ public class AvatarActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 i.putExtra("collection", "shop");
+                i.putExtra("gold",gold);
                 startActivity(i);
             }
         });

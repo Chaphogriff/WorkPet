@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import com.workthrutheweak.workpet.model.Item;
 import com.workthrutheweak.workpet.model.Task;
 
 import java.io.IOException;
@@ -36,10 +37,27 @@ public class JsonManager {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    public static void writeItemStream(OutputStream out, List<Item> itemList) throws IOException {
+        writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
+        writer.setIndent("  ");
+        writeItemList(writer, itemList);
+        writer.close();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public static void writeTaskList(JsonWriter writer, List<Task> taskList) throws IOException {
         writer.beginArray();
         for (Task task : taskList) {
             writeTask(writer, task);
+        }
+        writer.endArray();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static void writeItemList(JsonWriter writer, List<Item> itemList) throws IOException {
+        writer.beginArray();
+        for (Item task : itemList) {
+            writeItem(writer, task);
         }
         writer.endArray();
     }
@@ -62,10 +80,30 @@ public class JsonManager {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    public static void writeItem(JsonWriter writer, Item item) throws IOException {
+        writer.beginObject();
+        writer.name("Title").value(item.getTitle());
+        writer.name("Description").value(item.getDescription());
+        writer.name("Price").value(item.getPrice());
+        writer.name("Effect").value(item.getEffect());
+        writer.endObject();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public static List<Task> readJsonStream(InputStream in) throws IOException {
         reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
         try {
             return readTaskList(reader);
+        } finally {
+            reader.close();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static List<Item> readItemStream(InputStream in) throws IOException {
+        reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
+        try {
+            return readItemList(reader);
         } finally {
             reader.close();
         }
@@ -81,6 +119,18 @@ public class JsonManager {
         }
         reader.endArray();
         return taskList;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static List<Item> readItemList(JsonReader reader) throws IOException {
+        List<Item> itemList = new ArrayList<Item>();
+
+        reader.beginArray();
+        while (reader.hasNext()) {
+            itemList.add(readItem(reader));
+        }
+        reader.endArray();
+        return itemList;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -134,6 +184,33 @@ public class JsonManager {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    public static Item readItem(JsonReader reader) throws IOException {
+        String title = null;
+        String description = null;
+        int price = 0;
+        int effect = 0;
+
+        reader.beginObject();
+        while (reader.hasNext()) {
+            String name = reader.nextName();
+            if (name.equals("Title")) {
+                title = reader.nextString();
+            } else if (name.equals("Description")) {
+                description = reader.nextString();
+            } else if (name.equals("Price")) {
+                price = reader.nextInt();
+            } else if (name.equals("Effect")) {
+                effect = reader.nextInt();
+            }else {
+                reader.skipValue();
+            }
+        }
+        reader.endObject();
+
+        return new Item(title, description, price, effect);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public static List<String> readProfileStream(InputStream in) throws IOException {
         reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
         List<String> profileList = null;
@@ -149,6 +226,7 @@ public class JsonManager {
         }
         return profileList;
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static List<String> readProfileInteger(JsonReader reader) throws IOException {
