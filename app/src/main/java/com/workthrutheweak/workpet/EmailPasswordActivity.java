@@ -62,7 +62,6 @@ public class EmailPasswordActivity extends AppCompatActivity {
     private TextView stitle;
     private TextView spass;
     private TextView semail;
-
     private Button logbutton;
     private Button signButton;
 
@@ -155,8 +154,6 @@ public class EmailPasswordActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
-                Log.i("email", "hi");
-                Log.i("email", saddress.toString());
                 createUserWithEmailAndPassword(saddress.getText().toString().trim(), spassword.getText().toString().trim());
             }
         });

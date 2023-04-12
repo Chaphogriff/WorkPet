@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                         // on below line we are creating a builder variable for our alert dialog
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                         // on below line we are setting message for our dialog box.
-                        builder.setMessage("Select yes to display toast message and no to dismiss the dialog ?")
+                        builder.setMessage("Delete selected task ?")
                                 // on below line we are setting positive button
                                 // and setting text to it.
                                 .setPositiveButton("Yes", dialogClickListener)
