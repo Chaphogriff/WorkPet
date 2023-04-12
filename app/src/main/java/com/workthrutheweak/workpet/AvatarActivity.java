@@ -25,6 +25,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.JsonObject;
 import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.databinding.ActivityAvatarBinding;
+import com.workthrutheweak.workpet.model.Item;
 import com.workthrutheweak.workpet.model.Task;
 
 import org.json.JSONObject;
@@ -60,6 +61,7 @@ public class AvatarActivity extends AppCompatActivity {
     int level=2;
     int exp=75; // entre 0 et 100 ! ( si > 100, on level up )
     String avatarName="cat";
+    List<Item> ItemList;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility")
@@ -94,6 +96,11 @@ public class AvatarActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if(intent.hasExtra("avatar")) {
             avatarName = intent.getExtras().getString("avatar");
+        }
+        if(intent.hasExtra("newitem")){
+            recoverItemFromJson();
+            ItemList.add((Item)intent.getSerializableExtra("newitem"));
+            updateItemToJson();
         }
 
         // Set valeurs
@@ -257,5 +264,34 @@ public class AvatarActivity extends AppCompatActivity {
     protected void onPause() {
         updateDataToJson();
         super.onPause();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void updateItemToJson(){
+        File path = getApplicationContext().getFilesDir();
+
+        try {
+            FileOutputStream fos = new FileOutputStream(new File(path, "itemlist.json"));
+            JsonManager.writeItemStream(fos, ItemList);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void recoverItemFromJson(){
+
+        File path = getApplicationContext().getFilesDir();
+        FileInputStream fis = null;
+        // Profile
+        // Liste des tâches
+        try {
+            fis = new FileInputStream(new File(path, "itemlist.json"));
+            ItemList = JsonManager.readItemStream(fis);
+        } catch (IOException e) {
+            System.out.println(e);
+            ItemList = new ArrayList<>();
+            ItemList.add(new Item("Bread", "Good bread", 50,10));
+        }
     }
 }

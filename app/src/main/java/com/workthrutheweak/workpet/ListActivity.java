@@ -121,13 +121,6 @@ public class ListActivity extends AppCompatActivity {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    protected void onPause() {
-        updateDataToJson();
-        super.onPause();
-    }
-
     void generateShop(){
 
         titles.add("Cookie");
@@ -186,18 +179,6 @@ public class ListActivity extends AppCompatActivity {
             System.out.println(e);
             ItemList = new ArrayList<>();
             ItemList.add(new Item("Bread", "Good bread", 50,10));
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void updateDataToJson(){
-        File path = getApplicationContext().getFilesDir();
-
-        try {
-            FileOutputStream fos = new FileOutputStream(new File(path, "itemlist.json"));
-            JsonManager.writeItemStream(fos, ItemList);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 

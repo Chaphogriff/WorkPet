@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //Class for a Task item for recycler view
-public class Item {
+public class Item implements Serializable {
     private String ItemId;
     @SerializedName("Title")
     private String title;
