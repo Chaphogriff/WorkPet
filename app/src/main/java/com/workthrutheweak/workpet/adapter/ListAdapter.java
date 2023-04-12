@@ -27,6 +27,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
     LayoutInflater inflater;
     String mode;
     Context ctx;
+    int gold;
 
     public ListAdapter(Context ctx, List<String> titles, List<Integer> images, List<String> prices, String mode ){
         this.titles = titles;
@@ -35,6 +36,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
         this.mode = mode;
         this.ctx = ctx;
         this.inflater = LayoutInflater.from(ctx);
+    }
+
+    public ListAdapter(Context ctx, List<String> titles, List<Integer> images, List<String> prices, String mode, int gold ){
+        this.titles = titles;
+        this.images = images;
+        this.prices = prices;
+        this.mode = mode;
+        this.ctx = ctx;
+        this.inflater = LayoutInflater.from(ctx);
+        this.gold = gold;
     }
 
     @NonNull
@@ -82,11 +93,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
                         ctx.startActivity(i);
 
                     }else if(mode.equals("shop")){
-                        Toast.makeText(view.getContext(),"Buy "+ title, Toast.LENGTH_SHORT).show();
-                        Item item = new Item(title,"",Integer.parseInt(description.split(" ")[0]),25);
-                        Intent i = new Intent(ctx, AvatarActivity.class);
-                        i.putExtra("newitem", item);
-                        ctx.startActivity(i);
+                        int itemPrice = Integer.parseInt(description.split(" ")[0]);
+                        if(itemPrice>gold){
+                            Toast.makeText(view.getContext(),"Not enough gold!", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(view.getContext(),"Buy "+ title, Toast.LENGTH_SHORT).show();
+                            Item item = new Item(title,"",Integer.parseInt(description.split(" ")[0]),25);
+                            Intent i = new Intent(ctx, AvatarActivity.class);
+                            i.putExtra("newitem", item);
+                            ctx.startActivity(i);
+                        }
 
                     }else if(mode.equals("inventory")){
                         Toast.makeText(view.getContext(),"Use "+ title+" ! +25exp", Toast.LENGTH_SHORT).show();

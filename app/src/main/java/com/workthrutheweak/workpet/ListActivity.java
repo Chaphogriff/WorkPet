@@ -46,6 +46,8 @@ public class ListActivity extends AppCompatActivity {
     String mode;
     TextView modeText;
     List<Item> ItemList;
+    int gold;
+    TextView goldText;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -54,6 +56,9 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
         Bundle bundle = getIntent().getExtras();
         mode = bundle.getString("collection");
+        if(getIntent().hasExtra("gold")) {
+            gold = getIntent().getExtras().getInt("gold");
+        }
 
         //Setup View Binding variable
         binding = ActivityListBinding.inflate(getLayoutInflater());
@@ -65,6 +70,7 @@ public class ListActivity extends AppCompatActivity {
         button_back = binding.back;
         modeText = binding.mode;
         modeText.setText(mode.substring(0,1).toUpperCase() + mode.substring(1).toLowerCase());
+        goldText = binding.goldText;
 
         // Initialisation variables
         titles = new ArrayList<>();
@@ -73,6 +79,7 @@ public class ListActivity extends AppCompatActivity {
 
         // Générer la liste
         if(mode.equals("shop")){
+            goldText.setText("Gold : "+gold);
             generateShop();
         }else if(mode.equals("inventory")){
             recoverDataFromJson();
@@ -141,7 +148,7 @@ public class ListActivity extends AppCompatActivity {
         prices.add("100 Gold");
         prices.add("500 Gold");
 
-        adapter = new ListAdapter(this,titles,images,prices,"shop");
+        adapter = new ListAdapter(this,titles,images,prices,"shop",gold);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2,GridLayoutManager.VERTICAL,false);
         dataList.setLayoutManager(gridLayoutManager);

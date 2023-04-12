@@ -99,7 +99,9 @@ public class AvatarActivity extends AppCompatActivity {
         }
         if(intent.hasExtra("newitem")){
             recoverItemFromJson();
-            ItemList.add((Item)intent.getSerializableExtra("newitem"));
+            Item newItem = (Item)intent.getSerializableExtra("newitem");
+            ItemList.add(newItem);
+            gold = gold - newItem.getPrice();
             updateItemToJson();
         }
         if(intent.hasExtra("useditem")){
