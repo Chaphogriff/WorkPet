@@ -15,12 +15,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.workthrutheweak.workpet.databinding.ActivityMainBinding;
 import com.workthrutheweak.workpet.databinding.ActivitySettingBinding;
 
+import java.io.File;
+
 public class SettingActivity extends AppCompatActivity {
 
     // Variables
     private ActivitySettingBinding binding; //For ViewBinding feature
     Button button_back;
     TextView textView;
+    Button button_help;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class SettingActivity extends AppCompatActivity {
 
         // Récupérer les éléments du xml
         button_back = binding.back;
+        button_help = binding.help;
 
         // Mettre en place les listeners
 
@@ -41,6 +45,14 @@ public class SettingActivity extends AppCompatActivity {
         button_back.setOnClickListener(view ->
                 startActivity(new Intent(this, MainActivity.class))
         );
+
+        button_help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                File path = getApplicationContext().getFilesDir();
+                new File(path, "profile.json").delete();
+            }
+        });
 
 
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) BottomNavigationView bottomNavigationView = binding.nav;

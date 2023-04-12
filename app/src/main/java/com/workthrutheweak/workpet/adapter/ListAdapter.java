@@ -1,5 +1,6 @@
 package com.workthrutheweak.workpet.adapter;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.workthrutheweak.workpet.AvatarActivity;
+import com.workthrutheweak.workpet.ListActivity;
 import com.workthrutheweak.workpet.R;
 
 import java.util.List;
@@ -20,11 +23,15 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
     List<Integer> images;
     List<String> prices;
     LayoutInflater inflater;
+    String mode;
+    Context ctx;
 
-    public ListAdapter(Context ctx, List<String> titles, List<Integer> images, List<String> prices ){
+    public ListAdapter(Context ctx, List<String> titles, List<Integer> images, List<String> prices, String mode ){
         this.titles = titles;
         this.images = images;
         this.prices = prices;
+        this.mode = mode;
+        this.ctx = ctx;
         this.inflater = LayoutInflater.from(ctx);
     }
 
@@ -62,7 +69,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(view.getContext(),"Click on "+ getAbsoluteAdapterPosition(), Toast.LENGTH_SHORT).show();
+
+                    String petName = titles.get(getAbsoluteAdapterPosition());
+                    Toast.makeText(view.getContext(),"Click on "+ petName, Toast.LENGTH_SHORT).show();
+
+
+                    if(mode.equals("customize")){
+                        Intent i = new Intent(ctx, AvatarActivity.class);
+                        i.putExtra("avatar", petName.toLowerCase());
+                        ctx.startActivity(i);
+                    }
+
                 }
             });
 

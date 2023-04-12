@@ -110,9 +110,9 @@ public class ListActivity extends AppCompatActivity {
 
         titles.add("Cookie");
         titles.add("Bread");
-        titles.add("Can of food");
+        titles.add("Can");
         titles.add("Meat");
-        titles.add("Star fruit");
+        titles.add("Starfruit");
 
         images.add(R.drawable.cookie);
         images.add(R.drawable.bread);
@@ -126,7 +126,7 @@ public class ListActivity extends AppCompatActivity {
         prices.add("100 Gold");
         prices.add("500 Gold");
 
-        adapter = new ListAdapter(this,titles,images,prices);
+        adapter = new ListAdapter(this,titles,images,prices,"shop");
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2,GridLayoutManager.VERTICAL,false);
         dataList.setLayoutManager(gridLayoutManager);
@@ -135,7 +135,7 @@ public class ListActivity extends AppCompatActivity {
     }
 
     public void generateInventory(){
-        adapter = new ListAdapter(this,titles,images,prices);
+        adapter = new ListAdapter(this,titles,images,prices,"inventory");
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2,GridLayoutManager.VERTICAL,false);
         dataList.setLayoutManager(gridLayoutManager);
@@ -144,10 +144,10 @@ public class ListActivity extends AppCompatActivity {
 
     public void generateCustomized(){
 
-        titles.add("Brown cat");
+        titles.add("Cat");
         titles.add("Panda");
-        titles.add("Bunny");
-        titles.add("Gray Cat");
+        titles.add("Rabbit");
+        titles.add("Cat2");
         titles.add("Dog");
 
         images.add(R.drawable.cat);
@@ -162,7 +162,7 @@ public class ListActivity extends AppCompatActivity {
         prices.add("Meeeeeow !");
         prices.add("Bark bark!");
 
-        adapter = new ListAdapter(this,titles,images,prices);
+        adapter = new ListAdapter(this,titles,images,prices,"customize");
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2,GridLayoutManager.VERTICAL,false);
         dataList.setLayoutManager(gridLayoutManager);

@@ -4,12 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -55,6 +58,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifImageView;
+
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding; //For ViewBinding feature
@@ -67,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
     TextView levelTextView;
     ProgressBar progressBar;
     RecyclerView recyclerView;
+    GifImageView avatarView;
+    String avatarName = "cat";
     Button logoutbutton;
     private FirestoreRecyclerAdapter adapter;
     private DialogInterface.OnClickListener dialogClickListener;
@@ -92,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         levelTextView = binding.lvlText;
         progressBar = binding.expBar;
         logoutbutton = binding.logoutbutton;
+        avatarView = binding.homePet;
 
         logoutbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,7 +219,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Set valeurs
-        refreshProfileVar();
+        recoverProfileFromJson();
+        try {
+            refreshProfileVar();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         BottomNavigationView bottomNavigationView = binding.nav;
         bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
@@ -244,6 +258,32 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void setAvatar(String fileName) throws IOException {
+        int id = this.getResources().getIdentifier("drawable/"+fileName, null, getPackageName());
+        avatarView.setImageResource(id);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void recoverProfileFromJson() {
+        File path = getApplicationContext().getFilesDir();
+        FileInputStream fis = null;
+
+        // Profile
+        try {
+            fis = new FileInputStream(new File(path, "profile.json"));
+            List<String> listStringFromProfile = JsonManager.readProfileStream(fis);
+            level = Integer.parseInt(listStringFromProfile.get(0));
+            exp = Integer.parseInt(listStringFromProfile.get(1));
+            gold = Integer.parseInt(listStringFromProfile.get(2));
+            avatarName = listStringFromProfile.get(3);
+        } catch (IOException e) {
+            gold = 0;
+            level = 1;
+            exp = 0;
+            avatarName = "cat";
+        }
+    }
+
     // Récupération des données
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void recoverDataFromJson() {
@@ -254,14 +294,16 @@ public class MainActivity extends AppCompatActivity {
         // Profile
         try {
             fis = new FileInputStream(new File(path, "profile.json"));
-            List<Integer> listIntegerFromProfile = JsonManager.readProfileStream(fis);
-            level = listIntegerFromProfile.get(0);
-            exp = listIntegerFromProfile.get(1);
-            gold = listIntegerFromProfile.get(2);
+            List<String> listStringFromProfile = JsonManager.readProfileStream(fis);
+            level = Integer.parseInt(listStringFromProfile.get(0));
+            exp = Integer.parseInt(listStringFromProfile.get(1));
+            gold = Integer.parseInt(listStringFromProfile.get(2));
+            avatarName = listStringFromProfile.get(3);
         } catch (IOException e) {
             gold = 0;
             level = 1;
             exp = 0;
+            avatarName = "cat";
         }
 
         List<Task> top5TaskList = new ArrayList<>();
@@ -279,6 +321,24 @@ public class MainActivity extends AppCompatActivity {
             TaskList.add(new Task("Bien débuter", "N'hésiter pas à remplir votre tableau", 2023, 1, 1, 0, 0, 10, 10, false, "Once"));
         }
         recyclerView.setAdapter(new TaskAdapter(this, top5TaskList));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void updateProfileToJson() {
+        File path = getApplicationContext().getFilesDir();
+
+        // Save profile
+        try {
+            FileOutputStream fos = new FileOutputStream(new File(path, "profile.json"));
+            List<String> stringList = new ArrayList<>();
+            stringList.add(Integer.toString(level));
+            stringList.add(Integer.toString(exp));
+            stringList.add(Integer.toString(gold));
+            stringList.add(avatarName);
+            JsonManager.writeProfileStream(fos, stringList);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -313,11 +373,12 @@ public class MainActivity extends AppCompatActivity {
         // Save profile
         try {
             FileOutputStream fos = new FileOutputStream(new File(path, "profile.json"));
-            List<Integer> integerList = new ArrayList<>();
-            integerList.add(level);
-            integerList.add(exp);
-            integerList.add(gold);
-            JsonManager.writeProfileStream(fos, integerList);
+            List<String> stringList = new ArrayList<>();
+            stringList.add(Integer.toString(level));
+            stringList.add(Integer.toString(exp));
+            stringList.add(Integer.toString(gold));
+            stringList.add(avatarName);
+            JsonManager.writeProfileStream(fos, stringList);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -327,14 +388,15 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onPause() {
-        updateDataToJson();
+        updateProfileToJson();
         super.onPause();
     }
 
-    void refreshProfileVar() {
+    void refreshProfileVar() throws IOException {
         levelTextView.setText("Lv. " + level);
         goldTextView.setText("Gold: " + gold);
         progressBar.setProgress(exp);
+        setAvatar(avatarName);
     }
 
     // Ajouter les exp et gold quand on valide des tâches
