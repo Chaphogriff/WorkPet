@@ -48,8 +48,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -73,9 +71,12 @@ public class CalendarActivity extends AppCompatActivity {
     Button button_back;
     FloatingActionButton button_addT;
     CalendarView calendarView;
+    String avatarName;
     long date;
     private FirestoreRecyclerAdapter adapter;
     private DialogInterface.OnClickListener dialogClickListener;
+    int exp, gold,level;
+    int usergold, userxp;
 
 
     @SuppressLint("NewApi")
@@ -92,6 +93,15 @@ public class CalendarActivity extends AppCompatActivity {
         // Récupérer les éléments du xml
         button_back = binding.back;
         calendarView = binding.calendar;
+
+        docref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                usergold = Math.toIntExact(documentSnapshot.getLong("gold"));
+                userxp = Math.toIntExact(documentSnapshot.getLong("xp"));
+                Log.i("loaded", "done");
+            }
+        });
 
         // Mettre en place les listeners
         calendarView.setDate(date);
@@ -182,6 +192,7 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
+        recoverProfileFromJson();
 
         BottomNavigationView bottomNavigationView = binding.nav;
         bottomNavigationView.setSelectedItemId(R.id.calendar);
@@ -215,6 +226,7 @@ public class CalendarActivity extends AppCompatActivity {
 
 
         });
+
     }
 
     public void createPopupDialog() {
@@ -227,7 +239,6 @@ public class CalendarActivity extends AppCompatActivity {
         dialogbuilder.setView(calendarPopupView);
         dialog = dialogbuilder.create();
         dialog.show();
-        button_addT = calendarPopupView.findViewById(R.id.edit2);
         Log.i("cal","in there");
         button_popup_back.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -297,6 +308,18 @@ public class CalendarActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         model.setTaskDone(true);
                         docref.collection("Tasks").document(model.getTaskId()).update("taskDone", true);
+                        docref.update("gold", model.getGoldreward()+usergold);
+                        docref.update("xp", model.getXpreward()+userxp);
+
+                        int taskExp = model.getXpreward();
+                        int taskGold = model.getGoldreward();
+                        exp += taskExp;
+                        // vérifier si on level up (si exp>100 -> level+1)
+                        if (exp >= 100) {
+                            exp -= 100;
+                            level++;
+                        }
+                        gold += taskGold;
                     }
                 });
                 holder.deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -347,23 +370,68 @@ public class CalendarActivity extends AppCompatActivity {
         };
         adapter.startListening();
 
-
+        button_popup_back = (Button) calendarPopupView.findViewById(R.id.back);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
-        button_popup_back = (Button) calendarPopupView.findViewById(R.id.back);
         dialogbuilder.setView(calendarPopupView);
         dialog = dialogbuilder.create();
         dialog.show();
-        button_addT = calendarPopupView.findViewById(R.id.edit2);
-        Log.i("cal","in there");
         button_popup_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+                adapter.stopListening();
+                startActivity(new Intent(CalendarActivity.this, CalendarActivity.class));
             }
         });
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void recoverProfileFromJson() {
+        File path = getApplicationContext().getFilesDir();
+        FileInputStream fis = null;
+
+        // Profile
+        try {
+            fis = new FileInputStream(new File(path, "profile.json"));
+            List<String> listStringFromProfile = JsonManager.readProfileStream(fis);
+            level = Integer.parseInt(listStringFromProfile.get(0));
+            exp = Integer.parseInt(listStringFromProfile.get(1));
+            gold = Integer.parseInt(listStringFromProfile.get(2));
+            avatarName = listStringFromProfile.get(3);
+        } catch (IOException e) {
+            gold = 0;
+            level = 1;
+            exp = 0;
+            avatarName = "cat";
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void updateProfileToJson() {
+        File path = getApplicationContext().getFilesDir();
+
+        // Save profile
+        try {
+            FileOutputStream fos = new FileOutputStream(new File(path, "profile.json"));
+            List<String> stringList = new ArrayList<>();
+            stringList.add(Integer.toString(level));
+            stringList.add(Integer.toString(exp));
+            stringList.add(Integer.toString(gold));
+            stringList.add(avatarName);
+            JsonManager.writeProfileStream(fos, stringList);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    protected void onPause() {
+        updateProfileToJson();
+        super.onPause();
     }
 
     @Override
@@ -395,7 +463,6 @@ public class CalendarActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        adapter.stopListening();
     }
 
     public void modifyTask(Task task){
