@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,6 +48,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TaskActivity extends AppCompatActivity {
 
@@ -63,6 +65,9 @@ public class TaskActivity extends AppCompatActivity {
     private FirestoreRecyclerAdapter adapter;
     private DialogInterface.OnClickListener dialogClickListener;
     RecyclerView recyclerView;
+    int exp, gold, level;
+    int usergold, userxp;
+    String avatarName;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -82,6 +87,15 @@ public class TaskActivity extends AppCompatActivity {
         archivebutton = binding.archivesbutton;
         textView = binding.tasksText;
         recyclerView = binding.tasksRecyclerView;
+
+        docref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                usergold = Math.toIntExact(documentSnapshot.getLong("gold"));
+                userxp = Math.toIntExact(documentSnapshot.getLong("xp"));
+                Log.i("loaded", "done");
+            }
+        });
 
         Query query = docref.collection("Tasks").whereEqualTo("taskDone",false);
 
@@ -114,6 +128,18 @@ public class TaskActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         model.setTaskDone(true);
                         docref.collection("Tasks").document(model.getTaskId()).update("taskDone", true);
+                        docref.update("gold", model.getGoldreward()+usergold);
+                        docref.update("xp", model.getXpreward()+userxp);
+
+                        int taskExp = model.getXpreward();
+                        int taskGold = model.getGoldreward();
+                        exp += taskExp;
+                        // vérifier si on level up (si exp>100 -> level+1)
+                        if (exp >= 100) {
+                            exp -= 100;
+                            level++;
+                        }
+                        gold += taskGold;
                     }
                 });
                 holder.deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -223,6 +249,7 @@ public class TaskActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }*/
 
+        recoverProfileFromJson();
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) BottomNavigationView bottomNavigationView = binding.nav;
         bottomNavigationView.setSelectedItemId(R.id.task);
         //ajout du navbar
@@ -256,29 +283,51 @@ public class TaskActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    protected void onPause() {
-        List<Task> SaveList = new ArrayList<Task>();
-        if (TaskList != null) {
-            if (!TaskList.isEmpty()) {
-                for (Task task : TaskList) {
-                    if (!task.isTaskDone()) {
-                        //TaskList.remove(task); concurrent modif except
-                        SaveList.add(task);
-                    }
-                }
-            }
-        }
+    public void recoverProfileFromJson() {
         File path = getApplicationContext().getFilesDir();
+        FileInputStream fis = null;
+
+        // Profile
         try {
-            FileOutputStream fos = new FileOutputStream(new File(path, "tasklist.json"));
-            JsonManager.writeJsonStream(fos, SaveList);
+            fis = new FileInputStream(new File(path, "profile.json"));
+            List<String> listStringFromProfile = JsonManager.readProfileStream(fis);
+            level = Integer.parseInt(listStringFromProfile.get(0));
+            exp = Integer.parseInt(listStringFromProfile.get(1));
+            gold = Integer.parseInt(listStringFromProfile.get(2));
+            avatarName = listStringFromProfile.get(3);
+        } catch (IOException e) {
+            gold = 0;
+            level = 1;
+            exp = 0;
+            avatarName = "cat";
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void updateProfileToJson() {
+        File path = getApplicationContext().getFilesDir();
+
+        // Save profile
+        try {
+            FileOutputStream fos = new FileOutputStream(new File(path, "profile.json"));
+            List<String> stringList = new ArrayList<>();
+            stringList.add(Integer.toString(level));
+            stringList.add(Integer.toString(exp));
+            stringList.add(Integer.toString(gold));
+            stringList.add(avatarName);
+            JsonManager.writeProfileStream(fos, stringList);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        super.onPause();
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    protected void onPause() {
+        updateProfileToJson();
+        super.onPause();
+    }
     @Override
     protected void onStart() {
         super.onStart();

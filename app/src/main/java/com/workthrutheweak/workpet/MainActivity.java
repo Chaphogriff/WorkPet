@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
     int gold = 99;
     int level = 2;
     int exp = 75; // entre 0 et 100 ! ( si > 100, on level up )
+    int usergold, userxp;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -102,6 +103,14 @@ public class MainActivity extends AppCompatActivity {
         logoutbutton = binding.logoutbutton;
         avatarView = binding.homePet;
 
+        docref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                usergold = Math.toIntExact(documentSnapshot.getLong("gold"));
+                userxp = Math.toIntExact(documentSnapshot.getLong("xp"));
+                Log.i("loaded", "done");
+            }
+        });
         logoutbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,7 +125,8 @@ public class MainActivity extends AppCompatActivity {
         // Récupérer les données depuis Firestore
         //recyclerView.setAdapter(new TaskAdapter(MainActivity.this, TaskList2));
 
-        Query query = docref.collection("Tasks").whereEqualTo("taskDone",false);
+        Query query = docref.collection("Tasks").whereEqualTo("taskDone",false)
+                .orderBy("year").orderBy("month").orderBy("day").limit(5);
 
         FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
                 .setQuery(query, Task.class)
@@ -145,8 +155,27 @@ public class MainActivity extends AppCompatActivity {
                 holder.validateButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        model.setTaskDone(true);
+
+
                         docref.collection("Tasks").document(model.getTaskId()).update("taskDone", true);
+                        docref.update("gold", model.getGoldreward()+usergold);
+                        docref.update("xp", model.getXpreward()+userxp);
+
+                        int taskExp = model.getXpreward();
+                        int taskGold = model.getGoldreward();
+                        exp += taskExp;
+                        // vérifier si on level up (si exp>100 -> level+1)
+                        if (exp >= 100) {
+                            exp -= 100;
+                            level++;
+                        }
+                        gold += taskGold;
+                        try {
+                            refreshProfileVar();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        model.setTaskDone(true);
                     }
                 });
                 holder.deleteButton.setOnClickListener(new View.OnClickListener() {
