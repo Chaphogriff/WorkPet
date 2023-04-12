@@ -116,7 +116,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
                                     Item item = new Item(title,"",Integer.parseInt(description.split(" ")[0]),25);
                                     Intent i = new Intent(ctx, AvatarActivity.class);
                                     i.putExtra("newitem", item);
-                                    mp.release();
                                     ctx.startActivity(i);
                                 }
                             });
