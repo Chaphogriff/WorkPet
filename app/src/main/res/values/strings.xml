@@ -18,6 +18,24 @@
     <string name="add_a_task">Add a task</string>
     <string name="close">Close</string>
     <string name="edit_a_task">Edit a task</string>
+    <string name="tasks_done">Tasks Done</string>
+    <string name="validate_task">validate task</string>
+    <string name="modify_task">modify task</string>
+    <string name="delete_task">delete task</string>
+    <string name="difficulty">Difficulty :</string>
+    <string name="mode">Mode :</string>
+    <string name="deadline">Deadline :</string>
+    <string name="task_description">Task description</string>
+    <string name="description">Description :</string>
+    <string name="task_title">Task title</string>
+    <string name="title">Title :</string>
+    <string name="select_date">Select Date</string>
+    <string name="select_time">Select Time</string>
+    <string name="choose_the_difficulty">Choose the difficulty</string>
+    <string name="frequency">Frequency</string>
+    <string name="choose_a_frequency">Choose a frequency</string>
+    <string name="task_date">Task Date</string>
+    <string name="task_reward">Task Reward</string>
 
     <string-array name="difficulty_array">
         <item>Easy</item>

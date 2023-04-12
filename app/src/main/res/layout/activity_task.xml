@@ -67,7 +67,8 @@
         android:text="Tasks done"
         app:layout_constraintBottom_toTopOf="@+id/nav"
         app:layout_constraintEnd_toStartOf="@+id/addtbutton"
-        app:layout_constraintHorizontal_bias="0.291"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tasksRecyclerView"
         app:layout_constraintVertical_bias="0.833" />
@@ -77,11 +78,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="60dp"
         android:text="Create new task"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/nav"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/archivesbutton"
         app:layout_constraintTop_toBottomOf="@+id/tasksRecyclerView"
         app:layout_constraintVertical_bias="0.1" />
 

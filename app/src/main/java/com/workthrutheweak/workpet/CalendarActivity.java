@@ -69,6 +69,7 @@ public class CalendarActivity extends AppCompatActivity {
     private List<Task> taskList;
     private List<Task> taskList_popup;
     Button button_back;
+    Button button_add;
     FloatingActionButton button_addT;
     CalendarView calendarView;
     String avatarName;
@@ -93,6 +94,7 @@ public class CalendarActivity extends AppCompatActivity {
         // Récupérer les éléments du xml
         button_back = binding.back;
         calendarView = binding.calendar;
+        button_add = binding.addTask;
 
         docref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -127,6 +129,9 @@ public class CalendarActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MainActivity.class))
         );
 
+        button_add.setOnClickListener(view ->
+                startActivity(new Intent(this, AddTaskActivity.class))
+        );
         // Récupération de la date actuelle
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -267,9 +272,6 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
-        button_addT.setOnClickListener(view ->
-                startActivity(new Intent(this, AddTaskActivity.class))
-        );
 
     }
 
@@ -300,6 +302,7 @@ public class CalendarActivity extends AppCompatActivity {
                 model.setTaskId(dbKey);
                 List<String> TaskString = model.inString();
                 Log.i("task", String.valueOf(model.getDay()));
+                //if(model.getDay() == )
                 holder.taskTitleTextView.setText(TaskString.get(0));
                 holder.taskDescTextView.setText(TaskString.get(1));
                 holder.taskDateTextView.setText(TaskString.get(2));
