@@ -102,6 +102,25 @@ public class AvatarActivity extends AppCompatActivity {
             ItemList.add((Item)intent.getSerializableExtra("newitem"));
             updateItemToJson();
         }
+        if(intent.hasExtra("useditem")){
+            String usedItem = intent.getExtras().getString("useditem");
+            recoverItemFromJson();
+            // On enlève l'item qu'on a consommé
+            for (Item i : ItemList){
+                if(i.getTitle().equals(usedItem)){
+                    exp += i.getEffect();
+                    // vérifier si on level up (si exp>100 -> level+1)
+                    if (exp >= 100) {
+                        exp -= 100;
+                        level++;
+                    }
+                    ItemList.remove(i);
+                    break;
+                }
+            }
+            updateItemToJson();
+
+        }
 
         // Set valeurs
         levelTextView.setText("Lv. "+level);

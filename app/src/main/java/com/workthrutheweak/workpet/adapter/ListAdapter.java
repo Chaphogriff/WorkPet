@@ -74,20 +74,26 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
 
                     String title = titles.get(getAbsoluteAdapterPosition());
                     String description = prices.get(getAbsoluteAdapterPosition());
-                    Toast.makeText(view.getContext(),"Click on "+ title, Toast.LENGTH_SHORT).show();
-
 
                     if(mode.equals("customize")){
+                        Toast.makeText(view.getContext(),"Change pet to "+ title, Toast.LENGTH_SHORT).show();
                         Intent i = new Intent(ctx, AvatarActivity.class);
                         i.putExtra("avatar", title.toLowerCase());
                         ctx.startActivity(i);
+
                     }else if(mode.equals("shop")){
+                        Toast.makeText(view.getContext(),"Buy "+ title, Toast.LENGTH_SHORT).show();
                         Item item = new Item(title,"",Integer.parseInt(description.split(" ")[0]),25);
                         Intent i = new Intent(ctx, AvatarActivity.class);
                         i.putExtra("newitem", item);
                         ctx.startActivity(i);
-                    }
 
+                    }else if(mode.equals("inventory")){
+                        Toast.makeText(view.getContext(),"Use "+ title+" ! +25exp", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(ctx, AvatarActivity.class);
+                        i.putExtra("useditem", title);
+                        ctx.startActivity(i);
+                    }
 
                 }
             });
