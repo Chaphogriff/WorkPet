@@ -77,6 +77,7 @@ public class CalendarActivity extends AppCompatActivity {
     private DialogInterface.OnClickListener dialogClickListener;
     int exp, gold,level;
     int usergold, userxp, userlvl;
+    int Year,Month,DayOfMonth;
 
 
     @SuppressLint("NewApi")
@@ -144,12 +145,11 @@ public class CalendarActivity extends AppCompatActivity {
                 // Récupération de la date sélectionnée sur le CalendarView
                 Calendar selectedDate = Calendar.getInstance();
                 selectedDate.set(year, month, dayOfMonth);
-                //LocalDate localDate_calendar = LocalDate.of(year, month + 1, dayOfMonth);
                 taskList_popup.clear();
-                docref.collection("Tasks").whereEqualTo("year",year)
-                        .whereEqualTo("month", month+1)
-                        .whereEqualTo("day", dayOfMonth)
-                        .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                Year = year;
+                Month = month;
+                DayOfMonth = dayOfMonth;
+                docref.collection("Tasks").whereEqualTo("year", year).whereEqualTo("month", month+1).whereEqualTo("day", dayOfMonth).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
@@ -274,7 +274,7 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     public void createPopupDialog2() {
-        Query query = docref.collection("Tasks").whereEqualTo("taskDone", false);
+        Query query = docref.collection("Tasks").whereEqualTo("year", Year).whereEqualTo("month", Month+1).whereEqualTo("day", DayOfMonth);
 
         dialogbuilder = new AlertDialog.Builder(this);
         final View calendarPopupView = getLayoutInflater().inflate(R.layout.activity_calendar_popup, null);
