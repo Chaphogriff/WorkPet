@@ -2,9 +2,12 @@ package com.workthrutheweak.workpet;
 
 import static java.time.LocalDate.of;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Build;
@@ -33,9 +36,7 @@ import com.workthrutheweak.workpet.databinding.ActivityAddtaskBinding;
 import com.workthrutheweak.workpet.model.Task;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
 import java.util.Locale;
 
 public class AddTaskActivity extends AppCompatActivity {
@@ -44,7 +45,6 @@ public class AddTaskActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private DocumentReference docref = db.collection("Users").document(user.getUid());
-
     Button button_back;
     Button button_time;
     Button button_date;
@@ -182,6 +182,14 @@ public class AddTaskActivity extends AppCompatActivity {
                                               intent.putExtra("isTaskDone", false);
                                               intent.putExtra("Mode", mode);
                                               startActivity(intent);
+
+                                              long when = System.currentTimeMillis() + 6000L;
+
+                                              AlarmManager am = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                                              Intent intent2 = new Intent(AddTaskActivity.this, AlarmReceiver.class);
+                                              intent.putExtra("myAction", "mDoNotify");
+                                              PendingIntent pendingIntent = PendingIntent.getBroadcast(AddTaskActivity.this, 0, intent2, PendingIntent.FLAG_IMMUTABLE);
+                                              am.set(AlarmManager.RTC_WAKEUP, when, pendingIntent);
                                           }
                                       }
         );
@@ -324,5 +332,10 @@ public class AddTaskActivity extends AppCompatActivity {
                         Toast.makeText(AddTaskActivity.this,"Failed to add task",Toast.LENGTH_SHORT).show();
                     }
                 });
+
+
+
     }
+
+
 }

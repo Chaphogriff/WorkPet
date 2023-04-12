@@ -5,21 +5,39 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.adapter.TaskAdapter;
 import com.workthrutheweak.workpet.databinding.ActivityCalendarBinding;
@@ -42,6 +60,9 @@ public class CalendarActivity extends AppCompatActivity {
 
     // Variables
     private ActivityCalendarBinding binding; //For ViewBinding feature
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private DocumentReference docref = db.collection("Users").document(user.getUid());
     private AlertDialog.Builder dialogbuilder;
     private AlertDialog dialog;
     private TextView popup_title;
@@ -53,6 +74,8 @@ public class CalendarActivity extends AppCompatActivity {
     FloatingActionButton button_addT;
     CalendarView calendarView;
     long date;
+    private FirestoreRecyclerAdapter adapter;
+    private DialogInterface.OnClickListener dialogClickListener;
 
 
     @SuppressLint("NewApi")
@@ -110,15 +133,40 @@ public class CalendarActivity extends AppCompatActivity {
                 // Récupération de la date sélectionnée sur le CalendarView
                 Calendar selectedDate = Calendar.getInstance();
                 selectedDate.set(year, month, dayOfMonth);
-                LocalDate localDate_calendar = LocalDate.of(year, month + 1, dayOfMonth);
+                //LocalDate localDate_calendar = LocalDate.of(year, month + 1, dayOfMonth);
+                taskList_popup.clear();
+                docref.collection("Tasks").whereEqualTo("year",year)
+                        .whereEqualTo("month", month+1)
+                        .whereEqualTo("day", dayOfMonth)
+                        .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Task task = documentSnapshot.toObject(Task.class);
+                            task.setTaskId(documentSnapshot.getId());
+                            taskList_popup.add(task);
+                            Log.i("cal","tasklist is filled");
+                            Log.i("cal", "is tasklist empty ?");
+                            if (!taskList_popup.isEmpty()) {
+                                Log.i("cal", "tasklist not empty");
+                                createPopupDialog2();
+                            }
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Failed to load tasks", Toast.LENGTH_LONG);
+                    }
+                });
 
                 // Affichage de la date sélectionnée dans la console
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                Log.d("Selected date", sdf.format(selectedDate.getTime()));
+                Log.i("Selected date", dayOfMonth +"/"+month+"/"+year );
 
-                taskList_popup.clear();
 
-                if (taskList != null) {
+
+                /*if (taskList != null) {
                     if (!taskList.isEmpty()) {
                         for (Task task : taskList) {
                             LocalDate localDate_task = LocalDate.of(task.getYear(),task.getMonth(),task.getDay());
@@ -129,11 +177,8 @@ public class CalendarActivity extends AppCompatActivity {
                             }
                         }
                     }
-                }
+                }*/
 
-                if (!taskList_popup.isEmpty()) {
-                    createPopupDialog();
-                }
             }
         });
 
@@ -183,7 +228,7 @@ public class CalendarActivity extends AppCompatActivity {
         dialog = dialogbuilder.create();
         dialog.show();
         button_addT = calendarPopupView.findViewById(R.id.edit2);
-
+        Log.i("cal","in there");
         button_popup_back.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -214,5 +259,161 @@ public class CalendarActivity extends AppCompatActivity {
                 startActivity(new Intent(this, AddTaskActivity.class))
         );
 
+    }
+
+    public void createPopupDialog2() {
+        Query query = docref.collection("Tasks").whereEqualTo("taskDone", false);
+
+        dialogbuilder = new AlertDialog.Builder(this);
+        final View calendarPopupView = getLayoutInflater().inflate(R.layout.activity_calendar_popup, null);
+
+        FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
+                .setQuery(query, Task.class)
+                .build();
+
+        recyclerView = (RecyclerView) calendarPopupView.findViewById(R.id.tasksRecyclerView);
+        adapter = new FirestoreRecyclerAdapter<Task, CalendarActivity.TaskViewHolder>(options) {
+            @NonNull
+            @Override
+            public CalendarActivity.TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.taskholder_list, parent, false);
+                return new CalendarActivity.TaskViewHolder(view);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull CalendarActivity.TaskViewHolder holder, int position, @NonNull Task model) {
+                //Task model = model.get(position); //changer pour FF
+                DocumentSnapshot snapshot = options.getSnapshots().getSnapshot(position);
+                String dbKey = snapshot.getId();
+                model.setTaskId(dbKey);
+                List<String> TaskString = model.inString();
+                Log.i("task", String.valueOf(model.getDay()));
+                holder.taskTitleTextView.setText(TaskString.get(0));
+                holder.taskDescTextView.setText(TaskString.get(1));
+                holder.taskDateTextView.setText(TaskString.get(2));
+                holder.taskRewardTextView.setText(TaskString.get(3));
+                holder.validateButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        model.setTaskDone(true);
+                        docref.collection("Tasks").document(model.getTaskId()).update("taskDone", true);
+                    }
+                });
+                holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogClickListener = new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    // on below line we are setting a click listener
+                                    // for our positive button
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                        // on below line we are displaying a toast message.
+                                        Toast.makeText(CalendarActivity.this, "Yes clicked", Toast.LENGTH_SHORT).show();
+                                        docref.collection("Tasks").document(model.getTaskId()).delete();
+                                        break;
+                                    // on below line we are setting click listener
+                                    // for our negative button.
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                        // on below line we are dismissing our dialog box.
+                                        dialog.dismiss();
+
+                                }
+                            }
+                        };
+                        // on below line we are creating a builder variable for our alert dialog
+                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(CalendarActivity.this);
+                        // on below line we are setting message for our dialog box.
+                        builder.setMessage("Delete selected task ?")
+                                // on below line we are setting positive button
+                                // and setting text to it.
+                                .setPositiveButton("Yes", dialogClickListener)
+                                // on below line we are setting negative button
+                                // and setting text to it.
+                                .setNegativeButton("No", dialogClickListener)
+                                // on below line we are calling
+                                // show to display our dialog.
+                                .show();
+                    }
+                });
+                holder.modifyButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        modifyTask(model);
+                    }
+                });
+            }
+        };
+        adapter.startListening();
+
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
+        button_popup_back = (Button) calendarPopupView.findViewById(R.id.back);
+        dialogbuilder.setView(calendarPopupView);
+        dialog = dialogbuilder.create();
+        dialog.show();
+        button_addT = calendarPopupView.findViewById(R.id.edit2);
+        Log.i("cal","in there");
+        button_popup_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //adapter.startListening();
+    }
+
+    private class TaskViewHolder extends RecyclerView.ViewHolder {
+        private TextView taskTitleTextView;
+        private TextView taskDescTextView;
+        private TextView taskDateTextView;
+        private TextView taskRewardTextView;
+        private ImageButton validateButton;
+        private ImageButton modifyButton;
+        private ImageButton deleteButton;
+        public TaskViewHolder(@NonNull View itemView) {
+            super(itemView);
+            taskTitleTextView = itemView.findViewById(R.id.task_title);
+            taskDescTextView = itemView.findViewById(R.id.task_desc);
+            taskDateTextView = itemView.findViewById(R.id.task_date);
+            taskRewardTextView = itemView.findViewById(R.id.task_reward);
+            validateButton = itemView.findViewById(R.id.validate_button);
+            modifyButton = itemView.findViewById(R.id.modify_button);
+            deleteButton = itemView.findViewById(R.id.delete_button);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
+    public void modifyTask(Task task){
+        //Intent Creation
+        Intent intent = new Intent(CalendarActivity.this, ModifyTaskActivity.class);
+        intent.putExtra("Title", task.getTitle());
+        intent.putExtra("Desc", task.getDescription());
+        intent.putExtra("Year", task.getYear());
+        intent.putExtra("Month", task.getMonth());
+        intent.putExtra("Day", task.getDay());
+        intent.putExtra("Hour", task.getHour());
+        intent.putExtra("Minute", task.getMinute());
+        intent.putExtra("Gold", task.getGoldreward());
+        intent.putExtra("XP", task.getXpreward());
+        intent.putExtra("isTaskDone", task.isTaskDone());
+        intent.putExtra("Mode", task.getMode());
+        intent.putExtra("TaskId", task.getTaskId());
+        intent.putExtra("origin", "calendaractivity");
+        startActivity(intent);
     }
 }
