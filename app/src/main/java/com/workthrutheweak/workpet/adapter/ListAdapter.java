@@ -1,6 +1,7 @@
 package com.workthrutheweak.workpet.adapter;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
     List<String> prices;
     LayoutInflater inflater;
     String mode;
+    MediaPlayer mp;
     Context ctx;
     int gold;
 
@@ -95,12 +97,29 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
                     }else if(mode.equals("shop")){
                         int itemPrice = Integer.parseInt(description.split(" ")[0]);
                         if(itemPrice>gold){
+                            mp = MediaPlayer.create(ctx, R.raw.nov3);
+                            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                @Override
+                                public void onCompletion(MediaPlayer mp) {
+                                    mp.release();
+                                }
+                            });
                             Toast.makeText(view.getContext(),"Not enough gold!", Toast.LENGTH_SHORT).show();
+                            mp.start();
                         }else{
+                            mp = MediaPlayer.create(ctx, R.raw.buy_item);
+                            mp.start();
+                            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                @Override
+                                public void onCompletion(MediaPlayer mp) {
+                                    mp.release();
+                                }
+                            });
                             Toast.makeText(view.getContext(),"Buy "+ title, Toast.LENGTH_SHORT).show();
                             Item item = new Item(title,"",Integer.parseInt(description.split(" ")[0]),25);
                             Intent i = new Intent(ctx, AvatarActivity.class);
                             i.putExtra("newitem", item);
+                            mp.release();
                             ctx.startActivity(i);
                         }
 
