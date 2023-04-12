@@ -76,7 +76,7 @@ public class CalendarActivity extends AppCompatActivity {
     private FirestoreRecyclerAdapter adapter;
     private DialogInterface.OnClickListener dialogClickListener;
     int exp, gold,level;
-    int usergold, userxp;
+    int usergold, userxp, userlvl;
 
 
     @SuppressLint("NewApi")
@@ -99,6 +99,7 @@ public class CalendarActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 usergold = Math.toIntExact(documentSnapshot.getLong("gold"));
                 userxp = Math.toIntExact(documentSnapshot.getLong("xp"));
+                userlvl = Math.toIntExact(documentSnapshot.getLong("lvl"));
                 Log.i("loaded", "done");
             }
         });
@@ -309,7 +310,13 @@ public class CalendarActivity extends AppCompatActivity {
                         model.setTaskDone(true);
                         docref.collection("Tasks").document(model.getTaskId()).update("taskDone", true);
                         docref.update("gold", model.getGoldreward()+usergold);
-                        docref.update("xp", model.getXpreward()+userxp);
+                        userxp += model.getXpreward();
+                        if (userxp >= 100) {
+                            userxp -= 100;
+                            userlvl +=1;
+                        }
+                        docref.update("xp", userxp);
+                        docref.update("lvl", userlvl);
 
                         int taskExp = model.getXpreward();
                         int taskGold = model.getGoldreward();

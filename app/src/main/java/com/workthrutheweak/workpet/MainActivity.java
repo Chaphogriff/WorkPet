@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     int gold = 99;
     int level = 2;
     int exp = 75; // entre 0 et 100 ! ( si > 100, on level up )
-    int usergold, userxp;
+    int usergold, userxp, userlvl;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 usergold = Math.toIntExact(documentSnapshot.getLong("gold"));
                 userxp = Math.toIntExact(documentSnapshot.getLong("xp"));
-                Log.i("loaded", "done");
+                userlvl = Math.toIntExact(documentSnapshot.getLong("lvl"));
             }
         });
         logoutbutton.setOnClickListener(new View.OnClickListener() {
@@ -155,12 +155,14 @@ public class MainActivity extends AppCompatActivity {
                 holder.validateButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-
-                        docref.collection("Tasks").document(model.getTaskId()).update("taskDone", true);
                         docref.update("gold", model.getGoldreward()+usergold);
-                        docref.update("xp", model.getXpreward()+userxp);
-
+                        userxp += model.getXpreward();
+                        if (userxp >= 100) {
+                            userxp -= 100;
+                            userlvl +=1;
+                        }
+                        docref.update("xp", userxp);
+                        docref.update("lvl", userlvl);
                         int taskExp = model.getXpreward();
                         int taskGold = model.getGoldreward();
                         exp += taskExp;
@@ -176,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
                             throw new RuntimeException(e);
                         }
                         model.setTaskDone(true);
+                        docref.collection("Tasks").document(model.getTaskId()).update("taskDone", true);
                     }
                 });
                 holder.deleteButton.setOnClickListener(new View.OnClickListener() {
