@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.workthrutheweak.workpet.AvatarActivity;
 import com.workthrutheweak.workpet.ListActivity;
 import com.workthrutheweak.workpet.R;
+import com.workthrutheweak.workpet.model.Item;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
@@ -70,15 +72,22 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
                 @Override
                 public void onClick(View view) {
 
-                    String petName = titles.get(getAbsoluteAdapterPosition());
-                    Toast.makeText(view.getContext(),"Click on "+ petName, Toast.LENGTH_SHORT).show();
+                    String title = titles.get(getAbsoluteAdapterPosition());
+                    String description = prices.get(getAbsoluteAdapterPosition());
+                    Toast.makeText(view.getContext(),"Click on "+ title, Toast.LENGTH_SHORT).show();
 
 
                     if(mode.equals("customize")){
                         Intent i = new Intent(ctx, AvatarActivity.class);
-                        i.putExtra("avatar", petName.toLowerCase());
+                        i.putExtra("avatar", title.toLowerCase());
+                        ctx.startActivity(i);
+                    }else if(mode.equals("shop")){
+                        Item item = new Item(title,"",Integer.parseInt(description.split(" ")[0]),25);
+                        Intent i = new Intent(ctx, AvatarActivity.class);
+                        i.putExtra("newitem", item);
                         ctx.startActivity(i);
                     }
+
 
                 }
             });

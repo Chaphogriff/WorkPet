@@ -1,11 +1,13 @@
 package com.workthrutheweak.workpet;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,12 +16,22 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.adapter.ListAdapter;
 import com.workthrutheweak.workpet.databinding.ActivityListBinding;
 import com.workthrutheweak.workpet.databinding.ActivityMainBinding;
+import com.workthrutheweak.workpet.model.Item;
+import com.workthrutheweak.workpet.model.Task;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ListActivity extends AppCompatActivity {
 
@@ -33,7 +45,9 @@ public class ListActivity extends AppCompatActivity {
     Button button_back;
     String mode;
     TextView modeText;
+    List<Item> ItemList;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +75,7 @@ public class ListActivity extends AppCompatActivity {
         if(mode.equals("shop")){
             generateShop();
         }else if(mode.equals("inventory")){
+            recoverDataFromJson();
             generateInventory();
         }else if(mode.equals("customize")){
             generateCustomized();
@@ -135,11 +150,36 @@ public class ListActivity extends AppCompatActivity {
     }
 
     public void generateInventory(){
+
+        for(Item i : ItemList){
+            titles.add(i.getTitle());
+            int id = this.getResources().getIdentifier("drawable/"+i.getTitle().toLowerCase(), null, getPackageName());
+            images.add(id);
+            prices.add(i.getPrice()+" Gold");
+        }
+
         adapter = new ListAdapter(this,titles,images,prices,"inventory");
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2,GridLayoutManager.VERTICAL,false);
         dataList.setLayoutManager(gridLayoutManager);
         dataList.setAdapter(adapter);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void recoverDataFromJson(){
+
+        File path = getApplicationContext().getFilesDir();
+        FileInputStream fis = null;
+        // Profile
+        // Liste des tâches
+        try {
+            fis = new FileInputStream(new File(path, "itemlist.json"));
+            ItemList = JsonManager.readItemStream(fis);
+        } catch (IOException e) {
+            System.out.println(e);
+            ItemList = new ArrayList<>();
+            ItemList.add(new Item("Bread", "Good bread", 50,10));
+        }
     }
 
     public void generateCustomized(){
