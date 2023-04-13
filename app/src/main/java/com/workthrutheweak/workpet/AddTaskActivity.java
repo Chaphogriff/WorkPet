@@ -57,6 +57,8 @@ public class AddTaskActivity extends AppCompatActivity {
     String difficulty;
     String mode;
     int gold, xp;
+    boolean isDateSet = false;
+    boolean isTimeSet = false;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +128,7 @@ public class AddTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 popTimePicker(view);
+                isTimeSet = true;
             }
         });
 
@@ -133,6 +136,7 @@ public class AddTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 openDatePicker(view);
+                isDateSet = true;
             }
         });
         button_add.setOnClickListener(new View.OnClickListener() {
@@ -168,6 +172,17 @@ public class AddTaskActivity extends AppCompatActivity {
                                               if ( Desc.isEmpty()) {
                                                   Desc = "";
                                               }
+
+                                              // Initialize localdate and localtime
+                                              LocalDate localdate = LocalDate.now();
+                                              LocalTime localtime = LocalTime.now();
+
+                                              // Check if date and time are set
+                                              if (!isDateSet || !isTimeSet) {
+                                                  Toast.makeText(AddTaskActivity.this, "Please set a due date and time for the task", Toast.LENGTH_SHORT).show();
+                                                  return;
+                                              }
+
                                               saveTask();
                                               Intent intent = new Intent(AddTaskActivity.this, TaskActivity.class);
                                               intent.putExtra("Title", Title);
@@ -313,11 +328,22 @@ public class AddTaskActivity extends AppCompatActivity {
         if ( Desc.isEmpty()) {
             Desc = "";
         }
+        LocalDate localdate = LocalDate.now();
+        LocalTime localtime = LocalTime.now();
+
+        // Check if date and time are set
+        if (localdate == null || localtime == null) {
+            Toast.makeText(AddTaskActivity.this, "Please set a due date and time for the task", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         int year = localdate.getYear();
         int month = localdate.getMonthValue();
         int day = localdate.getDayOfMonth();
         int hour = localtime.getHour();
         int minute = localtime.getMinute();
+
+
 
         Task task = new Task(Title, Desc,year, month, day, hour, minute, gold, xp,false, mode);
 
