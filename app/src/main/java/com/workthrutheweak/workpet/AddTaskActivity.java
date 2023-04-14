@@ -59,6 +59,7 @@ public class AddTaskActivity extends AppCompatActivity {
     int gold, xp;
     boolean isDateSet = false;
     boolean isTimeSet = false;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +79,6 @@ public class AddTaskActivity extends AppCompatActivity {
         button_add = binding.AddButton;
         button_date = binding.Datebutton;
         button_time = binding.Timebutton;
-
-
         titleTask = binding.TitleInputField;
         descTask = binding.DescInputField;
 
@@ -117,7 +116,7 @@ public class AddTaskActivity extends AppCompatActivity {
             }
         });
 
-        localtime = LocalTime.of(0,0);
+        localtime = LocalTime.of(0, 0);
         // Mettre en place les listeners
         // Appuyer le bouton nous envoie vers un autre activité
         button_back.setOnClickListener(view ->
@@ -145,7 +144,7 @@ public class AddTaskActivity extends AppCompatActivity {
                                           public void onClick(View view) {
                                               String Title = titleTask.getText().toString();
                                               String Desc = descTask.getText().toString();
-                                              switch(difficulty) {
+                                              switch (difficulty) {
                                                   case "Easy":
                                                       gold = 10;
                                                       xp = 10;
@@ -166,10 +165,10 @@ public class AddTaskActivity extends AppCompatActivity {
                                                       gold = 10;
                                                       xp = 10;
                                               }
-                                              if ( Title.isEmpty()) {
+                                              if (Title.isEmpty()) {
                                                   Title = "Unnamed Task";
                                               }
-                                              if ( Desc.isEmpty()) {
+                                              if (Desc.isEmpty()) {
                                                   Desc = "";
                                               }
 
@@ -200,7 +199,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
                                               long when = System.currentTimeMillis() + 6000L;
 
-                                              AlarmManager am = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                                              AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                                               Intent intent2 = new Intent(AddTaskActivity.this, AlarmReceiver.class);
                                               intent.putExtra("myAction", "mDoNotify");
                                               PendingIntent pendingIntent = PendingIntent.getBroadcast(AddTaskActivity.this, 0, intent2, PendingIntent.FLAG_IMMUTABLE);
@@ -233,11 +232,11 @@ public class AddTaskActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                month = month + 1;
+                // month = month + 1;
                 String date = makeDateString(day, month, year);
                 button_date.setText(date);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    localdate = of(year, month, day);
+                    localdate = of(year, month + 1, day);
                 }
             }
         };
@@ -248,7 +247,7 @@ public class AddTaskActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             localdate = LocalDate.now();
             year = localdate.getYear();
-            month = localdate.getMonthValue();
+            month = localdate.getMonthValue() - 1;
             day = localdate.getDayOfMonth();
         }
         int style = AlertDialog.THEME_HOLO_LIGHT;
@@ -259,37 +258,12 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     private String makeDateString(int day, int month, int year) {
-        return getMonthFormat(month) + " " + day + " " + year;
+        return getMonthFormat(month + 1) + " " + day + " " + year;
     }
 
     private String getMonthFormat(int month) {
-        if (month == 1)
-            return "JAN";
-        if (month == 2)
-            return "FEB";
-        if (month == 3)
-            return "MAR";
-        if (month == 4)
-            return "APR";
-        if (month == 5)
-            return "MAY";
-        if (month == 6)
-            return "JUN";
-        if (month == 7)
-            return "JUL";
-        if (month == 8)
-            return "AUG";
-        if (month == 9)
-            return "SEP";
-        if (month == 10)
-            return "OCT";
-        if (month == 11)
-            return "NOV";
-        if (month == 12)
-            return "DEC";
-
-        //default should never happen
-        return "JAN";
+        String[] monthNames = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+        return monthNames[month - 1];
     }
 
     public void openDatePicker(View view) {
@@ -297,10 +271,10 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void saveTask(){
+    public void saveTask() {
         String Title = titleTask.getText().toString();
         String Desc = descTask.getText().toString();
-        switch(difficulty) {
+        switch (difficulty) {
             case "Easy":
                 gold = 10;
                 xp = 10;
@@ -322,20 +296,13 @@ public class AddTaskActivity extends AppCompatActivity {
                 xp = 10;
         }
 
-        if ( Title.isEmpty()) {
+        if (Title.isEmpty()) {
             Title = "Unnamed Task";
         }
-        if ( Desc.isEmpty()) {
+        if (Desc.isEmpty()) {
             Desc = "";
         }
-        LocalDate localdate = LocalDate.now();
-        LocalTime localtime = LocalTime.now();
 
-        // Check if date and time are set
-        if (localdate == null || localtime == null) {
-            Toast.makeText(AddTaskActivity.this, "Please set a due date and time for the task", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         int year = localdate.getYear();
         int month = localdate.getMonthValue();
@@ -344,21 +311,19 @@ public class AddTaskActivity extends AppCompatActivity {
         int minute = localtime.getMinute();
 
 
-
-        Task task = new Task(Title, Desc,year, month, day, hour, minute, gold, xp,false, mode);
+        Task task = new Task(Title, Desc, year, month, day, hour, minute, gold, xp, false, mode);
 
         docref.collection("Tasks").add(task).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(AddTaskActivity.this,"Task added",Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(AddTaskActivity.this,"Failed to add task",Toast.LENGTH_SHORT).show();
-                    }
-                });
-
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Toast.makeText(AddTaskActivity.this, "Task added", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(AddTaskActivity.this, "Failed to add task", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
     }
