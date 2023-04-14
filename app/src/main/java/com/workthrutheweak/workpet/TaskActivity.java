@@ -18,8 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,11 +42,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 public class TaskActivity extends AppCompatActivity {
 
@@ -98,7 +94,7 @@ public class TaskActivity extends AppCompatActivity {
             }
         });
 
-        Query query = docref.collection("Tasks").whereEqualTo("taskDone",false);
+        Query query = docref.collection("Tasks").whereEqualTo("taskDone", false);
 
         FirestoreRecyclerOptions<Task> options = new FirestoreRecyclerOptions.Builder<Task>()
                 .setQuery(query, Task.class)
@@ -108,7 +104,7 @@ public class TaskActivity extends AppCompatActivity {
             @NonNull
             @Override
             public TaskActivity.TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.taskholder_list,parent,false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.taskholder_list, parent, false);
                 return new TaskActivity.TaskViewHolder(view);
             }
 
@@ -129,11 +125,11 @@ public class TaskActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         model.setTaskDone(true);
                         docref.collection("Tasks").document(model.getTaskId()).update("taskDone", true);
-                        docref.update("gold", model.getGoldreward()+usergold);
+                        docref.update("gold", model.getGoldreward() + usergold);
                         userxp += model.getXpreward();
                         if (userxp >= 100) {
                             userxp -= 100;
-                            userlvl +=1;
+                            userlvl += 1;
                         }
                         docref.update("xp", userxp);
                         docref.update("lvl", userlvl);
@@ -335,6 +331,7 @@ public class TaskActivity extends AppCompatActivity {
         updateProfileToJson();
         super.onPause();
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -349,6 +346,7 @@ public class TaskActivity extends AppCompatActivity {
         private ImageButton validateButton;
         private ImageButton modifyButton;
         private ImageButton deleteButton;
+
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
             taskTitleTextView = itemView.findViewById(R.id.task_title);
@@ -367,7 +365,7 @@ public class TaskActivity extends AppCompatActivity {
         adapter.stopListening();
     }
 
-    public void modifyTask(Task task){
+    public void modifyTask(Task task) {
         //Intent Creation
         Intent intent = new Intent(TaskActivity.this, ModifyTaskActivity.class);
         intent.putExtra("Title", task.getTitle());

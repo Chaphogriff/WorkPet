@@ -285,56 +285,38 @@ public class ModifyTaskActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                // month = month + 1;
                 String date = makeDateString(day, month, year);
                 button_date.setText(date);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    localdate = of(year, month, day);
+                    localdate = of(year, month + 1, day);
                 }
             }
         };
-
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            localdate = of(yearIntent, monthIntent + 1, dayIntent);
+            localdate = LocalDate.now();
+            year = localdate.getYear();
+            month = localdate.getMonthValue() - 1;
+            day = localdate.getDayOfMonth();
         }
         int style = AlertDialog.THEME_HOLO_LIGHT;
 
-        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, yearIntent, monthIntent, dayIntent);
+        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
         //datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
 
     }
 
     private String makeDateString(int day, int month, int year) {
-        return getMonthFormat(month) + " " + day + " " + year;
+        return getMonthFormat(month + 1) + " " + day + " " + year;
     }
 
     private String getMonthFormat(int month) {
-        if (month == 1)
-            return "JAN";
-        if (month == 2)
-            return "FEB";
-        if (month == 3)
-            return "MAR";
-        if (month == 4)
-            return "APR";
-        if (month == 5)
-            return "MAY";
-        if (month == 6)
-            return "JUN";
-        if (month == 7)
-            return "JUL";
-        if (month == 8)
-            return "AUG";
-        if (month == 9)
-            return "SEP";
-        if (month == 10)
-            return "OCT";
-        if (month == 11)
-            return "NOV";
-        if (month == 12)
-            return "DEC";
-
-        //default should never happen
-        return "JAN";
+        String[] monthNames = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+        return monthNames[month - 1];
     }
 
     public void openDatePicker(View view) {
