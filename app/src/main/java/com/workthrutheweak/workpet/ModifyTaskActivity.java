@@ -64,6 +64,9 @@ public class ModifyTaskActivity extends AppCompatActivity {
     int yearIntent, monthIntent, dayIntent, hourIntent, minuteIntent;
     String taskId;
     String origin;
+    boolean isDateSet = false;
+    boolean isTimeSet = false;
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -191,6 +194,7 @@ public class ModifyTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 popTimePicker(view);
+                isTimeSet = true;
             }
         });
 
@@ -198,10 +202,13 @@ public class ModifyTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 openDatePicker(view);
+                isDateSet = true;
+
             }
         });
 
         button_save.setOnClickListener(new View.OnClickListener() {
+
                                            @RequiresApi(api = Build.VERSION_CODES.O)
                                            @Override
                                            public void onClick(View view) {
@@ -229,6 +236,11 @@ public class ModifyTaskActivity extends AppCompatActivity {
                                                        xp = 5;
                                                }
 
+                                               // Check if date and time are set
+                                               if (!isDateSet || !isTimeSet) {
+                                                   Toast.makeText(ModifyTaskActivity.this, "Please set a due date and time before saving the change.", Toast.LENGTH_SHORT).show();
+                                                   return;
+                                               }
                                                if (Title.isEmpty()) {
                                                    Title = "Unnamed Task";
                                                }
@@ -257,6 +269,7 @@ public class ModifyTaskActivity extends AppCompatActivity {
                                                } else {
                                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                                }
+
                                            }
                                        }
         );
@@ -323,4 +336,3 @@ public class ModifyTaskActivity extends AppCompatActivity {
         datePickerDialog.show();
     }
 }
-
