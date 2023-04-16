@@ -84,18 +84,6 @@
         app:layout_constraintVertical_bias="0.7"
         app:layout_constraintWidth_percent=".75" />
 
-    <Button
-        android:id="@+id/back"
-        android:layout_width="51dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginBottom="32dp"
-        android:drawableLeft="@drawable/baseline_keyboard_backspace_24"
-        android:drawablePadding="-10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav"
         style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"

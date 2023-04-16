@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -21,9 +22,15 @@ public class SettingActivity extends AppCompatActivity {
 
     // Variables
     private ActivitySettingBinding binding; //For ViewBinding feature
-    Button button_back;
+
     TextView textView;
-    Button button_help;
+    Button button_help, button_aboutus;
+
+    // Popup
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    private Button popup_back;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,21 +43,25 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(v);
 
         // Récupérer les éléments du xml
-        button_back = binding.back;
         button_help = binding.help;
+        button_aboutus = binding.about;
 
         // Mettre en place les listeners
 
         // Appuyer le bouton nous envoie vers un autre activité
-        button_back.setOnClickListener(view ->
-                startActivity(new Intent(this, MainActivity.class))
-        );
 
         button_help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 File path = getApplicationContext().getFilesDir();
                 new File(path, "profile.json").delete();
+            }
+        });
+
+        button_aboutus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createNewDialog();
             }
         });
 
@@ -88,4 +99,22 @@ public class SettingActivity extends AppCompatActivity {
 
         });
     }
+
+    public void createNewDialog(){
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View popUpView = getLayoutInflater().inflate(R.layout.popup_settings_about,null);
+        popup_back = (Button) popUpView.findViewById(R.id.back);
+
+        dialogBuilder.setView(popUpView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        popup_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
+
 }
