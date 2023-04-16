@@ -28,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -48,7 +49,7 @@ public class AddTaskActivity extends AppCompatActivity {
     Button button_back;
     Button button_time;
     Button button_date;
-    Button button_add;
+    FloatingActionButton button_add;
     EditText titleTask;
     EditText descTask;
     LocalDate localdate;

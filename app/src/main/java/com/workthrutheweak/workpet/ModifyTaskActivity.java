@@ -186,9 +186,11 @@ public class ModifyTaskActivity extends AppCompatActivity {
         localtime = LocalTime.of(0, 0);
         // Mettre en place les listeners
         // Appuyer le bouton nous envoie vers un autre activité
+        
         button_back.setOnClickListener(view ->
-                finish()
+                startActivity(new Intent(this, TaskActivity.class))
         );
+
 
         button_time.setOnClickListener(new View.OnClickListener() {
             @Override

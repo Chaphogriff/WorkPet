@@ -65,7 +65,7 @@ public class CalendarActivity extends AppCompatActivity {
     private AlertDialog dialog;
     private TextView popup_title;
     private RecyclerView recyclerView;
-    private Button button_popup_back;
+    private FloatingActionButton button_popup_back;
     private List<Task> taskList;
     private List<Task> taskList_popup;
     Button button_back;
@@ -241,7 +241,7 @@ public class CalendarActivity extends AppCompatActivity {
         popup_title = (TextView) calendarPopupView.findViewById(R.id.daytask);
         recyclerView = (RecyclerView) calendarPopupView.findViewById(R.id.tasksRecyclerView);
         recyclerView.setAdapter(new TaskAdapter(this, taskList_popup));
-        button_popup_back = (Button) calendarPopupView.findViewById(R.id.back);
+        button_popup_back = (FloatingActionButton) calendarPopupView.findViewById(R.id.back);
         dialogbuilder.setView(calendarPopupView);
         dialog = dialogbuilder.create();
         dialog.show();
@@ -380,7 +380,7 @@ public class CalendarActivity extends AppCompatActivity {
         };
         adapter.startListening();
 
-        button_popup_back = (Button) calendarPopupView.findViewById(R.id.back);
+        button_popup_back = (FloatingActionButton) calendarPopupView.findViewById(R.id.back);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);

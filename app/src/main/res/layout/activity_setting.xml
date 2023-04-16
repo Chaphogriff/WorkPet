@@ -10,100 +10,101 @@
         android:id="@+id/volume"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:text="Volume"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent=".075"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.2"
-        app:layout_constraintWidth_percent=".75"
-        android:text="Volume" />
+        app:layout_constraintWidth_percent=".75" />
 
     <Button
         android:id="@+id/language"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:text="Language"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent=".075"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3"
-        app:layout_constraintWidth_percent=".75"
-        android:text="Language" />
+        app:layout_constraintWidth_percent=".75" />
 
     <Button
         android:id="@+id/notification"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:text="Notification"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent=".075"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.4"
-        app:layout_constraintWidth_percent=".75"
-        android:text="Notification" />
+        app:layout_constraintWidth_percent=".75" />
 
     <Button
         android:id="@+id/about"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:text="About us"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent=".075"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5"
-        app:layout_constraintWidth_percent=".75"
-        android:text="About us" />
+        app:layout_constraintWidth_percent=".75" />
 
     <Button
         android:id="@+id/help"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:text="Delete json"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent=".075"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.6"
-        app:layout_constraintWidth_percent=".75"
-        android:text="Delete json" />
+        app:layout_constraintWidth_percent=".75" />
 
     <Button
         android:id="@+id/account"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:text="My Account"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent=".075"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.7"
-        app:layout_constraintWidth_percent=".75"
-        android:text="My Account" />
+        app:layout_constraintWidth_percent=".75" />
 
     <Button
         android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="51dp"
+        android:layout_height="41dp"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="16dp"
-        android:text="Back"
+        android:layout_marginBottom="32dp"
+        android:drawableLeft="@drawable/baseline_keyboard_backspace_24"
+        android:drawablePadding="-10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav"
+        style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
-        app:menu="@menu/boton_nav_menu"/>
+        app:menu="@menu/boton_nav_menu" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

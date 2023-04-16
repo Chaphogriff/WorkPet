@@ -54,8 +54,8 @@ public class TaskActivity extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private DocumentReference docref = db.collection("Users").document(user.getUid());
     Button button_back;
-    Button archivebutton;
-    Button addtbutton;
+    FloatingActionButton archivebutton;
+    FloatingActionButton addtbutton;
     TextView textView;
     List<Task> TaskList;
     private FirestoreRecyclerAdapter adapter;
