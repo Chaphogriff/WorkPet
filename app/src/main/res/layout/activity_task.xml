@@ -57,26 +57,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/boton_nav_menu" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <Button
         android:id="@+id/addtbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:backgroundTint="@color/tint"
-        android:src="@drawable/baseline_add"
+        android:text="ADD A NEW TASK"
         app:layout_constraintBottom_toTopOf="@+id/nav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.847"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tasksRecyclerView" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <Button
         android:id="@+id/archivesbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:backgroundTint="@color/tint"
-        android:src="@drawable/baseline_task_alt_24"
+        android:text="TASKS DONE"
         app:layout_constraintBottom_toTopOf="@+id/nav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.16"
