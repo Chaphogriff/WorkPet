@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,21 +27,25 @@ import com.workthrutheweak.workpet.databinding.ActivitySettingBinding;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SettingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     // Variables
     private ActivitySettingBinding binding; //For ViewBinding feature
-    Button button_help, button_aboutus, button_language, button_myaccount;
+    Button button_help, button_aboutus, button_language, button_myaccount, button_notification;
 
     // Popup
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
     private Button popup_back;
+    private boolean sfx,vibration,notification;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +60,11 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         button_aboutus = binding.about;
         button_language = binding.language;
         button_myaccount = binding.account;
+        button_notification = binding.notification;
+
+        recoverSettingFromJson();
 
         // Mettre en place les listeners
-
-        // Appuyer le bouton nous envoie vers un autre activité
 
         button_language.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -84,7 +90,13 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
             }
         });
 
-
+        button_notification.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onClick(View view) {
+                createNewDialog("notification");
+            }
+        });
 
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) BottomNavigationView bottomNavigationView = binding.nav;
         bottomNavigationView.setSelectedItemId(R.id.setting);
@@ -137,7 +149,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
             aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spino.setAdapter(aa);
 
-        }else if(setting.equals("myaccount")){
+        }else if(setting.equals("myaccount")) {
             popUpView = getLayoutInflater().inflate(R.layout.popup_settings_myaccount, null);
 
             TextView text = (TextView) popUpView.findViewById(R.id.text);
@@ -150,7 +162,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
             String gold = info.get(2);
             String avatarName = info.get(3);
 
-            String accountTxt = "Pet name : "+avatarName+"\nLevel : "+level+"\nExp : "+exp+"\nGold : "+gold+"\n";
+            String accountTxt = "Pet name : " + avatarName + "\nLevel : " + level + "\nExp : " + exp + "\nGold : " + gold + "\n";
             logoutbutton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -160,6 +172,18 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
             });
 
             text.setText(accountTxt);
+
+        }else if(setting.equals("notification")){
+            popUpView = getLayoutInflater().inflate(R.layout.popup_settings_notification,null);
+            Switch notif = (Switch) popUpView.findViewById(R.id.notifSwitch);
+            notif.setChecked(notification);
+            notif.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getApplicationContext(), "Notification can't be disabled", Toast.LENGTH_LONG).show(); // display the current state for switch's
+                    notif.setChecked(true);
+                }
+            });
 
         }else{
             popUpView = getLayoutInflater().inflate(R.layout.popup_settings_about,null);
@@ -202,4 +226,48 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         }
         return null;
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void recoverSettingFromJson() {
+        File path = getApplicationContext().getFilesDir();
+        FileInputStream fis = null;
+
+        // Profile
+        try {
+            fis = new FileInputStream(new File(path, "setting.json"));
+            List<Boolean> listBooleanFromSetting = JsonManager.readSettingStream(fis);
+            sfx = listBooleanFromSetting.get(0);
+            vibration = listBooleanFromSetting.get(1);
+            notification = listBooleanFromSetting.get(2);
+        } catch (IOException e) {
+            sfx = true;
+            vibration = true;
+            notification = true;
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void updateSettingToJson() {
+        File path = getApplicationContext().getFilesDir();
+
+        // Save profile
+        try {
+            FileOutputStream fos = new FileOutputStream(new File(path, "setting.json"));
+            List<Boolean> boolList = new ArrayList<>();
+            boolList.add(sfx);
+            boolList.add(vibration);
+            boolList.add(notification);
+            JsonManager.writeSettingStream(fos, boolList);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    protected void onPause() {
+        updateSettingToJson();
+        super.onPause();
+    }
+
 }

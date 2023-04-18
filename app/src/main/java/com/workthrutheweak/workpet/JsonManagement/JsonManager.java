@@ -227,6 +227,22 @@ public class JsonManager {
         return profileList;
     }
 
+    public static List<Boolean> readSettingStream(InputStream in) throws IOException {
+        reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
+        List<Boolean> settingList = null;
+        try {
+
+            reader.beginArray();
+            while (reader.hasNext()) {
+                settingList = readSettingBoolean(reader);
+            }
+            reader.endArray();
+        } finally {
+            reader.close();
+        }
+        return settingList;
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static List<String> readProfileInteger(JsonReader reader) throws IOException {
@@ -259,6 +275,33 @@ public class JsonManager {
         return profileVar;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static List<Boolean> readSettingBoolean(JsonReader reader) throws IOException {
+        Boolean sfx = null;
+        Boolean vibration = null;
+        Boolean notification = null;
+
+        reader.beginObject();
+        while (reader.hasNext()) {
+            String name = reader.nextName();
+            if (name.equals("Sfx")) {
+                sfx = reader.nextBoolean();
+            } else if (name.equals("Vibration")) {
+                vibration = reader.nextBoolean();
+            } else if (name.equals("Notification")) {
+                notification = reader.nextBoolean();
+            } else {
+                reader.skipValue();
+            }
+        }
+        reader.endObject();
+        List<Boolean> settingVar = new ArrayList<Boolean>();
+        settingVar.add(sfx);
+        settingVar.add(vibration);
+        settingVar.add(notification);
+        return settingVar;
+    }
+
     public static void writeProfileStream(OutputStream out, List<String> profileList) throws IOException {
         writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
         writer.setIndent("  ");
@@ -268,6 +311,19 @@ public class JsonManager {
         writer.name("Exp").value(profileList.get(1));
         writer.name("Gold").value(profileList.get(2));
         writer.name("Avatar").value(profileList.get(3));
+        writer.endObject();
+        writer.endArray();
+        writer.close();
+    }
+
+    public static void writeSettingStream(OutputStream out, List<Boolean> settingList) throws IOException {
+        writer = new JsonWriter(new OutputStreamWriter(out, "UTF-8"));
+        writer.setIndent("  ");
+        writer.beginArray();
+        writer.beginObject();
+        writer.name("Sfx").value(settingList.get(0));
+        writer.name("Vibration").value(settingList.get(1));
+        writer.name("Notification").value(settingList.get(2));
         writer.endObject();
         writer.endArray();
         writer.close();
