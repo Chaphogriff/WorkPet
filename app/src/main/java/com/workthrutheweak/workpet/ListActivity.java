@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -19,19 +18,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.adapter.ListAdapter;
 import com.workthrutheweak.workpet.databinding.ActivityListBinding;
-import com.workthrutheweak.workpet.databinding.ActivityMainBinding;
 import com.workthrutheweak.workpet.model.Item;
-import com.workthrutheweak.workpet.model.Task;
+import com.workthrutheweak.workpet.notification.ReminderBroadcast;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ListActivity extends AppCompatActivity {
 
@@ -59,6 +53,7 @@ public class ListActivity extends AppCompatActivity {
         if(getIntent().hasExtra("gold")) {
             gold = getIntent().getExtras().getInt("gold");
         }
+        ReminderBroadcast.createNotificationChannel(this);
 
         //Setup View Binding variable
         binding = ActivityListBinding.inflate(getLayoutInflater());

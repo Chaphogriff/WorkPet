@@ -1,18 +1,14 @@
 package com.workthrutheweak.workpet;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,8 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -37,9 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -47,6 +39,7 @@ import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.adapter.TaskAdapter;
 import com.workthrutheweak.workpet.databinding.ActivityMainBinding;
 import com.workthrutheweak.workpet.model.Task;
+import com.workthrutheweak.workpet.notification.ReminderBroadcast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -58,7 +51,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
 public class MainActivity extends AppCompatActivity {
@@ -103,6 +95,15 @@ public class MainActivity extends AppCompatActivity {
         logoutbutton = binding.logoutbutton;
         avatarView = binding.homePet;
 
+        //Notifications
+        ReminderBroadcast.createNotificationChannel(this);
+/*
+        NotificationHelper.createNotificationChannel(this,
+                NotificationManagerCompat.IMPORTANCE_DEFAULT, false,
+                getString(R.string.app_name), "App notification channel.");
+        NotificationHelper.createNotificationChannel(this,
+                NotificationManagerCompat.IMPORTANCE_HIGH, true,
+                "Tasks", "Notification channel for tasks.");*/
         docref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -498,4 +499,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("origin", "mainactivity");
         startActivity(intent);
     }
+
+
 }

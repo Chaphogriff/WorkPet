@@ -8,8 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-import com.workthrutheweak.workpet.databinding.ActivityTaskBinding;
 import com.workthrutheweak.workpet.databinding.ActivityTestBinding;
+import com.workthrutheweak.workpet.notification.ReminderBroadcast;
 
 public class TestActivity extends AppCompatActivity {
 
@@ -32,6 +32,7 @@ public class TestActivity extends AppCompatActivity {
         // Récupérer les éléments du xml
         button_back = binding.back;
         logo_wttw = binding.logoWttw;
+        ReminderBroadcast.createNotificationChannel(this);
 
         // Mettre en place les listeners
 

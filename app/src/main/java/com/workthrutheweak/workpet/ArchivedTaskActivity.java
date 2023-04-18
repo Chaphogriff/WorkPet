@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -34,8 +33,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.databinding.ActivityArchivedtaskBinding;
-import com.workthrutheweak.workpet.databinding.ActivityTaskBinding;
 import com.workthrutheweak.workpet.model.Task;
+import com.workthrutheweak.workpet.notification.ReminderBroadcast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -72,6 +71,7 @@ public class ArchivedTaskActivity extends AppCompatActivity {
         button_back = binding.back;
         textView = binding.tasksText;
         recyclerView = binding.tasksRecyclerView;
+        ReminderBroadcast.createNotificationChannel(this);
 
         Query query = docref.collection("Tasks").whereEqualTo("taskDone",true);
 

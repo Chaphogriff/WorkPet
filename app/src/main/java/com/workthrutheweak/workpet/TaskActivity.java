@@ -26,7 +26,6 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -34,9 +33,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.workthrutheweak.workpet.JsonManagement.JsonManager;
-import com.workthrutheweak.workpet.adapter.TaskAdapter;
 import com.workthrutheweak.workpet.databinding.ActivityTaskBinding;
 import com.workthrutheweak.workpet.model.Task;
+import com.workthrutheweak.workpet.notification.ReminderBroadcast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -83,6 +82,7 @@ public class TaskActivity extends AppCompatActivity {
         archivebutton = binding.archivesbutton;
         textView = binding.tasksText;
         recyclerView = binding.tasksRecyclerView;
+        ReminderBroadcast.createNotificationChannel(this);
 
         docref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override

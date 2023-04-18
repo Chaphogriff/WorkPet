@@ -2,15 +2,13 @@ package com.workthrutheweak.workpet;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
 import com.workthrutheweak.workpet.databinding.ActivityFirstBinding;
+import com.workthrutheweak.workpet.notification.ReminderBroadcast;
 
 public class FirstActivity extends AppCompatActivity {
     private ActivityFirstBinding binding; //For ViewBinding feature
@@ -24,6 +22,7 @@ public class FirstActivity extends AppCompatActivity {
         binding = ActivityFirstBinding.inflate(getLayoutInflater());
         View v = binding.getRoot();
         setContentView(v);
+        ReminderBroadcast.createNotificationChannel(this);
 
         getSupportActionBar().hide();
 

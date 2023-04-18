@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.workthrutheweak.workpet.databinding.ActivityEmailpasswordBinding;
+import com.workthrutheweak.workpet.notification.ReminderBroadcast;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,6 +70,7 @@ public class EmailPasswordActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emailpassword);
+        ReminderBroadcast.createNotificationChannel(this);
 
         //Setup View Binding variable
         binding = ActivityEmailpasswordBinding.inflate(getLayoutInflater());

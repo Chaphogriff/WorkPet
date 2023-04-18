@@ -22,8 +22,8 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.workthrutheweak.workpet.JsonManagement.JsonManager;
-import com.workthrutheweak.workpet.databinding.ActivityMainBinding;
 import com.workthrutheweak.workpet.databinding.ActivitySettingBinding;
+import com.workthrutheweak.workpet.notification.ReminderBroadcast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -64,6 +64,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         button_volume = binding.volume;
 
         recoverSettingFromJson();
+        ReminderBroadcast.createNotificationChannel(this);
 
         // Mettre en place les listeners
 

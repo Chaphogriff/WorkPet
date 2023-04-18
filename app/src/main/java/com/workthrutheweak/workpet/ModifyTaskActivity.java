@@ -20,25 +20,19 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.workthrutheweak.workpet.databinding.ActivityAddtaskBinding;
 import com.workthrutheweak.workpet.databinding.ActivityModifytaskBinding;
-import com.workthrutheweak.workpet.model.Task;
+import com.workthrutheweak.workpet.notification.ReminderBroadcast;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 public class ModifyTaskActivity extends AppCompatActivity {
     private ActivityModifytaskBinding binding;//For ViewBinding feature
@@ -89,6 +83,7 @@ public class ModifyTaskActivity extends AppCompatActivity {
 
         titleTask = binding.TitleInputField;
         descTask = binding.DescInputField;
+        ReminderBroadcast.createNotificationChannel(this);
 
         String titleIntent = getIntent().getStringExtra("Title");
         String descIntent = getIntent().getStringExtra("Desc");

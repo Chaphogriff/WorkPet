@@ -9,6 +9,8 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +27,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -35,6 +39,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.workthrutheweak.workpet.databinding.ActivityAddtaskBinding;
 import com.workthrutheweak.workpet.model.Task;
+import com.workthrutheweak.workpet.notification.AlarmScheduler;
+import com.workthrutheweak.workpet.notification.ReminderBroadcast;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -82,6 +88,7 @@ public class AddTaskActivity extends AppCompatActivity {
         button_time = binding.Timebutton;
         titleTask = binding.TitleInputField;
         descTask = binding.DescInputField;
+        ReminderBroadcast.createNotificationChannel(this);
 
         Spinner difspinner = (Spinner) findViewById(R.id.difficulty_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -203,7 +210,7 @@ public class AddTaskActivity extends AppCompatActivity {
                                               AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                                               Intent intent2 = new Intent(AddTaskActivity.this, AlarmReceiver.class);
                                               intent.putExtra("myAction", "mDoNotify");
-                                              PendingIntent pendingIntent = PendingIntent.getBroadcast(AddTaskActivity.this, 0, intent2, PendingIntent.FLAG_IMMUTABLE);
+                                              PendingIntent pendingIntent = PendingIntent.getBroadcast(AddTaskActivity.this, 0, intent2, PendingIntent.FLAG_MUTABLE);
                                               am.set(AlarmManager.RTC_WAKEUP, when, pendingIntent);
                                           }
                                       }
@@ -318,6 +325,22 @@ public class AddTaskActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 Toast.makeText(AddTaskActivity.this, "Task added", Toast.LENGTH_SHORT).show();
+                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+                Intent intent = new Intent(AddTaskActivity.this, ReminderBroadcast.class);
+                PendingIntent pendingIntent = AlarmScheduler.createPendingIntent(AddTaskActivity.this, task);
+                AlarmScheduler.scheduleAlarm(AddTaskActivity.this,task,pendingIntent,alarmManager);
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(AddTaskActivity.this, "TaskChannel")
+                        .setSmallIcon(R.drawable.logo_workpet)
+                        .setLargeIcon( BitmapFactory.decodeResource(getResources(),
+                                R.drawable.logo_workpet))
+                        .setContentTitle("WorkPet Task")
+                        .setContentText(String.format("%s - %s",task.getTitle(),task.getDescription()))
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setContentIntent(pendingIntent);
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(AddTaskActivity.this);
+                notificationManager.notify(1002, builder.build());
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

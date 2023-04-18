@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -19,24 +18,17 @@ import android.widget.Button;
 
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.gson.JsonObject;
 import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.databinding.ActivityAvatarBinding;
 import com.workthrutheweak.workpet.model.Item;
-import com.workthrutheweak.workpet.model.Task;
-
-import org.json.JSONObject;
+import com.workthrutheweak.workpet.notification.ReminderBroadcast;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +61,7 @@ public class AvatarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_avatar);
+        ReminderBroadcast.createNotificationChannel(this);
 
         //Setup View Binding variable
         binding = ActivityAvatarBinding.inflate(getLayoutInflater());

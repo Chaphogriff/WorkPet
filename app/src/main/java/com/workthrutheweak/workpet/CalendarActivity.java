@@ -42,6 +42,7 @@ import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.adapter.TaskAdapter;
 import com.workthrutheweak.workpet.databinding.ActivityCalendarBinding;
 import com.workthrutheweak.workpet.model.Task;
+import com.workthrutheweak.workpet.notification.ReminderBroadcast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -91,6 +92,7 @@ public class CalendarActivity extends AppCompatActivity {
         binding = ActivityCalendarBinding.inflate(getLayoutInflater());
         View v = binding.getRoot();
         setContentView(v);
+        ReminderBroadcast.createNotificationChannel(this);
 
         // Récupérer les éléments du xml
         button_back = binding.back;
