@@ -150,8 +150,12 @@ public class AvatarActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     heart.setVisibility(View.VISIBLE);
-                    mp.start();
-                    vibe.vibrate(vibrate_pattern, 0);
+                    if(isSfxOn()){
+                        mp.start();
+                    }
+                    if(isVibrationOn()){
+                        vibe.vibrate(vibrate_pattern, 0);
+                    }
                     // Gold test = one click gold up : TODO : remove this
                     gold++;
                     goldTextView.setText("Gold: "+gold);
@@ -164,10 +168,13 @@ public class AvatarActivity extends AppCompatActivity {
         });
         // onRelease ( MotionEvent.ACTION_UP ne fonctionne pas )
         pet.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 heart.setVisibility(View.INVISIBLE);
-                vibe.cancel();
+                if(isVibrationOn()){
+                    vibe.cancel();
+                }
             }
         });
 
@@ -313,6 +320,38 @@ public class AvatarActivity extends AppCompatActivity {
             System.out.println(e);
             ItemList = new ArrayList<>();
             ItemList.add(new Item("Bread", "Good bread", 50,10));
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean isSfxOn() {
+        File path = getApplicationContext().getFilesDir();
+        FileInputStream fis = null;
+
+        // Profile
+        try {
+            fis = new FileInputStream(new File(path, "setting.json"));
+            List<Boolean> listBooleanFromSetting = JsonManager.readSettingStream(fis);
+            boolean sfx = listBooleanFromSetting.get(0);
+            return sfx;
+        } catch (IOException e) {
+            return true;
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean isVibrationOn() {
+        File path = getApplicationContext().getFilesDir();
+        FileInputStream fis = null;
+
+        // Profile
+        try {
+            fis = new FileInputStream(new File(path, "setting.json"));
+            List<Boolean> listBooleanFromSetting = JsonManager.readSettingStream(fis);
+            boolean vibration = listBooleanFromSetting.get(1);
+            return vibration;
+        } catch (IOException e) {
+            return true;
         }
     }
 }

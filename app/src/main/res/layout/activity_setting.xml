@@ -62,7 +62,7 @@
         android:id="@+id/volume"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="Volume"
+        android:text="SFX / Vibration"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent=".075"
         app:layout_constraintLeft_toLeftOf="parent"

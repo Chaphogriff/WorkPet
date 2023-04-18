@@ -36,7 +36,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
 
     // Variables
     private ActivitySettingBinding binding; //For ViewBinding feature
-    Button button_help, button_aboutus, button_language, button_myaccount, button_notification;
+    Button button_volume, button_aboutus, button_language, button_myaccount, button_notification;
 
     // Popup
     private AlertDialog.Builder dialogBuilder;
@@ -61,6 +61,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         button_language = binding.language;
         button_myaccount = binding.account;
         button_notification = binding.notification;
+        button_volume = binding.volume;
 
         recoverSettingFromJson();
 
@@ -79,6 +80,14 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
             @Override
             public void onClick(View view) {
                 createNewDialog("aboutus");
+            }
+        });
+
+        button_volume.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onClick(View view) {
+                createNewDialog("volume");
             }
         });
 
@@ -185,6 +194,41 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
                 }
             });
 
+        }else if(setting.equals("volume")){
+            popUpView = getLayoutInflater().inflate(R.layout.popup_settings_volume,null);
+            Switch sfxSwitch = (Switch) popUpView.findViewById(R.id.sfxSwitch);
+            Switch vibeSwitch = (Switch) popUpView.findViewById(R.id.vibrationSwitch);
+            sfxSwitch.setChecked(sfx);
+            vibeSwitch.setChecked(vibration);
+            sfxSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sfx = sfxSwitch.isChecked();
+                    String status;
+                    if (sfx){
+                        status = "enabled";
+                    }else{
+                        status = "disabled";
+                    }
+                    Toast.makeText(getApplicationContext(), "SFX is "+status, Toast.LENGTH_LONG).show(); // display the current state for switch's
+
+                }
+            });
+            vibeSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    vibration = vibeSwitch.isChecked();
+                    String status;
+                    if (vibration){
+                        status = "enabled";
+                    }else{
+                        status = "disabled";
+                    }
+                    Toast.makeText(getApplicationContext(), "Vibration is "+status, Toast.LENGTH_LONG).show(); // display the current state for switch's
+
+                }
+            });
+
         }else{
             popUpView = getLayoutInflater().inflate(R.layout.popup_settings_about,null);
         }
@@ -232,7 +276,7 @@ public class SettingActivity extends AppCompatActivity implements AdapterView.On
         File path = getApplicationContext().getFilesDir();
         FileInputStream fis = null;
 
-        // Profile
+        // Settings
         try {
             fis = new FileInputStream(new File(path, "setting.json"));
             List<Boolean> listBooleanFromSetting = JsonManager.readSettingStream(fis);

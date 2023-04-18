@@ -2,6 +2,7 @@ package com.workthrutheweak.workpet.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +11,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.workthrutheweak.workpet.AvatarActivity;
+import com.workthrutheweak.workpet.JsonManagement.JsonManager;
 import com.workthrutheweak.workpet.ListActivity;
 import com.workthrutheweak.workpet.R;
 import com.workthrutheweak.workpet.model.Item;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -82,6 +88,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
             price = itemView.findViewById(R.id.price);
 
             itemView.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onClick(View view) {
 
@@ -105,10 +112,14 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
                                 }
                             });
                             Toast.makeText(view.getContext(),"Not enough gold!", Toast.LENGTH_SHORT).show();
-                            mp.start();
+                            if(isSfxOn()){
+                                mp.start();
+                            }
                         }else{
                             mp = MediaPlayer.create(ctx, R.raw.buy_item);
-                            mp.start();
+                            if(isSfxOn()){
+                                mp.start();
+                            }
                             mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                                 @Override
                                 public void onCompletion(MediaPlayer mp) {
@@ -132,6 +143,22 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
                 }
             });
 
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean isSfxOn() {
+        File path = ctx.getFilesDir();
+        FileInputStream fis = null;
+
+        // Profile
+        try {
+            fis = new FileInputStream(new File(path, "setting.json"));
+            List<Boolean> listBooleanFromSetting = JsonManager.readSettingStream(fis);
+            boolean sfx = listBooleanFromSetting.get(0);
+            return sfx;
+        } catch (IOException e) {
+            return true;
         }
     }
 
