@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <resources>
     <string name="app_name">WorkPet</string>
     <string name="tasks">Tasks</string>
@@ -51,5 +53,13 @@
         <item>Monthly</item>
         <item>Yearly</item>
     </string-array>
+
+    <string name="aboutus">
+    \nWorkPet is a task planning application developed by WorkThruTheWeak (WTTW) Studio.
+    \nThis application exists for our "Mobile App Programming" project.
+    \n\nAre you having a hard time with you daily task? Is it hard to stay motivated and do what you need to do ?
+    \n\nWorkPet is here for that purpose !\n We aim to make you enjoy doing tasks by going with a game-like approach.
+    \n\nComplete your mission, win coins, raise your pet! Simple, right?\n\n\n
+    </string>
 
 </resources>

@@ -108,7 +108,6 @@ public class SettingActivity extends AppCompatActivity {
         dialogBuilder.setView(popUpView);
         dialog = dialogBuilder.create();
         dialog.show();
-
         popup_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
