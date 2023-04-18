@@ -9,8 +9,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.workthrutheweak.workpet.databinding.ActivityMainBinding;
@@ -18,13 +22,11 @@ import com.workthrutheweak.workpet.databinding.ActivitySettingBinding;
 
 import java.io.File;
 
-public class SettingActivity extends AppCompatActivity {
+public class SettingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     // Variables
     private ActivitySettingBinding binding; //For ViewBinding feature
-
-    TextView textView;
-    Button button_help, button_aboutus;
+    Button button_help, button_aboutus, button_language;
 
     // Popup
     private AlertDialog.Builder dialogBuilder;
@@ -43,25 +45,24 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(v);
 
         // Récupérer les éléments du xml
-        button_help = binding.help;
         button_aboutus = binding.about;
+        button_language = binding.language;
 
         // Mettre en place les listeners
 
         // Appuyer le bouton nous envoie vers un autre activité
 
-        button_help.setOnClickListener(new View.OnClickListener() {
+        button_language.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                File path = getApplicationContext().getFilesDir();
-                new File(path, "profile.json").delete();
+                createNewDialog("language");
             }
         });
 
         button_aboutus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createNewDialog();
+                createNewDialog("aboutus");
             }
         });
 
@@ -100,9 +101,26 @@ public class SettingActivity extends AppCompatActivity {
         });
     }
 
-    public void createNewDialog(){
+    public void createNewDialog(String setting){
         dialogBuilder = new AlertDialog.Builder(this);
-        final View popUpView = getLayoutInflater().inflate(R.layout.popup_settings_about,null);
+        View popUpView=null;
+
+        if(setting.equals("aboutus")){
+            popUpView = getLayoutInflater().inflate(R.layout.popup_settings_about,null);
+        }else if(setting.equals("language")){
+            popUpView = getLayoutInflater().inflate(R.layout.popup_settings_language,null);
+
+            String[] languages = {"English"};
+            Spinner spino = (Spinner) popUpView.findViewById(R.id.spinnerLanguage);
+            spino.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
+            ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item,languages);
+            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spino.setAdapter(aa);
+
+        }else{
+            popUpView = getLayoutInflater().inflate(R.layout.popup_settings_about,null);
+        }
+
         popup_back = (Button) popUpView.findViewById(R.id.back);
 
         dialogBuilder.setView(popUpView);
@@ -116,4 +134,12 @@ public class SettingActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }
