@@ -108,7 +108,7 @@
         android:id="@+id/validate_button"
         android:layout_width="54dp"
         android:layout_height="49dp"
-        android:layout_marginStart="200dp"
+        android:layout_marginStart="150dp"
         android:layout_marginLeft="8dp"
         android:background="@drawable/roundcorners"
         android:contentDescription="@string/validate_task"
